@@ -1,0 +1,43 @@
+.adminPage{max-width:1180px}.adminHeader{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;margin-bottom:22px}.adminHeader h1{margin:4px 0}.adminGrid{display:grid;grid-template-columns:1fr 1fr;gap:20px}.adminForm label{display:grid;gap:5px}.adminForm input{margin-top:2px}.formGrid{display:grid;grid-template-columns:1fr 1fr;gap:0 14px}fieldset{border:1px solid #e3e6ee;border-radius:12px;padding:14px;margin:10px 0 18px}legend{font-size:13px;font-weight:800;padding:0 6px}.checkGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.check{display:flex!important;grid-template-columns:auto 1fr!important;align-items:center;gap:8px!important;font-weight:600!important}.check input{width:auto;margin:0}.staffList{display:grid;gap:8px}.staffRow{display:flex;justify-content:space-between;gap:16px;text-align:left;background:#f7f8fc;color:#111827;border:1px solid #e5e7eb}.staffRow.selected{border-color:#08105f;box-shadow:0 0 0 2px rgba(8,16,95,.08)}.staffRow span{display:grid;gap:3px}.staffRow span:last-child{text-align:right}.staffRow small{font-size:11px;color:#6b7280;text-transform:capitalize}.status{justify-self:end;padding:3px 7px;border-radius:999px;font-size:10px;font-weight:800;text-transform:uppercase}.status.active{background:#e7f7ec;color:#23633a}.status.invited{background:#fff4cf;color:#765b00}.status.disabled{background:#feecec;color:#922}.staffEditor{margin-top:20px}.danger{background:#a61d24}.transferBox{margin-top:22px;padding:18px;border-radius:14px;background:#f7f8fc}.transferBox h3{margin-top:0}.transferBox select{min-width:280px;padding:11px;border:1px solid #d5d9e2;border-radius:9px;background:#fff;font:inherit}@media(max-width:800px){.adminGrid,.formGrid{grid-template-columns:1fr}.checkGrid{grid-template-columns:1fr 1fr}.adminHeader{align-items:flex-start;flex-direction:column}.staffRow{flex-direction:column}.staffRow span:last-child{text-align:left}.status{justify-self:start}.transferBox select{min-width:100%}}
+
+/* Company administration uses the BrokerRelay workspace layout. */
+.adminShell{min-height:100vh;background:#f5f8ff}.adminShellHeader{height:82px;display:flex;align-items:center;gap:18px;padding:0 32px;border-bottom:1px solid #e4eaf4;background:#fff}.adminShellHeader .brokerRelayBrand img{width:175px;height:auto}.adminShellLayout{display:grid;grid-template-columns:225px minmax(0,1fr);max-width:1600px;min-height:calc(100vh - 82px);margin:auto}.adminShellNav{display:flex;flex-direction:column;gap:5px;padding:24px 13px;background:#fff;border-right:1px solid #e4eaf4}.adminShellNav a,.adminShellNav button{display:flex;align-items:center;gap:5px;width:100%;padding:12px 14px;border:0;border-radius:10px;background:transparent;color:#334766;text-decoration:none;text-align:left;font-size:14px;font-weight:650}.adminShellNav a:hover,.adminShellNav button:hover{background:#eaf2ff;filter:none;color:#2563eb}.adminShellNav .pill{margin-left:auto}.adminShellMain{padding:30px;max-width:1320px;width:100%;min-width:0;margin:0 auto}.adminShellMain .card{border:1px solid #e4eaf4;border-radius:18px;box-shadow:0 8px 28px rgba(31,57,110,.045)}.adminShellMain .adminHeader{align-items:center;margin-bottom:22px}.adminShellMain .adminHeader h1{color:#12264e;letter-spacing:-.025em;font-size:29px}.adminShellMain .adminHeader .eyebrow{color:#59749b}.adminShellMain .adminGrid{gap:18px}.adminShellMain .staffRow{background:#f7faff;color:#223453;border-color:#e4eaf4}.adminShellMain .staffRow.selected{border-color:#2563eb;box-shadow:0 0 0 2px rgba(37,99,235,.1)}.adminShellMain .notice{line-height:1.5}.adminShellMain fieldset{border-color:#e4eaf4}.adminShellMain .card[id]{scroll-margin-top:18px}
+@media(max-width:900px){.adminShellLayout{display:block}.adminShellNav{flex-direction:row;overflow:auto;white-space:nowrap;border-right:0;border-bottom:1px solid #e4eaf4;padding:8px}.adminShellNav a,.adminShellNav button{width:auto}.adminShellMain{padding:20px}}
+.adminShellNav .adminHelpLink{margin-top:auto;border-top:1px solid #e4eaf4;border-radius:0;padding-top:20px}
+@media(max-width:900px){.adminShellNav .adminHelpLink{margin-top:0;border-top:0;padding-top:12px}}
+@media(max-width:620px){.adminShellHeader{height:70px;padding:0 15px}.adminShellMain .adminHeader{align-items:flex-start}.adminShellMain .adminHeader button{width:100%}.adminShellMain .card{padding:18px}.adminShellMain .adminHeader h1{font-size:24px}}
+
+.adminShellHeader{justify-content:space-between}
+.adminShellAccount{display:flex;align-items:center;gap:24px;min-width:0;margin-left:auto;color:#485b7a;font-size:13px;font-weight:650}
+.adminShellAccount details{position:relative}
+.adminShellAccount summary{display:flex;align-items:center;gap:10px;list-style:none;cursor:pointer}
+.adminShellAccount summary::-webkit-details-marker{display:none}
+.adminShellAvatar{display:grid;place-items:center;width:40px;height:40px;flex:none;border-radius:50%;background:#607a9c;color:#fff;font-size:17px}
+.adminShellAccountMenu{position:absolute;right:0;top:calc(100% + 10px);z-index:20;min-width:205px;padding:7px;background:#fff;border:1px solid #e4eaf4;border-radius:11px;box-shadow:0 12px 24px rgba(31,57,110,.12)}
+.adminShellAccountEmail{display:block;overflow:hidden;padding:9px 11px;color:#64748b;font-size:12px;font-weight:400;text-overflow:ellipsis}
+.adminShellAccountMenu button{width:100%;background:transparent;color:#263858;text-align:left;font-size:13px}
+.adminShellAccountMenu button:hover{background:#eaf2ff;filter:none}
+.adminShellMain #head-broker-handover>label{display:grid;gap:5px;font-weight:650}
+.adminShellMain #head-broker-handover>label select{box-sizing:border-box;width:100%;min-height:45px;margin:2px 0 16px;padding:12px;border:1px solid #d5d9e2;border-radius:9px;background:#fff;color:#111827;font:inherit;font-weight:400}
+.adminShellMain #head-broker-handover>label select:focus-visible{outline:2px solid #2563eb;outline-offset:2px}
+@media(max-width:900px){.adminShellAccount>span{display:none}}
+@media(max-width:620px){.adminShellAccountName{display:none}.adminShellAccount summary{gap:5px}}
+
+.adminCompanyHeading{display:flex;align-items:center;gap:20px;min-width:0}
+.adminCompanyLogo{display:grid;place-items:center;flex:none;max-width:40vw;max-height:140px;padding:10px;overflow:hidden;background:#fff;border:1px solid #e4eaf4;border-radius:15px;box-shadow:0 4px 15px rgba(31,57,110,.07)}
+.adminCompanyLogo img{display:block;max-width:100%;max-height:100%;object-fit:contain}
+@media(max-width:620px){.adminCompanyHeading{align-items:flex-start;flex-direction:column;gap:12px}.adminCompanyLogo{max-width:100%}}
+
+.adminShellAccountMenu a { display: block; padding: 11px 17px; border-radius: 8px; color: #263858; text-decoration: none; font-size: 13px; }
+.adminShellAccountMenu a:hover { background: #eaf2ff; }
+
+/* Match the active workspace navigation and type scale. */
+.adminShellNav .adminNavActive{background:#eaf2ff;color:#1d4ed8}
+.adminShellMain .adminMobileAppearance{margin-bottom:22px}
+.adminShellMain .adminMobileAppearance h2{margin:5px 0 10px}
+.adminShellMain .adminMobileAppearance p.muted{margin:0 0 16px}
+.adminShellMain .adminMobileAppearance .button{font-size:14px}
+
+.adminShellMain a:not(.button){color:#1d4ed8;text-decoration:none;font-weight:650}
+.adminShellMain a:not(.button):hover{text-decoration:underline}
+.adminShellMain .adminGrid .notice{background:#f1f6ff;color:#344766;border:1px solid #dce7f8}

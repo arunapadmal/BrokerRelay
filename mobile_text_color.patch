@@ -1,0 +1,71 @@
+--- a/lib/company_branding.dart
++++ b/lib/company_branding.dart
+@@ -4,11 +4,13 @@
+ class CompanyBranding {
+   const CompanyBranding({
+     this.background = const Color(0xFFEFF6FF),
++    this.backgroundText = const Color(0xFF10245B),
+     this.button = const Color(0xFF2563EB),
+     this.notification = const Color(0xFFEF4444),
+   });
+ 
+   final Color background;
++  final Color backgroundText;
+   final Color button;
+   final Color notification;
+ 
+@@ -21,6 +23,7 @@
+   factory CompanyBranding.fromJson(Map<String, dynamic> json) {
+     return CompanyBranding(
+       background: parse(json['mobile_background_color'], const Color(0xFFEFF6FF)),
++      backgroundText: parse(json['mobile_text_color'], const Color(0xFF10245B)),
+       button: parse(json['mobile_button_color'], const Color(0xFF2563EB)),
+       notification: parse(json['mobile_notification_color'], const Color(0xFFEF4444)),
+     );
+--- a/lib/services/onboarding_service.dart
++++ b/lib/services/onboarding_service.dart
+@@ -123,7 +123,7 @@
+         final organisationId = row['organisation_id']?.toString();
+         if (organisationId != null) {
+           final branding = await supabase.from('organisations')
+-              .select('mobile_background_color,mobile_button_color,mobile_notification_color,logo_url')
++              .select('mobile_background_color,mobile_text_color,mobile_button_color,mobile_notification_color,logo_url')
+               .eq('id', organisationId).single();
+           final organisation = Map<String, dynamic>.from(
+               data['organisation'] as Map? ?? {});
+--- a/lib/main.dart
++++ b/lib/main.dart
+@@ -103,7 +103,7 @@
+         scaffoldBackgroundColor: branding.background,
+         appBarTheme: AppBarTheme(
+           backgroundColor: branding.background,
+-          foregroundColor: Color(0xFF10245B),
++          foregroundColor: branding.backgroundText,
+           centerTitle: false,
+         ),
+         cardTheme: CardThemeData(
+--- a/lib/screens/client_home_screen.dart
++++ b/lib/screens/client_home_screen.dart
+@@ -251,7 +251,7 @@
+                       maxLines: 1, overflow: TextOverflow.ellipsis,
+                       style: const TextStyle(fontSize: 18,
+                           fontWeight: FontWeight.w800,
+-                          color: Color(0xFF10245B)))),
++                          color: data.branding.backgroundText)))),
+                   IconButton(
+                     tooltip: 'Notifications',
+                     onPressed: () => _openNotifications(data),
+@@ -270,10 +270,10 @@
+                 Text('Welcome, ${data.clientFirstName}',
+                     style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                         fontWeight: FontWeight.w800,
+-                        color: const Color(0xFF10245B))),
++                        color: data.branding.backgroundText)),
+                 const SizedBox(height: 5),
+-                const Text('How can we help you today?',
+-                    style: TextStyle(color: Color(0xFF6B7280), fontSize: 15)),
++                Text('How can we help you today?',
++                    style: TextStyle(color: data.branding.backgroundText.withValues(alpha: 0.82), fontSize: 15)),
+                 const SizedBox(height: 24),
+                 Row(children: [
+                   _ContactAction(

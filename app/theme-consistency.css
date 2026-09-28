@@ -1,0 +1,34 @@
+/* Common type and control scale across broker, company and platform workspaces. */
+:root{--br-font:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;--br-title:#12264e;--br-text:#243555}
+body{font-family:var(--br-font);font-size:15px;line-height:1.5}
+button,.button,input,select,textarea{font-family:inherit}
+.brokerDeskMain,.adminShellMain,.platformMain{color:var(--br-text)}
+.brokerDeskMain :is(h1,h2,h3),.adminShellMain :is(h1,h2,h3),.platformMain :is(h1,h2,h3){color:var(--br-title);line-height:1.25}
+.brokerDeskMain h2,.adminShellMain h2,.platformMain h2{font-size:20px;letter-spacing:-.015em}
+.brokerDeskMain h3,.adminShellMain h3,.platformMain h3{font-size:17px}
+.brokerDeskMain :is(p,li,dd),.adminShellMain :is(p,li,dd),.platformMain :is(p,li,dd){line-height:1.55}
+.brokerDeskMain :is(input,select,textarea),.adminShellMain :is(input,select,textarea),.platformMain :is(input,select,textarea){font-size:14px;line-height:1.4}
+.brokerDeskMain :is(button,.button),.adminShellMain :is(button,.button),.platformMain :is(button,.button){font-size:14px;line-height:1.35}
+.platformInvitationForm label{font-size:13px}
+.platformHistory th,.platformHistory td{font-size:13px}
+.platformSidebar{width:100%}
+.platformSidebar a{gap:10px}
+.platformDetailsPage{max-width:1150px;margin:0 auto}
+.platformDetailsHeading{margin-bottom:18px}
+.platformDetailsHeading h1{font-size:29px;letter-spacing:-.025em}
+.platformDetailsPage .platformDetailsGrid .card{padding:24px}
+.platformDetailsPage .platformDetailsGrid h2{font-size:20px}
+.platformDetailsPage .backLink{margin-bottom:18px}
+/* Focused account and invitation pages use the same logo, heading and field styles. */
+.center .card,.page>.card{color:var(--br-text)}
+.center .card h1,.page>.card h1{font-size:27px;line-height:1.2;letter-spacing:-.025em;color:var(--br-title)}
+.center .card h2,.page>.card h2{font-size:20px;line-height:1.25;color:var(--br-title)}
+.center .card :is(p,li),.page>.card :is(p,li){line-height:1.55}
+.center .card :is(input,select,textarea),.page>.card :is(input,select,textarea){font-size:14px;line-height:1.4}
+.center .card .brokerRelayBrand,.page>.card .brokerRelayBrand{margin-bottom:8px}
+@media(max-width:620px){.platformDetailsHeading h1,.center .card h1,.page>.card h1{font-size:24px}.platformDetailsPage .platformDetailsGrid .card{padding:18px}}
+
+/* Keep the dashboard banner legible after the common heading colour is applied. */
+.brokerDeskMain .hero h1{color:#fff}
+.brokerDeskMain .hero .eyebrow{color:#dbeafe;opacity:1}
+.brokerDeskMain .hero p{color:#fff}

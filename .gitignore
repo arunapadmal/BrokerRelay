@@ -1,0 +1,14 @@
+
+# Local secrets and generated files
+.env
+.env.*
+!.env.example
+node_modules/
+.next/
+.netlify/
+.DS_Store
+*.pem
+*.key
+
+# Do not commit project archives
+*.zip

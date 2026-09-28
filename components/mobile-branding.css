@@ -1,0 +1,30 @@
+.brandingLayout { display:grid; grid-template-columns:minmax(280px,1fr) minmax(260px,340px); gap:28px; align-items:start; margin:18px 0 28px }
+.brandingChoices { display:flex; gap:8px; flex-wrap:wrap; margin:20px 0 }
+.brandingChoice { background:white; border:1px solid #c9d5e7; color:#17315c; padding:10px 12px }
+.brandingChoice.selected { border:2px solid #2563eb; background:#eff6ff }
+.brandingColour { display:flex; align-items:center; gap:10px; padding:12px 0; border-bottom:1px solid #e3eaf3 }
+.brandingColour span { flex:1 }.brandingColour small { display:block; color:#6b7280; margin-top:3px }
+.brandingColour input[type=color] { width:46px; height:38px; padding:2px; cursor:pointer }
+.brandingHex { width:94px!important; font-family:monospace }
+.brandingPhone { position:relative; border:7px solid #172239; border-radius:34px; min-height:540px; padding:22px 15px 66px; color:#10245b; box-shadow:0 16px 35px #152b4a22 }
+.brandingPhoneHeader { display:flex; align-items:center; gap:8px; margin-bottom:42px; font-size:14px }
+.brandingPhoneHeader strong { flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap }
+.brandingCompanyLogo { display:grid; place-items:center; width:32px; height:32px; background:white; border-radius:9px }
+.brandingCompanyLogo img { max-width:29px; max-height:29px; object-fit:contain }
+.brandingPhone h2 { margin:0 0 4px; font-size:23px }.brandingPhone p { font-size:13px; margin:0 0 22px }
+.brandingQuick { display:flex; gap:7px; margin-bottom:20px }.brandingQuick span { flex:1; display:grid; place-items:center; padding:14px 1px; background:#fff; border-radius:12px; font-size:24px }.brandingQuick small { font-size:10px; margin-top:5px }
+.brandingPreviewCard { margin-bottom:9px; padding:16px 10px; background:#fff; border-radius:11px; font-size:13px; font-weight:700; display:flex; align-items:center; justify-content:space-between }
+.brandingPreviewCard b { border-radius:30px; min-width:24px; text-align:center; padding:3px 5px }
+.brandingPreviewNav { position:absolute; bottom:8px; left:8px; right:8px; display:flex; justify-content:space-around; background:white; border-radius:14px; padding:9px 0; font-size:20px }.brandingPreviewNav span { display:grid; place-items:center }.brandingPreviewNav small { font-size:9px }
+.brandingLegend { font-size:12px; color:#6b7280; padding-top:10px }
+@media(max-width:760px){.brandingLayout{grid-template-columns:1fr}.brandingPhone{max-width:330px;margin:auto}}
+
+/* Settings controls follow the Broker Desk palette and maintain readable labels. */
+.applicationMain .card .brandingChoices button.brandingChoice{background:#fff;color:#17315c;border:1px solid #c9d5e7;font-size:14px}
+.applicationMain .card .brandingChoices button.brandingChoice.selected{background:#eaf2ff;color:#1d4ed8;border:2px solid #2563eb}
+.applicationMain .card .brandingChoices button.brandingChoice:hover{background:#f0f6ff}
+.applicationMain .brandingLayout>.brandingPreviewWrap .brandingPhone h2{color:#10245b}
+.applicationMain .brandingLayout>.brandingPreviewWrap .brandingPhone p{color:#10245b}
+.applicationMain .brandingLayout>.brandingPreviewWrap .brandingPhone{max-width:340px}
+
+.applicationMain .brandingPhone h2,.applicationMain .brandingPhone p{color:inherit}

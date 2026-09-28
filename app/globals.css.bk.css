@@ -1,0 +1,168 @@
+*{box-sizing:border-box}body{margin:0;background:#f5f7fb;color:#111827;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+button,.button{background:#08105f;color:#fff;border:0;border-radius:10px;padding:12px 18px;font-weight:700;cursor:pointer;text-decoration:none;display:inline-block}
+button:disabled{opacity:.55;cursor:not-allowed}.secondary{background:#eef0f7;color:#08105f}.small{padding:8px 12px}
+input{width:100%;padding:12px;border:1px solid #d5d9e2;border-radius:9px;margin:6px 0 16px;background:white;font:inherit}
+label{font-size:13px;font-weight:700}.center{min-height:100vh;display:grid;place-items:center;padding:24px}
+.page{max-width:1180px;margin:auto;padding:26px}.card{background:#fff;border:1px solid #e3e6ee;border-radius:18px;padding:24px;box-shadow:0 4px 18px rgba(0,0,0,.04);margin-bottom:22px}
+.narrow{width:min(440px,100%)}.joinCard{width:min(520px,100%)}.brand{font-weight:900;letter-spacing:.14em;color:#08105f}
+.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:26px}.hero{background:#08105f;color:#fff;border-radius:20px;padding:28px;display:flex;justify-content:space-between;gap:20px;align-items:center;margin-bottom:22px}
+.hero button{background:#fff;color:#08105f}.eyebrow{font-size:11px;font-weight:800;letter-spacing:.16em;opacity:.7}.muted{color:#6b7280}
+.notice{padding:13px 15px;border-radius:10px;background:#fff7d6;margin-bottom:18px}.error{color:#a31313}.success{padding:18px;border-radius:14px;background:#edf9ef}
+.invite{display:grid;grid-template-columns:1fr auto;gap:25px;align-items:center}.row{display:flex;gap:10px;flex-wrap:wrap}.qr{padding:12px;background:white;border:1px solid #e5e7eb;border-radius:14px}
+.sectionHead{display:flex;align-items:center;justify-content:space-between}.pill{font-size:12px;background:#eef0f7;padding:6px 10px;border-radius:999px}
+.tableWrap{overflow:auto}table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:12px;border-bottom:1px solid #edf0f4}th{font-size:12px;color:#6b7280}
+.tabs{display:flex;gap:8px;margin:18px 0}.tabs button{flex:1}
+@media(max-width:720px){.hero,.invite{display:block}.hero button{margin-top:18px}.qr{width:max-content;margin-top:20px}.page{padding:14px}}
+
+/* BrokerRelay product identity. The company name remains the main dashboard heading. */
+.brokerRelayBrand{display:inline-flex;align-items:center;gap:11px;color:#1e3a8a;font-weight:800;letter-spacing:-.025em;font-size:23px;line-height:1}
+.brokerRelayBrand img{display:block;max-width:100%;height:auto;flex:none;mix-blend-mode:multiply}
+.brokerRelayBrand.compact{font-size:14px;gap:7px;letter-spacing:0}
+.brokerRelayLogin{border-color:#e2eaf8;box-shadow:0 12px 40px rgba(37,99,235,.07);padding:32px}
+.brokerRelayLogin h1{margin:32px 0 6px;font-size:25px}
+.brokerRelayLogin button:not(.secondary){background:#2563eb}
+.brokerRelayLogin input:focus{outline:2px solid #93c5fd;outline-offset:1px}
+.page .formGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 16px}
+@media(max-width:720px){.page .formGrid{grid-template-columns:1fr}}
+
+/* Milestone 3 — Secure Messaging */
+.messageLink{display:inline-flex;align-items:center;gap:7px;color:#08105f;font-weight:800;text-decoration:none}
+.unreadBadge{display:inline-grid;place-items:center;min-width:22px;height:22px;padding:0 6px;border-radius:999px;background:#c92727;color:#fff;font-size:11px}
+.messagePage{max-width:980px}.messageHeader{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;margin-bottom:18px}.messageHeader h1{margin:5px 0}.backLink{display:inline-block;margin-bottom:20px;color:#08105f;font-weight:750;text-decoration:none}.secureLabel{background:#edf9ef;color:#24613a;border-radius:999px;padding:8px 12px;font-size:12px;font-weight:800}
+.chatCard{background:#fff;border:1px solid #e3e6ee;border-radius:18px;overflow:hidden;box-shadow:0 4px 18px rgba(0,0,0,.04)}.chatMessages{height:min(58vh,620px);overflow:auto;padding:22px;background:#f7f8fc}.emptyChat{min-height:260px;display:grid;place-content:center;text-align:center}.emptyChat p{margin-top:8px}.messageRow{display:flex;margin:9px 0}.messageRow.mine{justify-content:flex-end}.messageRow.theirs{justify-content:flex-start}.messageBubble{max-width:min(72%,620px);padding:11px 14px;border-radius:16px;background:#fff;border:1px solid #e1e5ee;white-space:pre-wrap;overflow-wrap:anywhere}.messageRow.mine .messageBubble{background:#08105f;color:#fff;border-color:#08105f}.messageBubble span{display:block;margin-top:6px;font-size:10px;opacity:.65;text-align:right}.messageComposer{padding:16px;border-top:1px solid #e3e6ee;background:#fff}.messageComposer textarea{width:100%;resize:vertical;min-height:76px;border:1px solid #d5d9e2;border-radius:12px;padding:12px;font:inherit;outline:none}.messageComposer textarea:focus{border-color:#08105f;box-shadow:0 0 0 2px rgba(8,16,95,.08)}.composerFoot{display:flex;justify-content:space-between;align-items:center;gap:14px;margin-top:10px}.composerFoot span{font-size:11px;color:#6b7280}
+@media(max-width:720px){.messageHeader,.composerFoot{align-items:flex-start;flex-direction:column}.messageBubble{max-width:88%}.chatMessages{height:55vh}.messageComposer button{width:100%}}
+
+/* Milestone 4 — Loan / Application Progress */
+.applicationLink{color:#08105f;font-weight:800;text-decoration:none}.applicationPage{max-width:1050px}.applicationHeader{margin-bottom:18px}.applicationGrid{display:grid;grid-template-columns:1.2fr .8fr;gap:16px;margin-bottom:16px}.statusHero{font-size:28px;font-weight:850;color:#08105f;margin:10px 0}.clientNotePreview{margin-top:14px;padding:13px;border-radius:12px;background:#f5f6fa}.applicationForm{display:grid;gap:14px;margin-top:16px}.applicationForm label,.applicationGrid label{display:grid;gap:7px;font-size:13px;font-weight:750}.applicationForm input,.applicationForm select,.applicationForm textarea,.applicationGrid input{width:100%;border:1px solid #d5d9e2;border-radius:10px;padding:11px 12px;font:inherit;background:#fff}.applicationGrid button{margin-top:12px}.statusUpdateCard{margin:16px 0}.historyItem{position:relative;display:grid;grid-template-columns:22px 1fr;gap:10px;padding-bottom:20px}.historyItem:not(:last-child)::before{content:'';position:absolute;left:5px;top:15px;bottom:0;width:2px;background:#d9ddeb}.historyDot{width:12px;height:12px;margin-top:4px;border-radius:50%;background:#08105f;z-index:1}.smallText{font-size:11px}.notice.error{background:#fff0f0;color:#9b1c1c}@media(max-width:760px){.applicationGrid{grid-template-columns:1fr}}
+
+/* BrokerRelay login — soft background with a focused form. */
+.brokerRelayLoginPage{min-height:100vh;display:grid;place-items:center;padding:32px 18px;position:relative;overflow:hidden;background:linear-gradient(145deg,#eff6ff 0%,#f7faff 48%,#eef5ff 100%)}
+.brokerRelayLoginBackdrop{position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 12% 15%,rgba(147,197,253,.23),transparent 34%),radial-gradient(circle at 87% 82%,rgba(37,99,235,.11),transparent 38%)}
+.brokerRelayLoginCard{isolation:isolate;position:relative;width:min(100%,430px);padding:57px 34px 38px;border:1px solid #e1eaf8;border-radius:27px;background:#fff;box-shadow:0 22px 65px rgba(30,64,175,.09);overflow:hidden;text-align:center}
+.brokerRelayLoginCard::before{content:"";position:absolute;z-index:-1;top:-61px;right:-83px;width:210px;height:146px;border-radius:0 0 0 90%;background:#eff6ff;transform:rotate(-13deg)}
+.brokerRelayLoginCard::after{content:"";position:absolute;z-index:-1;bottom:-100px;left:-95px;width:230px;height:145px;border-radius:50%;background:#f1f7ff;transform:rotate(18deg)}
+.brokerRelayLoginIdentity{display:flex;justify-content:center;margin:0 0 38px}
+.brokerRelayLoginIdentity .brokerRelayBrand img{width:235px}
+.brokerRelayLoginCard h1{font-size:26px;line-height:1.2;color:#112652;margin:0 0 6px;letter-spacing:-.025em}
+.brokerRelayLoginIntro{font-size:14px;color:#66758e;margin:0 0 33px}
+.brokerRelayFieldLabel{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.brokerRelayInputWrap{display:flex;align-items:center;width:100%;height:49px;margin:0 0 13px;border:1px solid #d9e3f2;border-radius:10px;background:#fff;color:#788aa6;transition:border-color .15s,box-shadow .15s}
+.brokerRelayInputWrap:focus-within{border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,235,.11)}
+.brokerRelayInputWrap>svg{width:19px;height:19px;margin-left:15px;flex:none}
+.brokerRelayInputWrap input{width:100%;min-width:0;height:100%;border:0!important;outline:0!important;box-shadow:none!important;padding:0 13px;margin:0;background:transparent;font-size:14px;color:#172b50}
+.brokerRelayInputWrap input::placeholder{color:#7c8ba3}
+.brokerRelayVisibility{background:none!important;border:0;padding:7px 13px;color:#8090aa;display:grid;place-items:center}
+.brokerRelayVisibility svg{width:19px;height:19px}
+.brokerRelayLoginActions{display:flex;justify-content:flex-end;margin:4px 0 24px}
+.brokerRelayForgot{border:0;background:none!important;color:#2563eb;padding:4px 0;font-size:13px;font-weight:650;text-decoration:none}
+.brokerRelayForgot:hover{text-decoration:underline}
+.brokerRelayForgot:focus-visible,.brokerRelayVisibility:focus-visible{outline:2px solid #2563eb;outline-offset:2px;border-radius:4px}
+.brokerRelaySignIn{width:100%;background:#2563eb;border-radius:10px;min-height:47px;box-shadow:0 5px 12px rgba(37,99,235,.16)}
+.brokerRelaySignIn:hover{background:#1d4ed8}
+.brokerRelayLoginMessage{margin:18px 0 0;font-size:13px;line-height:1.5;color:#334e79}
+@media(max-width:480px){.brokerRelayLoginCard{padding:48px 24px 32px}.brokerRelayLoginIdentity .brokerRelayBrand img{width:215px}}
+
+/* BrokerRelay presentation board: shared desktop styling and owner workspace. */
+:root{--br-blue:#2563eb;--br-ink:#1f2937;--br-muted:#6b7280;--br-line:#e4eaf4;--br-surface:#f8fafc}
+body{background:linear-gradient(145deg,#eff6ff 0%,#f8fafc 34%,#f8fafc 100%);color:var(--br-ink)}
+.page{max-width:1440px;padding:32px 28px}
+.card,.chatCard{border:1px solid var(--br-line);border-radius:18px;box-shadow:0 8px 30px rgba(31,41,55,.045)}
+button,.button{background:var(--br-blue);border-radius:10px}
+button:hover:not(:disabled),.button:hover{filter:brightness(.95)}
+button:focus-visible,.button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid #93c5fd;outline-offset:2px}
+.secondary{background:#eff6ff;color:#1e40af}
+.muted{color:var(--br-muted)}.eyebrow{color:#52627b}
+.topbar{padding:6px 0 26px}.hero{background:linear-gradient(115deg,#143692,#2563eb);border-radius:22px;box-shadow:0 12px 28px rgba(37,99,235,.16)}.hero button{color:#1d4ed8}
+.tableWrap{border:1px solid var(--br-line);border-radius:12px}table{background:#fff}th{background:#f5f8fd;color:#617089}tbody tr:hover{background:#f9fbff}th,td{padding:14px 16px}
+.pill{background:#eaf2ff;color:#1d4ed8;font-weight:700}.messageLink,.applicationLink,.backLink{color:#1d4ed8}
+.platformTopbar{padding:12px 12px 28px}.platformRole{align-self:center;color:#52627b;font-size:13px;font-weight:700}
+.platformLayout{display:grid;grid-template-columns:210px minmax(0,1fr);gap:18px;align-items:start}
+.platformNav{position:sticky;top:24px;display:flex;flex-direction:column;gap:8px;padding:18px 12px;background:#fff;border:1px solid var(--br-line);border-radius:18px;min-height:460px}
+.platformNav a,.platformNav span{display:block;padding:12px 14px;border-radius:10px;font-size:14px;color:#34445f;text-decoration:none;font-weight:650}
+.platformNav a:hover{background:#f4f8ff}.platformNav .platformNavActive{background:#eaf2ff;color:#1d4ed8}
+.platformContent{min-width:0}.platformCompanies h1{font-size:31px;letter-spacing:-.03em;margin:6px 0 4px}.platformInvite{margin:0 0 22px}.platformInvite h2{margin:6px 0}.platformInvite form{max-width:740px}
+.platformContent .card{padding:26px 30px;margin-bottom:18px}.platformContent input{margin-top:9px}.platformContent .tableWrap{margin-top:20px}
+@media(max-width:760px){.page{padding:18px 14px}.platformLayout{display:block}.platformNav{position:static;min-height:0;flex-direction:row;overflow:auto;margin-bottom:16px;padding:8px}.platformNav a,.platformNav span{white-space:nowrap}.platformContent .card{padding:20px}.platformRole{display:none}.topbar{gap:12px;align-items:flex-start}.topbar .row{justify-content:flex-end}.sectionHead{gap:14px;align-items:flex-start;flex-wrap:wrap}}
+
+/* Platform owner page based on the supplied BrokerRelay interface reference. */
+.platformShell{max-width:1440px;margin:24px auto;background:#fff;border:1px solid #e9eef7;border-radius:24px;overflow:hidden;box-shadow:0 16px 45px rgba(31,57,110,.06)}
+.platformHeader{height:90px;display:flex;align-items:center;justify-content:space-between;padding:0 34px;border-bottom:1px solid #e8edf6}
+.platformHeader .brokerRelayBrand img{width:175px;height:auto}
+.platformAccount{display:flex;align-items:center;gap:13px;color:#14244b}.platformAccount strong,.platformAccount small{display:block}.platformAccount strong{font-size:14px}.platformAccount small{color:#72809b;font-size:12px;margin-top:3px}
+.platformAvatar{display:grid;place-items:center;background:#607a9c;color:#fff;width:42px;height:42px;border-radius:50%;font-weight:700}.platformDeskLink{color:#677a9b;font-size:23px;text-decoration:none;padding:6px}
+.platformBody{display:grid;grid-template-columns:235px minmax(0,1fr);min-height:700px}
+.platformSidebar{border-right:1px solid #e8edf6;padding:22px 15px;display:flex;flex-direction:column;gap:7px}
+.platformSidebar a{display:flex;align-items:center;gap:16px;color:#243555;font-size:14px;font-weight:650;text-decoration:none;padding:12px 14px;border-radius:11px}.platformSidebar a span{font-size:21px;width:26px;text-align:center;color:#485e82}.platformSidebar a:hover{background:#f4f8ff}.platformSidebar .platformNavActive{color:#2563eb;background:#eaf2ff}.platformSidebar .platformNavActive span{color:#2563eb}
+.platformSidebarBottom{margin-top:auto;border-top:1px solid #e8edf6;padding-top:16px}
+.platformMain{padding:34px 30px;min-width:0;background:linear-gradient(#fff,#fbfdff)}
+.platformHeading{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;margin-bottom:26px}.platformHeading h1{font-size:30px;letter-spacing:-.03em;color:#10244e;margin:0 0 10px}.platformHeading p{max-width:560px;color:#62718c;line-height:1.5;margin:0;font-size:14px}.platformInviteJump{white-space:nowrap;margin-top:5px}
+.platformCompanies .tableWrap{border:1px solid #e8edf6;border-radius:13px;overflow-x:auto}.platformCompanies table{min-width:620px}.platformCompanies th{background:#f4f7fb}.platformCompanies td,.platformCompanies th{font-size:13px;padding:16px 18px}.platformCompanies tbody tr:last-child td{border-bottom:0}.platformStatus{display:inline-flex;align-items:center;gap:8px;text-transform:capitalize}.platformStatus::before{content:'';width:8px;height:8px;border-radius:50%;background:#f59e0b}.platformStatus.isActive::before{background:#10b981}
+.platformEmpty{color:#64748b;font-size:13px;padding:8px 4px}
+.platformInvitationCard{display:grid;grid-template-columns:1.05fr 1fr;gap:24px;margin:28px 0 24px;padding:26px;background:#fff;border:1px solid #e8edf6;border-radius:18px;box-shadow:0 7px 25px rgba(31,57,110,.045);scroll-margin-top:20px}
+.platformInvitationIntro{display:flex;align-items:flex-start;gap:16px;padding:6px 16px 0 0;border-right:1px solid #e8edf6}.platformInvitationIcon{display:grid;place-items:center;flex:none;width:42px;height:42px;border-radius:50%;background:#eaf2ff;color:#2563eb;font-size:20px}.platformInvitationIntro h2{font-size:17px;color:#12264e;margin:8px 0 14px}.platformInvitationIntro p{font-size:13px;line-height:1.6;color:#697891;max-width:330px;margin:0}.platformInvitationIntro .platformExpiry{margin-top:10px}
+.platformInvitationForm label{display:block;font-size:12px;color:#263858}.platformInvitationForm input{margin:7px 0 16px;padding:12px 14px;border-color:#dbe4f2}.platformInvitationForm input::placeholder{color:#94a3b8}.platformSubmit{width:100%;background:#2563eb;margin-top:4px;min-height:46px}
+.platformHistory{padding:24px;background:#fff;border:1px solid #e8edf6;border-radius:18px}.platformHistory h2{font-size:18px;color:#12264e;margin:0 0 18px}.platformHistory th,.platformHistory td{font-size:12px}.platformHistory td{overflow-wrap:anywhere}
+@media(max-width:800px){.platformShell{margin:0;border-radius:0}.platformHeader{padding:0 18px;height:74px}.platformBody{display:block}.platformSidebar{position:static;display:flex;flex-direction:row;overflow-x:auto;border-right:0;border-bottom:1px solid #e8edf6;padding:8px}.platformSidebar a{white-space:nowrap}.platformSidebarBottom{margin:0 0 0 auto;border:0;padding:0}.platformMain{padding:24px 16px}.platformInvitationCard{grid-template-columns:1fr}.platformInvitationIntro{border-right:0;border-bottom:1px solid #e8edf6;padding-bottom:18px}.platformHeading{flex-wrap:wrap}.platformAccount strong,.platformAccount small{display:none}}
+
+/* Platform account menu and edge-to-edge owner workspace. */
+.platformShell{margin:0 auto;min-height:100vh;border-top:0;border-bottom:0;border-radius:0}
+.platformAccount{position:relative;display:block}.platformAccount summary{display:flex;align-items:center;gap:13px;list-style:none;cursor:pointer;padding:7px 4px;border-radius:8px}.platformAccount summary::-webkit-details-marker{display:none}.platformAccount summary:hover{background:#f4f8ff}.platformChevron{color:#677a9b;font-size:22px;padding-left:7px}.platformAccountMenu{position:absolute;right:0;top:calc(100% + 8px);z-index:20;min-width:180px;padding:7px;background:#fff;border:1px solid #dbe4f2;border-radius:12px;box-shadow:0 14px 30px rgba(31,57,110,.13)}.platformAccountMenu a,.platformAccountMenu button{display:block;width:100%;text-align:left;padding:10px 12px;border-radius:7px;background:transparent;color:#243555;text-decoration:none;font-size:14px;font-weight:650}.platformAccountMenu a:hover,.platformAccountMenu button:hover{background:#eaf2ff;filter:none}
+@media(max-width:800px){.platformShell{border:0}.platformAccount summary{gap:7px}.platformChevron{padding-left:0}}
+
+.platformCompanyLink{color:#1d4ed8;font-weight:750;text-decoration:none}.platformCompanyLink:hover{text-decoration:underline}.platformCompanies td a[href^="tel:"]{color:#263858;text-decoration:none}.platformCompanies td a[href^="tel:"]:hover{text-decoration:underline}
+.platformDetailsPage{max-width:1150px}.platformDetailsHeading{background:#fff;border:1px solid #e8edf6;border-radius:18px;padding:26px 30px;margin-bottom:18px}.platformDetailsHeading h1{margin:7px 0 12px;color:#10244e}.platformDetailsGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}.platformDetailsGrid .card{margin:0}.platformDetailsGrid h2{font-size:18px;margin:0 0 20px;color:#12264e}.platformDetailsGrid dl{margin:0}.platformDetailsGrid dl div{padding:11px 0;border-top:1px solid #e8edf6}.platformDetailsGrid dt{color:#697891;font-size:12px;font-weight:700;margin-bottom:5px}.platformDetailsGrid dd{margin:0;overflow-wrap:anywhere}.platformDetailsGrid a{color:#1d4ed8}
+@media(max-width:760px){.platformDetailsGrid{grid-template-columns:1fr}}
+
+.platformSearchLabel{display:block;margin:0 0 6px;color:#465977;font-size:12px}.platformSearch{width:min(360px,100%);margin:0 0 16px;padding:10px 13px;background:#fff;border:1px solid #dbe4f2;border-radius:10px}
+
+.platformCompanyToggle{display:inline-flex;align-items:center;gap:8px;padding:0;background:none;border:0;border-radius:0;color:#1d4ed8;font:inherit;font-weight:750;text-align:left}.platformCompanyToggle:hover{color:#163da5;text-decoration:underline;filter:none}.platformCompanyToggle span{color:#64748b}.platformCompanyToggle:focus-visible,.platformLogoUpload:focus-within{outline:2px solid #2563eb;outline-offset:3px}
+.platformCompanies .platformCompanyProfileRow td{padding:0;background:#f7faff;border-bottom:1px solid #dbe6f6}.platformCompanyProfilePanel{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(250px,.9fr);gap:24px;padding:22px 24px}.platformCompanyProfilePanel h3{margin:5px 0 14px;font-size:18px;color:#12264e}.platformCompanyProfilePanel dl{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:0}.platformCompanyProfilePanel dt{font-size:11px;font-weight:750;color:#697891}.platformCompanyProfilePanel dd{margin:4px 0 0;overflow-wrap:anywhere;font-size:13px;color:#263858}.platformCompanyProfileActions{display:flex;align-items:flex-start;flex-direction:column;gap:16px}.platformCompanyProfileActions>.button{font-size:12px}.platformLogoEditor{display:flex;align-items:center;gap:15px;max-width:100%;min-width:0}.platformLogoPreview{display:grid;place-items:center;flex:none;width:100px;height:76px;overflow:hidden;background:#fff;border:1px solid #dbe4f2;border-radius:11px}.platformLogoPreview img{display:block;max-width:100%;max-height:100%;object-fit:contain}.platformLogoPreview>span{font-size:30px;font-weight:800;color:#2563eb}.platformLogoEditor strong{color:#12264e}.platformLogoEditor p{margin:5px 0 9px}.platformLogoUpload{position:relative;display:inline-block;padding:9px 13px;border-radius:9px;background:#2563eb;color:#fff;font-size:12px;font-weight:750;cursor:pointer}.platformLogoUpload input{position:absolute;inset:0;width:100%;height:100%;margin:0;opacity:0;cursor:pointer}.platformLogoUpload:has(input:disabled){opacity:.55;cursor:wait}.platformLogoEditor .platformLogoError{color:#9b1c1c}.platformLogoEditor .platformLogoSuccess{color:#23633a}
+@media(max-width:800px){.platformCompanyProfilePanel{grid-template-columns:1fr}.platformLogoPreview{width:88px;height:68px}}
+
+/* BrokerDesk home screen, aligned with the BrokerRelay owner workspace. */
+.brokerDeskShell{min-height:100vh;background:#f5f8ff}.brokerDeskHeader{height:82px;display:flex;align-items:center;justify-content:space-between;padding:0 32px;background:#fff;border-bottom:1px solid #e4eaf4}.brokerDeskHeader .brokerRelayBrand img{width:175px;height:auto}
+.brokerDeskAccount{display:flex;align-items:center;gap:24px;color:#485b7a;font-size:13px;font-weight:650}.brokerDeskAccount details{position:relative}.brokerDeskAccount summary{display:flex;align-items:center;gap:10px;list-style:none;cursor:pointer}.brokerDeskAccount summary::-webkit-details-marker{display:none}.brokerDeskAvatar{display:grid;place-items:center;width:40px;height:40px;border-radius:50%;background:#607a9c;color:white;font-size:17px}.brokerDeskAccountMenu{position:absolute;right:0;top:calc(100% + 10px);z-index:5;min-width:145px;padding:6px;background:white;border:1px solid #e4eaf4;border-radius:11px;box-shadow:0 12px 24px rgba(31,57,110,.12)}.brokerDeskAccountMenu button{background:transparent;color:#263858;text-align:left;width:100%;font-size:13px}.brokerDeskAccountMenu button:hover{background:#eaf2ff;filter:none}
+.brokerDeskLayout{display:grid;grid-template-columns:225px minmax(0,1fr);max-width:1600px;min-height:calc(100vh - 82px);margin:auto}.brokerDeskNav{display:flex;flex-direction:column;gap:5px;padding:24px 13px;background:#fff;border-right:1px solid #e4eaf4}.brokerDeskNav a{display:flex;align-items:center;gap:6px;padding:12px 14px;border-radius:10px;text-decoration:none;color:#334766;font-weight:650;font-size:14px}.brokerDeskNav a:hover{background:#f2f6ff}.brokerDeskNav .brokerDeskNavActive{background:#eaf2ff;color:#2563eb}.brokerDeskNav .unreadBadge{margin-left:auto}
+.brokerDeskMain{padding:30px;min-width:0;max-width:1320px;width:100%;margin:0 auto}.brokerDeskMain .hero{background:linear-gradient(115deg,#143692,#2563eb);padding:30px 34px;margin-bottom:20px}.brokerDeskMain .hero h1{font-size:27px;letter-spacing:-.02em;margin:8px 0}.brokerDeskMain .hero .eyebrow{color:#dbeafe}.brokerDeskMain .hero p:last-child{margin-bottom:0;font-size:14px}.brokerDeskMain .hero button{background:#fff;color:#1d4ed8}
+.brokerDeskOverview{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin:22px 0}.brokerDeskMetric{display:flex;flex-direction:column;gap:6px;min-height:126px;padding:19px 22px;background:#fff;border:1px solid #e4eaf4;border-radius:16px;box-shadow:0 5px 18px rgba(31,57,110,.04);text-decoration:none;color:#12264e}.brokerDeskMetric:hover{border-color:#b9cffa}.brokerDeskMetric span{font-size:22px;color:#2563eb}.brokerDeskMetric strong{font-size:22px}.brokerDeskMetric small{color:#697891;font-size:12px}.brokerDeskMetric:last-child strong{font-size:17px;margin-top:4px}
+.brokerDeskClients{scroll-margin-top:18px}.brokerDeskSearchLabel{display:block;margin:5px 0;color:#465977;font-size:12px}.brokerDeskSearch{width:min(350px,100%);margin:0 0 18px}.brokerDeskEmpty{background:#f8fbff;border-radius:12px;padding:24px;text-align:center}.brokerDeskClients th,.brokerDeskClients td{font-size:13px}
+@media(max-width:900px){.brokerDeskLayout{display:block}.brokerDeskNav{flex-direction:row;overflow:auto;white-space:nowrap;border-right:0;border-bottom:1px solid #e4eaf4;padding:8px}.brokerDeskMain{padding:20px}.brokerDeskAccount>span{display:none}}
+@media(max-width:620px){.brokerDeskHeader{height:70px;padding:0 15px}.brokerDeskAccount summary{font-size:11px}.brokerDeskMain .hero{display:flex;flex-direction:column;align-items:stretch;padding:24px}.brokerDeskMain .hero button{width:100%}.brokerDeskMain .hero h1{font-size:23px}.brokerDeskOverview{grid-template-columns:1fr;gap:10px}.brokerDeskMetric{min-height:0}.brokerDeskClients .sectionHead{align-items:flex-start}}
+.brokerDeskClients td small{display:block;color:#79879b;font-size:11px;margin-top:4px;overflow-wrap:anywhere}.brokerDeskClients td{overflow-wrap:anywhere}
+
+/* In-page client profile and clear message entry point. */
+.brokerDeskClientToggle{background:transparent;color:#1d4ed8;font-size:13px;font-weight:800;padding:0;text-align:left;border-radius:3px}.brokerDeskClientToggle:hover{filter:none;text-decoration:underline}.brokerDeskClientToggle span{margin-left:4px}.brokerDeskProfileRow td{padding:0!important;border-bottom:1px solid #dce6f5}.brokerDeskProfilePanel{display:flex;justify-content:space-between;gap:30px;padding:24px;background:#f4f8ff}.brokerDeskProfilePanel h3{color:#12264e;margin:3px 0 18px}.brokerDeskProfilePanel dl{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 24px;margin:0}.brokerDeskProfilePanel dt{font-size:11px;color:#65758f;font-weight:700}.brokerDeskProfilePanel dd{margin:3px 0 0;overflow-wrap:anywhere}.brokerDeskProfileActions{display:flex;align-content:start;justify-content:flex-end;align-items:flex-start;flex-wrap:wrap;gap:8px;max-width:400px}.brokerDeskProfileActions .button{font-size:12px;padding:10px 12px}
+@media(max-width:760px){.brokerDeskProfilePanel{flex-direction:column}.brokerDeskProfileActions{justify-content:flex-start}.brokerDeskProfilePanel dl{grid-template-columns:1fr}}
+
+/* Company branding is fitted within an owner-selected display area. */
+.platformLogoEditor{flex-direction:column;align-items:flex-start}
+.platformLogoPreview{max-width:100%;width:160px;height:72px;padding:5px}
+.platformLogoPreview img{width:100%;height:100%;max-width:100%;max-height:100%;object-fit:contain}
+.platformLogoDimensions{display:flex;align-items:flex-end;flex-wrap:wrap;gap:9px;margin-top:15px}
+.platformLogoDimensions label{display:grid;gap:5px;color:#465977;font-size:11px}
+.platformLogoDimensions input{box-sizing:border-box;width:92px;min-height:37px;margin:0;padding:7px 9px;font-size:13px}
+.platformLogoDimensions button{min-height:37px}
+.brokerDeskHeroIdentity{display:flex;align-items:center;gap:22px;min-width:0}
+.brokerDeskCompanyLogo{display:grid;place-items:center;flex:none;max-width:40%;max-height:140px;padding:10px;overflow:hidden;background:#fff;border-radius:15px;box-shadow:0 4px 15px rgba(0,0,0,.12)}
+.brokerDeskCompanyLogo img{display:block;max-width:100%;max-height:100%;object-fit:contain}
+.announcementCompanyIdentity{display:flex;align-items:center;gap:10px}
+.announcementCompanyIdentity img{width:54px;height:34px;object-fit:contain;background:#fff;border-radius:5px}
+@media(max-width:620px){.brokerDeskHeroIdentity{align-items:flex-start;flex-direction:column;gap:12px}.brokerDeskCompanyLogo{max-width:100%}}
+
+/* Application workspace keeps the same persistent navigation as BrokerDesk. */
+.applicationMain{max-width:1200px}
+.applicationMain .applicationHeader{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;margin-bottom:24px}
+.applicationMain .applicationHeader .eyebrow,.applicationMain .card .eyebrow{color:#59749b}
+.applicationMain .applicationHeader h1{margin:7px 0;color:#12264e;font-size:29px;letter-spacing:-.025em}
+.applicationMain .applicationHeader .muted{margin:0;line-height:1.5}
+.applicationMain .card{border:1px solid #e4eaf4;border-radius:18px;box-shadow:0 8px 28px rgba(31,57,110,.045)}
+.applicationMain .card h2{color:#12264e}
+.applicationMain .card button:not(.secondary){background:#2563eb}
+.applicationMain .card button.secondary{background:#eaf2ff;color:#1d4ed8}
+.applicationMain .card :is(input,select,textarea):focus-visible{outline:2px solid #2563eb;outline-offset:2px}
+.applicationMain .historyDot{background:#2563eb}
+.applicationMain .systemOfRecord{flex:none}
+@media(max-width:760px){.applicationMain .applicationHeader{flex-direction:column}.applicationMain .systemOfRecord{max-width:100%}}
+@media(max-width:620px){.applicationMain .applicationHeader h1{font-size:24px}}
+.applicationMain .card button.danger{background:#a61d24}
+.applicationMain .card .row select{min-width:min(240px,100%);flex:1;min-height:44px;padding:10px 12px;border:1px solid #d5d9e2;border-radius:10px;background:#fff;font:inherit}

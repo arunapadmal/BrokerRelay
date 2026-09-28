@@ -1,0 +1,15 @@
+*{box-sizing:border-box}body{margin:0;background:#f5f7fb;color:#111827;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+button,.button{background:#08105f;color:#fff;border:0;border-radius:10px;padding:12px 18px;font-weight:700;cursor:pointer;text-decoration:none;display:inline-block}
+button:disabled{opacity:.55;cursor:not-allowed}.secondary{background:#eef0f7;color:#08105f}.small{padding:8px 12px}
+input{width:100%;padding:12px;border:1px solid #d5d9e2;border-radius:9px;margin:6px 0 16px;background:white;font:inherit}
+label{font-size:13px;font-weight:700}.center{min-height:100vh;display:grid;place-items:center;padding:24px}
+.page{max-width:1180px;margin:auto;padding:26px}.card{background:#fff;border:1px solid #e3e6ee;border-radius:18px;padding:24px;box-shadow:0 4px 18px rgba(0,0,0,.04);margin-bottom:22px}
+.narrow{width:min(440px,100%)}.joinCard{width:min(520px,100%)}.brand{font-weight:900;letter-spacing:.14em;color:#08105f}
+.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:26px}.hero{background:#08105f;color:#fff;border-radius:20px;padding:28px;display:flex;justify-content:space-between;gap:20px;align-items:center;margin-bottom:22px}
+.hero button{background:#fff;color:#08105f}.eyebrow{font-size:11px;font-weight:800;letter-spacing:.16em;opacity:.7}.muted{color:#6b7280}
+.notice{padding:13px 15px;border-radius:10px;background:#fff7d6;margin-bottom:18px}.error{color:#a31313}.success{padding:18px;border-radius:14px;background:#edf9ef}
+.invite{display:grid;grid-template-columns:1fr auto;gap:25px;align-items:center}.row{display:flex;gap:10px;flex-wrap:wrap}.qr{padding:12px;background:white;border:1px solid #e5e7eb;border-radius:14px}
+.sectionHead{display:flex;align-items:center;justify-content:space-between}.pill{font-size:12px;background:#eef0f7;padding:6px 10px;border-radius:999px}
+.tableWrap{overflow:auto}table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:12px;border-bottom:1px solid #edf0f4}th{font-size:12px;color:#6b7280}
+.tabs{display:flex;gap:8px;margin:18px 0}.tabs button{flex:1}
+@media(max-width:720px){.hero,.invite{display:block}.hero button{margin-top:18px}.qr{width:max-content;margin-top:20px}.page{padding:14px}}

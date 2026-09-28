@@ -1,0 +1,17 @@
+.announcementMain .announcementHeader{display:flex;align-items:center;justify-content:space-between;gap:20px;margin-bottom:24px}
+.announcementMain .announcementHeader .eyebrow{color:#59749b}
+.announcementMain .announcementHeader h1{margin:7px 0;color:#12264e;font-size:29px;letter-spacing:-.025em}
+.announcementMain .announcementHeader .muted{margin:0}
+.announcementMain .systemOfRecord{flex:none}
+.announcementMain .card{border:1px solid #e4eaf4;border-radius:18px;box-shadow:0 8px 28px rgba(31,57,110,.045)}
+.announcementMain .card h2{margin:4px 0 12px;color:#12264e}
+.announcementMain .card .eyebrow{color:#59749b}
+.announcementMain .card button:not(.secondary){background:#2563eb}
+.announcementMain .card button.secondary{background:#eaf2ff;color:#1d4ed8}
+.announcementMain .card input[type="radio"],.announcementMain .card input[type="checkbox"]{width:auto;margin:0;vertical-align:middle;accent-color:#2563eb}
+.announcementMain .card select,.announcementMain .card textarea{box-sizing:border-box;width:100%;padding:11px 12px;border:1px solid #d5d9e2;border-radius:10px;background:#fff;font:inherit}
+.announcementMain .card select{display:block;min-height:45px}
+.announcementMain .card :is(input,select,textarea):focus-visible{outline:2px solid #2563eb;outline-offset:2px}
+.announcementMain .historyDot{background:#2563eb}
+@media(max-width:800px){.announcementMain .announcementHeader{align-items:flex-start;flex-direction:column}.announcementMain .systemOfRecord{max-width:100%}}
+@media(max-width:620px){.announcementMain .card .sectionHead{align-items:flex-start;flex-wrap:wrap;gap:12px}.announcementMain .announcementHeader h1{font-size:24px}}
