@@ -7,7 +7,7 @@ import { supabase } from '@/lib/supabase'
 
 type Props = {
   clientId?: string
-  section: 'active' | 'archive' | 'replacement' | 'team' | 'documents' | 'settings' | 'messages' | 'help' | 'delivery' | 'mobile'
+  section: 'active' | 'archive' | 'replacement' | 'team' | 'documents' | 'settings' | 'messages' | 'help' | 'delivery' | 'mobile' | 'billing'
   children: ReactNode
 }
 
@@ -74,6 +74,7 @@ export function ApplicationWorkspaceShell({ clientId, section, children }: Props
       {canManageStaff && <Link href="/admin">♙ &nbsp; Company &amp; staff</Link>}
       {isHeadBroker && <Link href="/admin/document-delivery" className={section === 'delivery' ? 'brokerDeskNavActive' : undefined} aria-current={section === 'delivery' ? 'page' : undefined}>▣ &nbsp; Delivery settings</Link>}
       {isHeadBroker && <Link href="/settings/mobile-appearance" className={section === 'mobile' ? 'brokerDeskNavActive' : undefined} aria-current={section === 'mobile' ? 'page' : undefined}>◈ &nbsp; Mobile appearance</Link>}
+      {isHeadBroker && <Link href="/billing" className={section === 'billing' ? 'brokerDeskNavActive' : undefined} aria-current={section === 'billing' ? 'page' : undefined}>▤ &nbsp; Billing &amp; invoices</Link>}
       {isPlatformOwner && <Link href="/platform/companies">▦ &nbsp; Platform companies</Link>}
       <Link href="/help" className={`brokerDeskHelpLink${section === 'help' ? ' brokerDeskNavActive' : ''}`} aria-current={section === 'help' ? 'page' : undefined}>ⓘ &nbsp; Help &amp; Support</Link>
     </nav><div className="brokerDeskMain applicationMain">

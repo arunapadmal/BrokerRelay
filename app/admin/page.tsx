@@ -314,6 +314,7 @@ export default function AdministrationPage() {
         <Link href="/dashboard">⌂ &nbsp; Broker Desk</Link>
         <Link href="/admin" className="adminNavActive" aria-current="page">♙ &nbsp; Company &amp; staff</Link>
         <a href="#company-profile">▦ &nbsp; Company profile</a>
+        {viewerIsHeadBroker && <Link href="/billing">▤ &nbsp; Company billing &amp; invoices</Link>}
         <a href="#staff-directory">♙ &nbsp; Staff directory</a>
         {pending.length > 0 || inviteOpen ? <a href="#staff-invitations">✉ &nbsp; Invitations {pending.length > 0 && <span className="pill">{pending.length}</span>}</a> : <button type="button" onClick={() => setInviteOpen(true)}>✉ &nbsp; Invitations</button>}
         {viewerIsHeadBroker && <a href="#head-broker-handover">⇄ &nbsp; Head Broker handover</a>}

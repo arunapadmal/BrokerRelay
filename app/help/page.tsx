@@ -8,7 +8,7 @@ const sections = [
   ['messages', 'Messages'], ['applications', 'Applications'],
   ['documents', 'Document requests'], ['announcements', 'Announcements'],
   ['follow-ups', 'Follow-up messages'], ['company', 'Company & staff'],
-  ['mobile-appearance', 'Mobile app appearance'],
+  ['mobile-appearance', 'Mobile app appearance'], ['billing', 'Billing & invoices'],
   ['support', 'Help with a problem'],
 ] as const
 
@@ -55,7 +55,7 @@ export default function HelpPage() {
       </section>
       <section className="card" id="announcements"><p className="eyebrow">06 · CLIENT UPDATES</p><h2>Announcements</h2>
         <ol><li>Open <Link href="/announcements">Announcements</Link>. Choose My clients or, if authorised, Company clients. You may narrow recipients by lender or select particular clients.</li>
-          <li>Write a title and message, or load a saved company message. Birthday and New Year messages are examples of manual messages; choose recipients and send each one yourself.</li>
+          <li>General announcements require an active company subscription and a recorded settled application for each recipient. Clients without a settled application can receive loan milestone announcements for their application status. Write a title and message, or load a saved company message. Birthday and New Year messages are examples of manual messages; choose recipients and send each one yourself.</li>
           <li>For a loan follow-up, choose one client and their application. Only messages matching that application’s current status appear. Review the message and recipients before sending.</li>
           <li>Use <strong>Recent announcements</strong> to review sends and read counts. The recipient audience is checked again when sending.</li></ol>
         <p className="muted">A manually sent loan follow-up is linked to its application. Sending it does not change the application status or replace scheduled notifications.</p>
@@ -79,10 +79,18 @@ export default function HelpPage() {
           <li>Choose <strong>Publish changes</strong> when the colours are readable. Clients see the published appearance after their app refreshes.</li></ol>
         <p className="muted">The installed app icon remains BrokerRelay. Button and notification label colours adjust automatically; the background text colour controls headings and labels over the page background.</p>
       </section>
-      <section className="card" id="support"><p className="eyebrow">10 · TROUBLESHOOTING</p><h2>Help with a problem</h2>
+      <section className="card" id="billing"><p className="eyebrow">10 · COMPANY SUBSCRIPTION</p><h2>Billing &amp; invoices</h2>
+        <ol><li>The Head Broker opens <Link href="/billing">Billing &amp; invoices</Link> from the left menu to check the company package, monthly settlement allowance, extra usage and invoices.</li>
+          <li>Each application counts once when its settlement is first recorded. Allowances reset each calendar month in Melbourne time and do not roll over. Extra settlements use the rate shown for that billing month.</li>
+          <li>The Platform Owner can preview the current month invoice before the month ends, even with zero settlements. New invoices and previews show the subtotal, 10% GST and total including GST. Earlier issued invoices keep their original amounts. Monthly invoices cover the previous month and appear on the 1st. When enabled, invoices go to the company billing email, direct debit is scheduled seven days after notice, and receipts follow confirmed payment. The Head Broker can authorise or stop future collection from Company billing & invoices. Settlement records list application numbers and the broker who recorded settlement. A preview does not issue an invoice or request payment. Completed months become available after the first billing month ends.</li>
+          <li>Open an invoice to review its details or print/save a PDF. Follow its payment instructions; the Platform Owner records received payments.</li>
+          <li>Ask the Platform Owner to change your package. Existing-company package changes start next month. General announcements and post-settlement follow-ups require an active subscription, including any approved overdue grace period.</li></ol>
+        <p className="muted">Company setup includes the Head Broker. Any configured additional broker fee applies to a new broker activation; existing staff and reactivation of the same account are not charged again.</p>
+      </section>
+      <section className="card" id="support"><p className="eyebrow">11 · TROUBLESHOOTING</p><h2>Help with a problem</h2>
         <h3>Client or application missing</h3><p>Check that you selected the correct client and that your Head Broker assigned you to their service team. For a withdrawn or older settled loan, check Archive / Past.</p>
         <h3>Document request cannot be completed</h3><p>Ask the Head Broker to open Delivery settings in the left menu and verify the company’s document delivery email. Check the request status before asking the client to upload again.</p>
-        <h3>Follow-up option missing</h3><p>Choose one client and application first. Only messages allowed for that loan status are offered. Approval and settlement defaults also require the follow-up database update.</p>
+        <h3>Follow-up option missing</h3><p>Ask the Head Broker to check the company subscription if a billing restriction appears. Choose one client and application first. Only messages allowed for that loan status are offered. Approval and settlement defaults also require the follow-up database update.</p>
         <h3>Mobile appearance cannot be published</h3><p>Only the Head Broker can edit it. Choose a valid background text colour with enough contrast against the background; the page shows an alert if the combination is difficult to read. If the Background text option is missing or saving fails, ask your administrator to check that the latest web update and mobile appearance database update have been installed.</p>
         <h3>Sign-in or access problem</h3><p>Check that you are using the invited email address. Existing clients can reset their password from the invitation page; signed-in users can <Link href="/account/password">change their password</Link>. If access is still missing, contact your company’s Head Broker or administrator with the page name and error message. Do not send passwords or client documents in a support request.</p>
       </section>

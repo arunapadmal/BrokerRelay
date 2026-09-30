@@ -224,7 +224,8 @@ export default function DashboardPage() {
         {portalAccess.is_head_broker && <Link href="/settings/mobile-appearance">◈ &nbsp; Mobile appearance</Link>}
         {isPlatformOwner && <Link href="/platform/companies">▦ &nbsp; Platform companies</Link>}
         <Link className="brokerDeskHelpLink" href="/help">ⓘ &nbsp; Help &amp; Support</Link>
-      </nav><div className="brokerDeskMain">
+      {portalAccess.is_head_broker && <Link href="/billing">▤ &nbsp; Billing &amp; invoices</Link>}
+    </nav><div className="brokerDeskMain">
 
       <section className="hero">
         <div className="brokerDeskHeroIdentity">

@@ -325,6 +325,14 @@ export default function ClientApplicationsPage() {
     setError('')
     setNotice('')
 
+    if (status === 'settled' && selected.status !== 'settled') {
+      const { data: quote, error: quoteError } = await supabase.rpc('billing_settlement_quote', { p_application_id: selected.id })
+      if (quoteError) { setError(quoteError.message); setBusy(false); return }
+      const amount = new Intl.NumberFormat('en-AU', { style: 'currency', currency: 'AUD' }).format((quote.extra_cents ?? 0) / 100)
+      const explanation = quote.counted ? 'This application has already been counted; no second settlement charge will be created.' : quote.extra_cents > 0 ? `The included allowance has been used. This settlement adds ${amount} to this month's invoice.` : `This settlement uses one of your included settlements (${quote.used} of ${quote.included} already used). If concurrent settlements exceed the allowance, the extra rate is ${new Intl.NumberFormat('en-AU', { style: 'currency', currency: 'AUD' }).format((quote.rate_cents ?? 0) / 100)}.`
+      if (!window.confirm(`Record this settlement? ${explanation} Final usage is checked when saving.`)) { setBusy(false); return }
+    }
+
     const includeSettlementDate =
       status === 'settled' || status === 'settlement_scheduled'
 

@@ -29,7 +29,7 @@ const eligibleKeys: Record<string, string[]> = {
   settlement_scheduled: ['settlement_scheduled'],
   settled: ['settlement_confirmation','settlement_1_month','settlement_3_month','settlement_6_month','settlement_12_month','settlement_annual'],
 }
-type PreviewRow = { client_id: string; client_name: string; email: string | null; connected: boolean }
+type PreviewRow = { client_id: string; client_name: string; email: string | null; connected: boolean; eligible: boolean; reason: string | null }
 type HistoryRow = {
   announcement_id: string
   title: string
@@ -124,11 +124,10 @@ export default function AnnouncementsPage() {
   async function loadRecipients(orgId = organisationId, nextScope = scope, nextLenderId = lenderId) {
     if (!orgId) return
     setLoadingRecipients(true); setError('')
-    const { data, error: previewError } = await supabase.rpc('preview_announcement_audience_v2', {
+    const { data, error: previewError } = await supabase.rpc('billing_announcement_audience', {
       p_organisation_id: orgId,
       p_scope: nextScope,
       p_lender_id: nextLenderId || null,
-      p_client_ids: null,
     })
     setLoadingRecipients(false)
     if (previewError) { setError(previewError.message); setBaseRecipients([]); return }
@@ -140,10 +139,11 @@ export default function AnnouncementsPage() {
   useEffect(() => { if (organisationId) void loadRecipients(organisationId, scope, lenderId) }, [organisationId, scope, lenderId])
 
   const effectiveRecipients = useMemo(() => {
-    if (!selectSpecific) return baseRecipients
+    const available = followUpKey ? baseRecipients : baseRecipients.filter(row => row.eligible)
+    if (!selectSpecific) return available
     const selected = new Set(selectedClients)
-    return baseRecipients.filter(row => selected.has(row.client_id))
-  }, [baseRecipients, selectSpecific, selectedClients])
+    return available.filter(row => selected.has(row.client_id))
+  }, [baseRecipients, selectSpecific, selectedClients, followUpKey])
 
   const visibleClients = useMemo(() => {
     const q = clientSearch.trim().toLowerCase()
@@ -268,7 +268,8 @@ export default function AnnouncementsPage() {
         {isHeadBroker && <Link href="/settings/mobile-appearance">◈ &nbsp; Mobile appearance</Link>}
         {isPlatformOwner && <Link href="/platform/companies">▦ &nbsp; Platform companies</Link>}
         <Link className="brokerDeskHelpLink" href="/help">ⓘ &nbsp; Help &amp; Support</Link>
-      </nav><div className="brokerDeskMain announcementMain">
+      {isHeadBroker && <Link href="/billing">▤ &nbsp; Billing &amp; invoices</Link>}
+    </nav><div className="brokerDeskMain announcementMain">
       <header className="applicationHeader announcementHeader">
         <div>
           <p className="eyebrow">CLIENT COMMUNICATION</p>
@@ -281,6 +282,7 @@ export default function AnnouncementsPage() {
       {error && <div className="notice error">{error}</div>}
       {notice && <div className="notice">{notice}</div>}
 
+      <p className="notice">General announcements are available to clients with a recorded settled application while your company subscription is active. Select a client and application to send a loan milestone message before settlement. {baseRecipients.filter(row => !row.eligible).length} client(s) excluded from general announcements.</p>
       <section className="card" style={{ marginBottom: 16, borderLeft: '4px solid var(--company-accent, #111878)' }}>
         <div className="sectionHead">
           <div><p className="eyebrow">RECIPIENTS</p><h2>Who should receive this?</h2></div>
@@ -310,7 +312,7 @@ export default function AnnouncementsPage() {
             <strong>3. Clients</strong>
             <label style={{ display: 'block', marginTop: 9 }}>
               <input type="radio" checked={!selectSpecific} disabled={Boolean(followUpKey)} onChange={() => { setSelectSpecific(false); setSelectedClients([]); setShowReview(false) }} />{' '}
-              All matching clients ({baseRecipients.length})
+              All eligible clients ({baseRecipients.filter(row => row.eligible).length})
             </label>
             <label style={{ display: 'block', marginTop: 7 }}>
               <input type="radio" checked={selectSpecific} onChange={() => { setSelectSpecific(true); setShowReview(false) }} />{' '}
@@ -322,7 +324,7 @@ export default function AnnouncementsPage() {
               <div style={{ display: 'grid', gap: 8, marginTop: 10, maxHeight: 260, overflow: 'auto' }}>
                 {visibleClients.map(row => <label key={row.client_id}>
                   <input type={followUpKey ? 'radio' : 'checkbox'} name={followUpKey ? 'follow-up-client' : undefined} checked={selectedClients.includes(row.client_id)} onChange={() => toggleClient(row.client_id)} />{' '}
-                  {row.client_name}{row.email ? ` · ${row.email}` : ''}
+                  {row.client_name}{row.email ? ` · ${row.email}` : ''}{!row.eligible && <small className="muted"> · {row.reason} — loan milestone messages only</small>}
                 </label>)}
               </div>
             </div>}

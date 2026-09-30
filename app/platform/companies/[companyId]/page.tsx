@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { useParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { BrokerRelayBrand } from '@/components/BrokerRelayBrand'
+import { CompanyBillingPanel } from '@/components/CompanyBillingPanel'
 import { CompanyLogoEditor } from '@/components/CompanyLogoEditor'
 import { supabase } from '@/lib/supabase'
 
@@ -65,6 +66,7 @@ export default function PlatformCompanyInformationPage() {
     </header>
     <div className="platformBody"><nav className="platformSidebar" aria-label="Platform navigation">
       <Link className="platformNavActive" href="/platform/companies"><span aria-hidden="true">▦</span> Companies</Link>
+      <Link href={`/platform/billing?company=${params.companyId}`}>▤ Billing &amp; plans</Link>
       <Link href="/platform/companies#invitations"><span aria-hidden="true">✉</span> Invitations</Link>
       <div className="platformSidebarBottom"><Link href="/dashboard"><span aria-hidden="true">⌂</span> Broker Desk</Link></div>
     </nav><div className="platformMain"><div className="platformDetailsPage">
@@ -72,6 +74,7 @@ export default function PlatformCompanyInformationPage() {
     {message && <div className="notice" role="status">{message}</div>}
     {company && <>
       <div className="platformDetailsHeading"><div><p className="eyebrow">COMPANY INFORMATION</p><h1>{company.name}</h1><span className={`platformStatus ${company.status === 'active' ? 'isActive' : ''}`}>{company.status}</span></div></div>
+      <CompanyBillingPanel companyId={company.id} owner />
       <div className="platformDetailsGrid">
         <section className="card"><h2>Company branding</h2><CompanyLogoEditor companyId={company.id} companyName={company.name} logoUrl={company.logo_url} logoWidth={company.logo_display_width} logoHeight={company.logo_display_height} onUpdated={url => setCompany(current => current ? { ...current, logo_url: url } : current)} onDimensionsUpdated={(width,height) => setCompany(current => current ? { ...current, logo_display_width: width, logo_display_height: height } : current)} /></section>
         <section className="card"><h2>Head Broker</h2><dl>
