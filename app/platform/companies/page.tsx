@@ -111,6 +111,7 @@ export default function PlatformCompaniesPage() {
     <div className="platformBody">
       <nav className="platformSidebar" aria-label="Platform navigation">
         <a className="platformNavActive" href="#companies"><span aria-hidden="true">▦</span> Companies</a>
+        <Link href="/platform/operations">◉ Operations</Link>
         <Link href="/platform/billing"><span aria-hidden="true">▤</span> Billing &amp; plans</Link>
         <a href="#invitations"><span aria-hidden="true">✉</span> Invitations</a>
         <div className="platformSidebarBottom"><Link href="/dashboard"><span aria-hidden="true">⌂</span> Broker Desk</Link></div>

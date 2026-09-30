@@ -9,7 +9,7 @@ const sections = [
   ['documents', 'Document requests'], ['announcements', 'Announcements'],
   ['follow-ups', 'Follow-up messages'], ['company', 'Company & staff'],
   ['mobile-appearance', 'Mobile app appearance'], ['billing', 'Billing & invoices'],
-  ['support', 'Help with a problem'],
+  ['payments', 'Direct debit & receipts'], ['support', 'Help with a problem'],
 ] as const
 
 export default function HelpPage() {
@@ -27,6 +27,7 @@ export default function HelpPage() {
         <ol><li>Sign in with the account invited by your company. If you received a staff invitation, accept it before opening the Broker Desk.</li>
           <li>Use <Link href="/dashboard">Home</Link> to see your connected clients, invitation tools and account menu. Use your account menu to sign out.</li>
           <li>Select Messages, Applications, Document requests or Manage team from the left menu. Choose a client inside that workspace. Access depends on your company role and client assignment.</li></ol>
+        <p>Home now includes <strong>Your next actions</strong>: unread conversations, open document requests and applications in progress. Head Brokers can expand the company setup checklist. These counts cover records you are permitted to access.</p>
         <p className="muted">A client joins through a mobile invitation or the browser invitation test page. They may need to accept and connect before you can work on their loan.</p>
       </section>
       <section className="card" id="clients"><p className="eyebrow">02 · CLIENTS</p><h2>Clients &amp; service team</h2>
@@ -38,6 +39,7 @@ export default function HelpPage() {
       <section className="card" id="messages"><p className="eyebrow">03 · COMMUNICATION</p><h2>Secure messages</h2>
         <ol><li>Open <Link href="/messages">Messages</Link> and select the client. You can change clients with the selector at the top of the conversation.</li>
           <li>Write your message and choose <strong>Send secure message</strong>. New replies appear in the conversation; opening it marks messages as read.</li></ol>
+        <p>Use secure messages for a conversation, application updates for loan progress, and announcements for eligible client updates. Notifications alert clients to new activity; they are not a separate conversation.</p>
         <p className="muted">Messages support text. Use Document requests when you need a file; avoid asking clients to attach sensitive documents in a message.</p>
       </section>
       <section className="card" id="applications"><p className="eyebrow">04 · LOAN PROGRESS</p><h2>Applications</h2>
@@ -80,14 +82,45 @@ export default function HelpPage() {
         <p className="muted">The installed app icon remains BrokerRelay. Button and notification label colours adjust automatically; the background text colour controls headings and labels over the page background.</p>
       </section>
       <section className="card" id="billing"><p className="eyebrow">10 · COMPANY SUBSCRIPTION</p><h2>Billing &amp; invoices</h2>
-        <ol><li>The Head Broker opens <Link href="/billing">Billing &amp; invoices</Link> from the left menu to check the company package, monthly settlement allowance, extra usage and invoices.</li>
-          <li>Each application counts once when its settlement is first recorded. Allowances reset each calendar month in Melbourne time and do not roll over. Extra settlements use the rate shown for that billing month.</li>
-          <li>The Platform Owner can preview the current month invoice before the month ends, even with zero settlements. New invoices and previews show the subtotal, 10% GST and total including GST. Earlier issued invoices keep their original amounts. Monthly invoices cover the previous month and appear on the 1st. When enabled, invoices go to the company billing email, direct debit is scheduled seven days after notice, and receipts follow confirmed payment. The Head Broker can authorise or stop future collection from Company billing & invoices. Settlement records list application numbers and the broker who recorded settlement. A preview does not issue an invoice or request payment. Completed months become available after the first billing month ends.</li>
-          <li>Open an invoice to review its details or print/save a PDF. Follow its payment instructions; the Platform Owner records received payments.</li>
-          <li>Ask the Platform Owner to change your package. Existing-company package changes start next month. General announcements and post-settlement follow-ups require an active subscription, including any approved overdue grace period.</li></ol>
-        <p className="muted">Company setup includes the Head Broker. Any configured additional broker fee applies to a new broker activation; existing staff and reactivation of the same account are not charged again.</p>
+        <p>The Head Broker opens <Link href="/billing">Billing &amp; invoices</Link> from the left menu or Company &amp; staff. Other brokers should contact their Head Broker about company billing.</p>
+        <h3>Check your package and usage</h3>
+        <ol><li>Review your current package, monthly price, included settlements and extra settlement rate. Use the amounts displayed for your company; package prices and allowances can change for future months.</li>
+          <li>Check the settlements used and estimated usage bill. The estimate excludes GST and one-time fees; the final invoice includes any applicable charges.</li>
+          <li>Ask the Platform Owner to change your package. Existing-company package changes start next month; a scheduled change appears on the billing page.</li></ol>
+        <p>Allowances reset on the first of each calendar month in Melbourne time and do not roll over. Each application counts once when settlement is first recorded. Keep the application number and settlement date accurate, and publish Settled when the loan settles.</p>
+        <p className="muted">The included allowance is not a limit on processing loans. Further settlements use the extra settlement rate for that billing month. Company setup includes the Head Broker. Any configured additional broker activation fee applies to a new broker; existing staff and reactivation of the same account are not charged again.</p>
+        <h3>Monthly invoice timeline</h3>
+        <ol><li><strong>During the month:</strong> view your usage and estimated bill. A new subscription starts at the full calendar-month price.</li>
+          <li><strong>On the 1st:</strong> an invoice for the previous calendar month appears after billing runs. When email delivery is enabled, it is sent to your company billing email.</li>
+          <li><strong>After invoice notice:</strong> authorised automatic collection is scheduled seven days after notice. If notice is delayed, collection is delayed too.</li>
+          <li><strong>After confirmed payment:</strong> the invoice is marked paid. When receipt delivery is enabled, a receipt goes to the company billing email.</li></ol>
+        <h3>Read or save an invoice</h3>
+        <ol><li>Select <strong>Refresh invoices</strong>, then choose the invoice for the month you need.</li>
+          <li>Review the subscription, extra settlements, applicable one-time fees, subtotal, 10% GST and total. Prices displayed for packages and extra settlements exclude GST.</li>
+          <li>Review the settlement records for application numbers and the broker who recorded each settlement. Issued invoice details are preserved if later company details or prices change.</li>
+          <li>Use the invoice print option and your browser’s Save as PDF destination to keep a copy. For manual payment, follow the invoice instructions and use the requested reference.</li></ol>
+        <p className="muted">The first final invoice appears after your first billing month ends. An empty invoice list during that month is expected. Earlier issued invoices retain their original amounts; do not assume GST has been added retrospectively.</p>
+        <h3>Subscription status and communication</h3>
+        <p>General announcements and post-settlement relationship follow-ups require an active subscription, including any approved overdue grace period. General announcements also require a recorded settled application for each recipient. Before settlement, use loan-processing communications and status-eligible milestone announcements. If relationship communications are paused, ask your Head Broker to review billing with the Platform Owner.</p>
       </section>
-      <section className="card" id="support"><p className="eyebrow">11 · TROUBLESHOOTING</p><h2>Help with a problem</h2>
+      <section className="card" id="payments"><p className="eyebrow">11 · PAYMENTS</p><h2>Direct debit &amp; receipts</h2>
+        <p>Automatic payments are available only after the Platform Owner configures the payment gateway and billing delivery. A company’s Head Broker must authorise collection from their own billing page.</p>
+        <ol><li>Open <Link href="/billing">Billing &amp; invoices</Link> and find <strong>Automatic direct debit</strong>.</li>
+          <li>Select <strong>Set up direct debit</strong>, or <strong>Update debit authorisation</strong> for an existing authorisation. Enter the required details in the secure Stripe form.</li>
+          <li>Read the authorisation, select its consent checkbox, then choose <strong>Authorise direct debit</strong>.</li>
+          <li>Select <strong>Refresh payment status</strong> after submission. Confirmation may take a moment. An authorised live account shows its last four digits; a test authorisation does not enable real invoice collection.</li></ol>
+        <p>Collection is scheduled seven days after the invoice notice and may take time to complete. A submitted or processing debit is not yet a paid invoice. Receipts are sent after successful payment is confirmed.</p>
+        <p>New or changed bank authorisations apply to future invoice notices. An existing invoice may need manual payment; ask the Platform Owner before paying it another way if a debit may already be processing.</p>
+        <h3>Stop future automatic payments</h3>
+        <p>Select <strong>Stop automatic payments</strong> and confirm. A payment already submitted may still complete. Stopping collection does not cancel your subscription or remove amounts owed; arrange an alternative payment method with the Platform Owner.</p>
+        <p className="muted">Stripe collects bank details securely. BrokerRelay stores the authorisation reference and last four digits. Never send full bank details or passwords in a support message.</p>
+      </section>
+      <section className="card" id="support"><p className="eyebrow">12 · TROUBLESHOOTING</p><h2>Help with a problem</h2>
+        <h3>No invoice or billing access</h3><p>Billing is available to the Head Broker. Check that a subscription has been assigned and that the first billing month has ended, then choose Refresh invoices. If a completed month is missing, ask the Platform Owner to check the billing run.</p>
+        <h3>Invoice or receipt email missing</h3><p>Ask the Head Broker to check the company billing email in Company &amp; staff and review the spam folder. The invoice may still be available on the billing page. Give the Platform Owner the invoice number so they can check delivery. A receipt is not due while payment is still processing.</p>
+        <h3>Direct debit unavailable or payment failed</h3><p>If setup is unavailable, ask the Platform Owner to check gateway configuration. A test authorisation cannot collect real invoices. For a failed payment, review the notice, refresh payment status and contact the Platform Owner about updating the authorisation or paying manually. Do not repeatedly submit payment while its status is uncertain.</p>
+        <h3>Settlement count or invoice looks incorrect</h3><p>Note the billing month, invoice number and application number. Compare the settlement records with your applications, then ask the Platform Owner to investigate. Changing a settled application does not automatically reverse an issued invoice.</p>
+        <h3>Dashboard action counts</h3><p>Unread conversations count clients with unread replies. Open document requests include requests awaiting upload and failed delivery. Applications in progress are a worklist, not an overdue warning. Refresh Home after completing work. Head Brokers can expand the company setup checklist for links to company details, delivery, appearance, templates and billing.</p>
         <h3>Client or application missing</h3><p>Check that you selected the correct client and that your Head Broker assigned you to their service team. For a withdrawn or older settled loan, check Archive / Past.</p>
         <h3>Document request cannot be completed</h3><p>Ask the Head Broker to open Delivery settings in the left menu and verify the company’s document delivery email. Check the request status before asking the client to upload again.</p>
         <h3>Follow-up option missing</h3><p>Ask the Head Broker to check the company subscription if a billing restriction appears. Choose one client and application first. Only messages allowed for that loan status are offered. Approval and settlement defaults also require the follow-up database update.</p>

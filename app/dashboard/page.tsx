@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { Fragment, useEffect, useState } from 'react'
 import { QRCodeSVG } from 'qrcode.react'
 import { supabase } from '@/lib/supabase'
+import { WorkspaceGuidance } from '@/components/WorkspaceGuidance'
 import { BrokerRelayBrand } from '@/components/BrokerRelayBrand'
 
 type BrokerContext = {
@@ -288,6 +289,8 @@ export default function DashboardPage() {
         <a href="#clients" className="brokerDeskMetric"><span>✉</span><strong>{unreadTotal}</strong><small>Unread messages</small></a>
         <Link href="/announcements" className="brokerDeskMetric"><span>◈</span><strong>Announcements</strong><small>Send a client update →</small></Link>
       </div>
+
+      {context && <WorkspaceGuidance companyId={context.organisationId} head={!!portalAccess.is_head_broker} clients={clients} unread={unread} />}
 
       <section className="card brokerDeskClients" id="clients">
         <div className="sectionHead">
