@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { Fragment, FormEvent, useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
+import { COMPANY_SETUP_URL } from '@/lib/company-invitation-url'
 import { BrokerRelayBrand } from '@/components/BrokerRelayBrand'
 import { CompanyBillingPanel } from '@/components/CompanyBillingPanel'
 import { CompanyLogoEditor } from '@/components/CompanyLogoEditor'
@@ -65,7 +66,7 @@ export default function PlatformCompaniesPage() {
     })
     if (createError) { setError(createError.message); setBusy(false); return }
     const { error: emailError } = await supabase.auth.signInWithOtp({
-      email, options: { shouldCreateUser: true, emailRedirectTo: `${window.location.origin}/platform/company-setup` },
+      email, options: { shouldCreateUser: true, emailRedirectTo: COMPANY_SETUP_URL },
     })
     setBusy(false)
     if (emailError) setError(`Invitation saved, but the email was not sent: ${emailError.message}. Use Resend after checking email delivery.`)
@@ -77,7 +78,7 @@ export default function PlatformCompaniesPage() {
     setError(''); setSuccess('')
     const { error: sendError } = await supabase.auth.signInWithOtp({
       email: invitation.head_email,
-      options: { shouldCreateUser: true, emailRedirectTo: `${window.location.origin}/platform/company-setup` },
+      options: { shouldCreateUser: true, emailRedirectTo: COMPANY_SETUP_URL },
     })
     if (sendError) setError(sendError.message)
     else setSuccess(`Invitation email sent to ${invitation.head_email}.`)
