@@ -11,6 +11,7 @@ export default function CompanyDocumentDeliveryPage() {
   const [access, setAccess] = useState<Access | null>(null)
   const [endpoints, setEndpoints] = useState<Endpoint[]>([])
   const [email, setEmail] = useState('')
+  const [editing, setEditing] = useState(false)
   const [code, setCode] = useState('')
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
@@ -28,9 +29,11 @@ export default function CompanyDocumentDeliveryPage() {
       p_organisation_id: next.organisation_id,
     })
     if (statusError) { setError(statusError.message); return }
-    setEndpoints((rows ?? []) as Endpoint[])
+    const unique = new Map<string, Endpoint>()
+    for (const row of (rows ?? []) as Endpoint[]) { const key=row.email.trim().toLowerCase(); if (!unique.has(key) || row.verified) unique.set(key,row) }
+    setEndpoints([...unique.values()])
     const pending = (rows ?? []).find((row: Endpoint) => row.pending)
-    if (pending) setEmail(pending.email)
+    setEmail(pending?.email ?? (rows ?? []).find((row: Endpoint) => row.verified)?.email ?? '')
   }
 
   useEffect(() => { void load() }, [])
@@ -38,13 +41,15 @@ export default function CompanyDocumentDeliveryPage() {
   async function propose(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     if (!access?.organisation_id || busy) return
+    const normalised=email.trim().toLowerCase()
+    if (endpoints.some(e=>e.email.trim().toLowerCase()===normalised)) { setError('This email is already saved. Verify the pending mailbox or enter a different address.'); return }
     setBusy(true); setError(''); setNotice('')
     const { error: proposeError } = await supabase.rpc('propose_company_document_email', {
       p_organisation_id: access.organisation_id, p_email: email.trim(),
     })
     setBusy(false)
     if (proposeError) { setError(proposeError.message); return }
-    setCode('')
+    setCode(''); setEditing(false)
     setNotice('Address saved as pending. Send a verification code to its mailbox.')
     await load()
   }
@@ -99,10 +104,11 @@ export default function CompanyDocumentDeliveryPage() {
             <strong>{endpoint.email}</strong>
           </div>)}
         </div>
-        <form className="applicationForm" onSubmit={propose}>
+        {(!endpoints.length || editing) ? <form className="applicationForm" onSubmit={propose}>
           <label>Company document delivery email<input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="documents@yourcompany.com.au" required /></label>
-          <div><button disabled={busy}>{busy ? 'Saving…' : 'Save address for verification'}</button></div>
-        </form>
+          <div><button disabled={busy}>{busy ? 'Saving…' : 'Save address for verification'}</button>{endpoints.length>0 && <button className="secondary" type="button" disabled={busy} onClick={()=>{setEditing(false);setError('')}}>Cancel edit</button>}</div>
+        </form> : <button className="secondary" type="button" disabled={busy} onClick={()=>{setEditing(true);setError('');setNotice('')}}>Edit email</button>}
+        <p className="muted">One company receiving mailbox is used for new requests. A different address must be verified before it replaces the current mailbox.</p>
       </>}
     </section>
     {access?.is_head_broker && endpoints.some(e => e.pending) && <section className="card deliverySettingsCard">

@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { Fragment, FormEvent, useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
+import { Performance } from '@/components/CompanyPerformance'
 import { COMPANY_SETUP_URL } from '@/lib/company-invitation-url'
 import { BrokerRelayBrand } from '@/components/BrokerRelayBrand'
 import { CompanyBillingPanel } from '@/components/CompanyBillingPanel'
@@ -12,6 +13,9 @@ type Company = { id: string; name: string; legal_name: string | null; abn: strin
 type Invitation = { id: string; head_name: string; head_email: string; head_mobile: string; status: string; created_at: string; expires_at: string }
 
 export default function PlatformCompaniesPage() {
+  const [period,setPeriod]=useState('all')
+  const [monthly,setMonthly]=useState<Record<string,Performance>>({})
+  const [performance,setPerformance] = useState<Record<string,Performance>>({})
   const [ready, setReady] = useState(false)
   const [busy, setBusy] = useState(false)
   const [companySearch, setCompanySearch] = useState('')
@@ -21,13 +25,18 @@ export default function PlatformCompaniesPage() {
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
 
+  const shownPerformance=period==='month'?monthly:performance
   async function load() {
     const [companyResult, invitationResult, logoResult] = await Promise.all([
       supabase.rpc('platform_company_contact_overview_v2'),
       supabase.rpc('platform_list_company_invitations'),
       supabase.from('organisations').select('id,logo_url,logo_display_width,logo_display_height'),
     ])
-    setError('')
+    const stats=await supabase.rpc('company_performance')
+    setPerformance(Object.fromEntries((stats.data??[]).map((r:Performance)=>[r.organisation_id,r])))
+    const monthStats=await supabase.rpc('company_performance_month')
+    setMonthly(Object.fromEntries((monthStats.data??[]).map((r:Performance)=>[r.organisation_id,r])))
+    setError(stats.error?'Company counts unavailable. Apply the company performance SQL update.':'')
     if (companyResult.error) setError(`Could not load companies: ${companyResult.error.code === 'PGRST202' ? 'Apply the platform_company_contact_email migration, then refresh this page.' : companyResult.error.message}`)
     else {
       const logos = new Map((logoResult.data ?? []).map(row => [row.id, row]))
@@ -120,11 +129,12 @@ export default function PlatformCompaniesPage() {
       <div className="platformMain">
         <section id="companies" className="platformCompanies">
           <div className="platformHeading"><div><h1>Companies</h1><p>Independent companies using BrokerRelay. Each company manages its own staff, clients and data.</p></div></div>
+          <div className="row" role="group" aria-label="Company reporting period"><button type="button" className={period==='all'?'':'secondary'} aria-pressed={period==='all'} onClick={()=>setPeriod('all')}>All time</button><button type="button" className={period==='month'?'':'secondary'} aria-pressed={period==='month'} onClick={()=>setPeriod('month')}>This month</button></div><p className="muted">{period==='month'?'New clients and applications created this month; settlements use the actual settlement date in Melbourne time. Missing counts require the monthly performance SQL update.':'All-time records by current status.'}</p>
           <label className="platformSearchLabel" htmlFor="company-search">Search companies</label>
           <input id="company-search" className="platformSearch" type="search" value={companySearch} onChange={event => setCompanySearch(event.target.value)} placeholder="Company, Head Broker, or email" />
-          <div className="tableWrap"><table><thead><tr><th>Company</th><th>Head Broker</th><th>Contact number</th><th>Status</th></tr></thead>
-            <tbody>{visibleCompanies.map(company => <Fragment key={company.id}><tr><td><button className="platformCompanyToggle" type="button" aria-expanded={expandedCompanyId === company.id} aria-controls={`company-details-${company.id}`} onClick={() => setExpandedCompanyId(current => current === company.id ? null : company.id)}>{company.name} <span aria-hidden="true">{expandedCompanyId === company.id ? '⌃' : '⌄'}</span></button></td><td>{company.head_broker_name ?? '—'}</td><td>{company.head_broker_mobile ? <a href={`tel:${company.head_broker_mobile.replace(/[^+\d]/g, '')}`}>{company.head_broker_mobile}</a> : '—'}</td><td><span className={`platformStatus ${company.status === 'active' ? 'isActive' : ''}`}>{company.status}</span></td></tr>
-              {expandedCompanyId === company.id && <tr className="platformCompanyProfileRow" id={`company-details-${company.id}`}><td colSpan={4}><div className="platformCompanyProfilePanel"><div><p className="eyebrow">COMPANY PROFILE</p><h3>{company.name}</h3><dl><div><dt>Head Broker</dt><dd>{company.head_broker_name ?? 'Not provided'}</dd></div><div><dt>Email</dt><dd>{company.head_broker_email ?? 'Not provided'}</dd></div><div><dt>Mobile</dt><dd>{company.head_broker_mobile ?? 'Not provided'}</dd></div><div><dt>ABN</dt><dd>{company.abn ?? 'Not provided'}</dd></div><div><dt>Added</dt><dd>{new Date(company.created_at).toLocaleDateString('en-AU')}</dd></div></dl></div><div className="platformCompanyProfileActions"><CompanyLogoEditor companyId={company.id} companyName={company.name} logoUrl={company.logo_url} logoWidth={company.logo_display_width} logoHeight={company.logo_display_height} onUpdated={url => setCompanies(current => current.map(row => row.id === company.id ? { ...row, logo_url: url } : row))} onDimensionsUpdated={(width,height) => setCompanies(current => current.map(row => row.id === company.id ? { ...row, logo_display_width: width, logo_display_height: height } : row))} /><Link className="button secondary" href={`/platform/companies/${company.id}`}>Full company information</Link></div></div><CompanyBillingPanel companyId={company.id} owner /></td></tr>}
+          <div className="tableWrap"><table><thead><tr><th>Company</th><th>Head Broker</th><th>Contact number</th><th>Status</th><th>{period==='month'?'New clients':'Clients'}</th><th>{period==='month'?'New applications':'Applications'}</th></tr></thead>
+            <tbody>{visibleCompanies.map(company => <Fragment key={company.id}><tr><td><button className="platformCompanyToggle" type="button" aria-expanded={expandedCompanyId === company.id} aria-controls={`company-details-${company.id}`} onClick={() => setExpandedCompanyId(current => current === company.id ? null : company.id)}>{company.name} <span aria-hidden="true">{expandedCompanyId === company.id ? '⌃' : '⌄'}</span></button></td><td>{company.head_broker_name ?? '—'}</td><td>{company.head_broker_mobile ? <a href={`tel:${company.head_broker_mobile.replace(/[^+\d]/g, '')}`}>{company.head_broker_mobile}</a> : '—'}</td><td><span className={`platformStatus ${company.status === 'active' ? 'isActive' : ''}`}>{company.status}</span></td><td>{shownPerformance[company.id]?.clients ?? '—'}</td><td>{shownPerformance[company.id]?.applications ?? '—'}{shownPerformance[company.id] && <small style={{display:'block'}}>{period==='month'?`Settlements this month: ${shownPerformance[company.id].settled_month??0}`:`Settled: ${shownPerformance[company.id].application_statuses.settled??0} · Withdrawn: ${shownPerformance[company.id].application_statuses.withdrawn??0}`}</small>}</td></tr>
+              {expandedCompanyId === company.id && <tr className="platformCompanyProfileRow" id={`company-details-${company.id}`}><td colSpan={6}><div className="platformCompanyProfilePanel"><div><p className="eyebrow">COMPANY PROFILE</p><h3>{company.name}</h3><dl><div><dt>Head Broker</dt><dd>{company.head_broker_name ?? 'Not provided'}</dd></div><div><dt>Email</dt><dd>{company.head_broker_email ?? 'Not provided'}</dd></div><div><dt>Mobile</dt><dd>{company.head_broker_mobile ?? 'Not provided'}</dd></div><div><dt>ABN</dt><dd>{company.abn ?? 'Not provided'}</dd></div><div><dt>Added</dt><dd>{new Date(company.created_at).toLocaleDateString('en-AU')}</dd></div></dl></div><div className="platformCompanyProfileActions"><CompanyLogoEditor companyId={company.id} companyName={company.name} logoUrl={company.logo_url} logoWidth={company.logo_display_width} logoHeight={company.logo_display_height} onUpdated={url => setCompanies(current => current.map(row => row.id === company.id ? { ...row, logo_url: url } : row))} onDimensionsUpdated={(width,height) => setCompanies(current => current.map(row => row.id === company.id ? { ...row, logo_display_width: width, logo_display_height: height } : row))} /><Link className="button secondary" href={`/platform/companies/${company.id}`}>Full company information</Link></div></div>{period==='all' && shownPerformance[company.id] && <details><summary>Client and application status breakdown</summary><p>Clients: {Object.entries(shownPerformance[company.id].client_statuses).map(([k,v])=>`${k}: ${v}`).join(' · ') || 'None'}</p><p>Applications: {Object.entries(shownPerformance[company.id].application_statuses).map(([k,v])=>`${k.replaceAll('_',' ')}: ${v}`).join(' · ') || 'None'}</p></details>}<CompanyBillingPanel companyId={company.id} owner /></td></tr>}
             </Fragment>)}</tbody></table></div>
           {!companies.length ? <p className="platformEmpty">No companies yet. Send a setup invitation to add the first company.</p> : visibleCompanies.length === 0 && <p className="platformEmpty">No companies match your search.</p>}
         </section>
