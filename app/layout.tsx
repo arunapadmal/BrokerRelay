@@ -6,7 +6,7 @@ import type { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'BrokerRelay',
   description: 'BrokerRelay broker workspace',
-  icons: { icon: '/brokerrelay-logo.png' },
+  icons: { icon: '/favicon.ico' },
 }
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
