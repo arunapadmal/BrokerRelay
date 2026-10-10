@@ -1,5 +1,6 @@
 'use client'
 
+import { ClientGreetingPreferences } from '@/components/ClientGreetingPreferences'
 import Link from 'next/link'
 import { Fragment, useEffect, useState } from 'react'
 import { QRCodeSVG } from 'qrcode.react'
@@ -332,6 +333,7 @@ export default function DashboardPage() {
                       <dl><div><dt>Email</dt><dd>{c.email ?? 'Not provided'}</dd></div><div><dt>Mobile</dt><dd>{c.mobile ?? 'Not provided'}</dd></div><div><dt>Status</dt><dd>{c.status}</dd></div><div><dt>Connected</dt><dd>{c.connected_at ? new Date(c.connected_at).toLocaleDateString('en-AU') : '—'}</dd></div></dl></div>
                       <div className="brokerDeskProfileActions"><Link className="button" href={`/messages/${c.id}`}>Secure messages</Link><Link className="button secondary" href={`/applications/${c.id}`}>Applications</Link><Link className="button secondary" href={`/documents/${c.id}`}>Document requests</Link><Link className="button secondary" href={`/clients/${c.id}/team`}>Service team</Link></div>
                     </div>
+                    <ClientGreetingPreferences clientId={c.id} />
                   </td></tr>}
                   </Fragment>
                 ))}

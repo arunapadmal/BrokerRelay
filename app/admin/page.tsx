@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { FormEvent, useEffect, useMemo, useRef, useState } from 'react'
+import { CompanySchedulePermission } from '@/components/CompanySchedulePermission'
 import { supabase } from '@/lib/supabase'
 import { BrokerRelayBrand } from '@/components/BrokerRelayBrand'
 import './admin.css'
@@ -378,6 +379,7 @@ export default function AdministrationPage() {
         {selected.status !== 'active' && <div className="notice">This staff record is {selected.status}. Roles and permissions are read-only until the invitation is accepted or the staff member is reactivated.</div>}
         <fieldset disabled={selected.status !== 'active' || selected.roles.includes('head_broker')}><legend>Roles</legend><div className="checkGrid">{roleOptions.map(([key, label]) => <label className="check" key={key}><input type="checkbox" checked={roles.includes(key)} onChange={(event) => setRoles(event.target.checked ? [...roles, key] : roles.filter((role) => role !== key))} /> {label}</label>)}</div></fieldset>
         <div className="row">{selected.status === 'active' && !selected.roles.includes('head_broker') && <button onClick={saveRoles} disabled={busy || roles.length === 0}>Save roles</button>}{selected.status === 'disabled' ? <><button className="secondary" onClick={() => setStatus('active')} disabled={busy}>Reactivate</button><button className="danger" onClick={archiveStaff} disabled={busy || selected.assigned_clients > 0}>Remove staff</button></> : selected.status === 'active' && !selected.roles.includes('head_broker') ? <button className="danger" onClick={() => setStatus('disabled')} disabled={busy || selected.assigned_clients > 0}>Deactivate</button> : null}</div>
+        {viewerIsHeadBroker && snapshot && selected.status === "active" && <CompanySchedulePermission organisationId={snapshot.organisation.id} userId={selected.user_id} />}
         {selected.assigned_clients > 0 && <p className="notice">Transfer all assigned clients before deactivating or removing this staff member.</p>}
         <fieldset disabled={selected.status !== 'active' || selected.roles.includes('head_broker')}><legend>Explicit delegated permissions</legend><p className="muted smallText">These grants supplement the permissions inherited from roles. Company ownership cannot be delegated.</p><div className="checkGrid">{permissionOptions.map(([key, label]) => <label className="check" key={key}><input type="checkbox" checked={permissions.includes(key)} onChange={(event) => setPermissions(event.target.checked ? [...permissions, key] : permissions.filter((permission) => permission !== key))} /> {label}</label>)}</div></fieldset>
         {selected.status === 'active' && !selected.roles.includes('head_broker') && <button className="secondary" onClick={savePermissions} disabled={busy}>Save delegated permissions</button>}

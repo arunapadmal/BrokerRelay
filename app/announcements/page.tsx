@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { ChangeEvent, useEffect, useMemo, useState } from 'react'
+import { CompanyMessageSchedules } from '@/components/CompanyMessageSchedules'
 import { supabase } from '@/lib/supabase'
 import { BrokerRelayBrand } from '@/components/BrokerRelayBrand'
 import './announcements.css'
@@ -386,6 +387,7 @@ export default function AnnouncementsPage() {
           </div>)}
         </div>}
       </section>
+      {organisationId && <CompanyMessageSchedules organisationId={organisationId} templates={companyMessages} />}
       </div></div>
     </main>
   )

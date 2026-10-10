@@ -2,6 +2,7 @@
 
 import { ChangeEvent, useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
+import { CompanyMessageSchedules } from '@/components/CompanyMessageSchedules'
 import { ApplicationWorkspaceShell } from '@/components/ApplicationWorkspaceShell'
 
 type TemplateRow = {
@@ -29,6 +30,7 @@ const names: Record<string, string> = {
 }
 
 export default function FollowUpTemplateSettingsPage() {
+  const [tab,setTab]=useState<'loan'|'company'>('loan')
   const [organisationId, setOrganisationId] = useState<string | null>(null)
   const [templates, setTemplates] = useState<TemplateRow[]>([])
   const [busyKey, setBusyKey] = useState('')
@@ -199,10 +201,12 @@ export default function FollowUpTemplateSettingsPage() {
         </p>
       </section>
 
+      <div className="row" role="group" aria-label="Message settings" style={{marginBottom:16}}><button type="button" className={tab==='loan'?'':'secondary'} aria-pressed={tab==='loan'} onClick={()=>setTab('loan')}>Loan follow-ups</button><button type="button" className={tab==='company'?'':'secondary'} aria-pressed={tab==='company'} onClick={()=>setTab('company')}>Company messages</button></div>
+      {tab==='company' && <>
       <section className="card" style={{ marginBottom: 16 }}>
         <p className="eyebrow">COMPANY MESSAGE LIBRARY</p>
         <h2>Saved messages for announcements</h2>
-        <p className="muted">Create reusable messages for birthdays, New Year or other occasions. A broker chooses the recipients and sends each announcement manually; saving a message does not schedule it.</p>
+        <p className="muted">Create reusable messages for birthdays, New Year or other occasions. Use these templates manually or create a separate broker schedule. Saving a template does not activate automatic sending.</p>
         {companyMessages.length === 0 && <p className="muted">No company messages saved yet.</p>}
         {companyMessages.map(row => <div className="sectionHead" key={row.id} style={{ marginTop: 12 }}><div><strong>{row.name}</strong><p className="muted">{row.title_template}</p></div>
           {canManageCompany && <div className="row"><button type="button" className="secondary" onClick={() => { setEditingId(row.id); setCustomName(row.name); setCustomTitle(row.title_template); setCustomBody(row.body_template) }}>Edit</button><button type="button" className="secondary" disabled={busyKey === 'company'} onClick={() => void deleteCompanyMessage(row.id)}>Delete</button></div>}
@@ -222,6 +226,9 @@ export default function FollowUpTemplateSettingsPage() {
           </div>
         </div>}
       </section>
+      {organisationId && <CompanyMessageSchedules organisationId={organisationId} templates={companyMessages} />}
+      </>}
+      {tab==='loan' && <>
       <p className="muted">Approval and settlement updates are sent when an application moves to that stage. Later check-ins are scheduled from its settlement date.</p>
       <div style={{ display: 'grid', gap: 16 }}>
         {templates.map((row) => (
@@ -294,6 +301,7 @@ export default function FollowUpTemplateSettingsPage() {
           </section>
         ))}
       </div>
+      </>}
     </ApplicationWorkspaceShell>
   )
 }
