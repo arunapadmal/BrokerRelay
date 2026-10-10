@@ -57,16 +57,43 @@ export default function HelpPage() {
       </section>
       <section className="card" id="announcements"><p className="eyebrow">06 · CLIENT UPDATES</p><h2>Announcements</h2>
         <ol><li>Open <Link href="/announcements">Announcements</Link>. Choose My clients or, if authorised, Company clients. You may narrow recipients by lender or select particular clients.</li>
-          <li>General announcements require an active company subscription and a recorded settled application for each recipient. Clients without a settled application can receive loan milestone announcements for their application status. Write a title and message, or load a saved company message. Birthday and New Year messages are examples of manual messages; choose recipients and send each one yourself.</li>
+          <li>General announcements require an active company subscription and a recorded settled application for each recipient. Clients without a settled application can receive loan milestone announcements for their application status. Write a title and message, or load a saved company message. Birthday and New Year messages can be sent manually or scheduled in Follow-up Message Settings.</li>
           <li>For a loan follow-up, choose one client and their application. Only messages matching that application’s current status appear. Review the message and recipients before sending.</li>
           <li>Use <strong>Recent announcements</strong> to review sends and read counts. The recipient audience is checked again when sending.</li></ol>
         <p className="muted">A manually sent loan follow-up is linked to its application. Sending it does not change the application status or replace scheduled notifications.</p>
       </section>
-      <section className="card" id="follow-ups"><p className="eyebrow">07 · MESSAGE SETTINGS</p><h2>Follow-up messages</h2>
-        <ol><li>In <Link href="/settings/follow-up-templates">Follow-up settings</Link>, review the default approval, settlement and post-settlement messages. Edit the title or body and save your broker wording, or restore the company/platform wording.</li>
-          <li>Use <code>{'{{client_first_name}}'}</code>, <code>{'{{broker_first_name}}'}</code> and <code>{'{{application_description}}'}</code> where appropriate. They are filled when notifications are created.</li>
-          <li>A Head Broker can add, edit or delete reusable company messages in the Company message library. Brokers can then choose them while writing an announcement.</li></ol>
-        <p className="muted">Saved company messages are manual templates. They do not create birthday reminders or automatic holiday broadcasts. Automatic loan milestones follow application status and settlement date.</p>
+      <section className="card" id="follow-ups"><p className="eyebrow">07 · MESSAGE SETTINGS</p><h2>Follow-up messages and company schedules</h2>
+        <h3>Loan follow-ups</h3>
+        <p>Open <Link href="/settings/follow-up-templates">Follow-up Message Settings</Link> and select <strong>Loan follow-ups</strong>. Review the approval, settlement and review messages. Save your broker wording or restore company/platform wording. Loan milestones follow the application status; later reviews follow its settlement date.</p>
+        <p>Use <code>{'{{client_first_name}}'}</code> and <code>{'{{broker_first_name}}'}</code> to personalise greetings. Loan messages can also use <code>{'{{application_description}}'}</code>.</p>
+        <h3>Set up company-message scheduling</h3>
+        <ol>
+          <li>The Head Broker opens <Link href="/admin">Company &amp; Staff</Link>, selects an active broker, enables <strong>Can schedule company messages</strong> and saves. Company-wide sending requires its separate announcement permission.</li>
+          <li>Open <Link href="/settings/follow-up-templates">Follow-up Message Settings</Link> → <strong>Company messages</strong>. The Head Broker can create shared templates, such as New Year greetings or birthday wishes. Saving a template alone does not schedule a send.</li>
+          <li>Select a saved message and choose <strong>Send once</strong>, <strong>Every year</strong> or <strong>Every client birthday</strong>. Choose the send time and timezone. One-off and annual messages also need a date.</li>
+          <li>Choose <strong>My assigned clients</strong>, specific clients, or <strong>All company clients</strong> if authorised. Each broker manages their own client schedules; the Head Broker can oversee all company schedules.</li>
+          <li>Save the schedule. New schedules start <strong>Paused</strong>. Choose <strong>Preview recipients</strong> and review the occurrence date, message and any eligibility blocks. For birthdays, select the birthday date to preview that day’s recipients.</li>
+          <li>Choose <strong>Activate</strong> and confirm the saved schedule shows <strong>Active</strong>. Saving and activating are separate steps. Pause a schedule before editing if you want to review it again before sending.</li>
+        </ol>
+        <h3>Optional birthdays and greeting preferences</h3>
+        <p>Expand a client’s profile on the <Link href="/dashboard">Dashboard</Link> and open <strong>Optional birthday and greetings</strong>. Enter only day and month; a birth year is not required. Birthday information is optional and never blocks registration or a loan application.</p>
+        <p>With the client’s agreement, select <strong>Client agrees to birthday greetings</strong> and/or <strong>Client agrees to general company greetings</strong>, then choose <strong>Save preferences</strong>. Recording a birthday alone does not enable greetings. New Year greetings require the general company-greetings preference.</p>
+        <p>Once the birthday schedule is active, newly recorded birthdays are included automatically when eligible. Clients without a birthday are omitted. February 29 birthdays use February 28 in non-leap years. In the updated client app, clients can manage these choices under <strong>Settings and more → Birthday and greetings</strong>.</p>
+        <h3>When and where messages arrive</h3>
+        <p>Automatic sending runs on the server every five minutes, so an eligible message normally appears within about five minutes after its selected time. Times follow the schedule’s timezone, such as Australia/Melbourne. Sending continues when the browser is closed and does not require BrokerRelay Pro to be installed or open.</p>
+        <p>Scheduled greetings appear in the client app’s <strong>Announcements</strong> and in-app notifications. This scheduling feature does not send email or push notifications. Before each send, BrokerRelay checks current client assignments, broker permissions, greeting preferences, an active eligible subscription and a recorded billable settled application.</p>
+        <h3>Check delivery or troubleshoot a skipped message</h3>
+        <ol>
+          <li>Check the schedule is Active, its date/time/timezone are correct, and the client is in its current audience.</li>
+          <li>Review <strong>Daily tasks and recipient preview</strong> and <strong>Recent delivery history</strong> in company-message scheduling, also available through Announcements.</li>
+          <li><strong>Scheduled</strong> means due to send; <strong>Blocked</strong> means a current eligibility check prevents sending; <strong>Sent</strong> means the in-app message was created, not that the client has read it; <strong>Skipped</strong> records an occurrence that was not sent; <strong>Failed</strong> needs investigation.</li>
+          <li>If the reason is <strong>Company greetings are disabled</strong>, check the client’s general company-greetings preference. Enable it only with their agreement. For birthday messages, check both the birthday and birthday-greetings preference.</li>
+          <li>For billing blocks, contact the Head Broker to check the subscription and settled-loan eligibility. For assignment or permission blocks, review Company &amp; Staff and the client’s service team.</li>
+          <li>A skipped occurrence does not retry automatically after preferences or billing change. Correct the cause and create a new future one-off schedule if another send is appropriate. Overlapping birthday schedules or the same template for the same client/date may be skipped to prevent duplicate greetings.</li>
+          <li>If an eligible active message still has no delivery record after the expected run, contact the Platform Owner with the schedule name, selected time, timezone and displayed error. Avoid sending it manually until you confirm whether an automatic delivery already exists.</li>
+        </ol>
+        <h3>BrokerRelay Pro daily tasks</h3>
+        <p>In the updated BrokerRelay Pro app, <strong>My Day</strong> shows today’s scheduled greetings, client, sending broker and delivery status. Pull down to refresh. Open a card to review the message or manage its schedule in BrokerDesk. Opening a task does not resend it. Pro displays the tasks; the server performs the automatic sending.</p>
       </section>
       <section className="card" id="company"><p className="eyebrow">08 · COMPANY ADMINISTRATION</p><h2>Company &amp; staff</h2>
         <ol><li>Authorised company staff can open <Link href="/admin">Company &amp; staff</Link> to update the company profile and logo, invite staff, and review pending invitations.</li>
