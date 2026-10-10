@@ -1,0 +1,33 @@
+/* Scoped message controls matching BrokerRelay's blue workspace theme. */
+.brMessagePanel{margin:20px 0;padding:24px!important;color:var(--br-text,#243555);border:1px solid #e4eaf4!important;border-radius:18px!important;background:#fff;box-shadow:0 8px 28px rgba(31,57,110,.045);min-width:0}
+.brMessagePanel h2{margin:0 0 10px;font-size:20px;color:var(--br-title,#12264e)}
+.brMessagePanel h3{font-size:16px;color:var(--br-title,#12264e);margin:28px 0 14px}
+.brMessagePanel p{line-height:1.6;margin:8px 0 14px}
+.brMessagePanel .applicationForm{padding:20px;background:#f7faff;border:1px solid #e3ebf8;border-radius:14px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.brMessagePanel .applicationForm>:is(h3,p,.row,div,.check){grid-column:1/-1}
+.brMessagePanel .applicationForm h3{margin:0}
+.brMessagePanel label{display:grid;gap:8px;font-size:13px;font-weight:650;min-width:0}
+.brMessagePanel :is(input:not([type=checkbox]),select,textarea){box-sizing:border-box;width:100%;min-height:44px;padding:10px 12px;border:1px solid #d5dfed;border-radius:10px;background:#fff;color:#243555;font:inherit;font-size:14px}
+.brMessagePanel .row{display:flex;flex-wrap:wrap;align-items:center;gap:12px}
+.brMessagePanel .row>label{flex:1;min-width:180px}
+.brMessagePanel label.check{display:flex;align-items:flex-start;gap:10px;font-size:14px;font-weight:500;padding:8px 0;line-height:1.5}
+.brMessagePanel input[type=checkbox]{appearance:auto;width:18px!important;height:18px!important;min-height:18px;flex:0 0 18px;margin:2px 0 0;padding:0;accent-color:#2563eb}
+.brMessagePanel button{width:auto;min-height:42px;padding:10px 16px;border-radius:10px;background:#2563eb;color:#fff;border:1px solid transparent;font:inherit;font-size:14px;font-weight:650;cursor:pointer;justify-self:start}
+.brMessagePanel button.secondary{background:#eaf2ff;color:#1d4ed8;border-color:#d7e5fc}
+.brMessagePanel button:disabled{opacity:.5;cursor:not-allowed}
+.brMessagePanel :is(button,input,select):focus-visible{outline:2px solid #2563eb;outline-offset:3px}
+.brMessagePanel .notice{padding:12px 16px;border-radius:10px;background:#edf4ff;color:#234879;font-size:14px;overflow-wrap:anywhere}
+.brMessagePanel .notice.error{background:#fff0f0;color:#9b1c1c}
+.scheduleItem{position:relative;padding:20px;margin:12px 0;border:1px solid #e3eaf5;border-radius:14px;background:#fff}
+.scheduleItem>strong{display:block;color:#12264e;font-size:16px;padding-right:90px}
+.scheduleItem>p{font-size:13px;color:#65758e;max-width:90%;margin-bottom:10px}
+.scheduleItem>small{display:block;color:#65758e;overflow-wrap:anywhere;margin-bottom:14px}
+.scheduleItem>.scheduleBadge{position:absolute;right:18px;top:18px}
+.scheduleBadge{display:inline-flex;padding:4px 10px;border-radius:999px;font-size:12px;font-weight:700;background:#edf2fa;color:#53647e;text-transform:capitalize;white-space:nowrap}
+.scheduleBadge:is(.active,.sent){background:#e8f6ee;color:#207747}.scheduleBadge:is(.paused,.skipped){background:#fff5dd;color:#8a6511}.scheduleBadge.failed{background:#ffeded;color:#a32e35}
+.scheduleDate{max-width:260px;margin-bottom:14px}
+.scheduleTask{margin:12px 0;padding:16px 18px;border:1px solid #e3eaf5;border-radius:12px;background:#f8faff;overflow-wrap:anywhere}
+.scheduleTask summary{cursor:pointer;font-weight:650;color:#234879;line-height:1.6}.scheduleTask>p{white-space:pre-wrap}
+.scheduleHistory{display:grid;grid-template-columns:110px 85px minmax(0,1fr);align-items:center;gap:14px;padding:14px 4px;border-bottom:1px solid #e8edf6;font-size:13px;line-height:1.5}.scheduleHistory .scheduleBadge{justify-self:start}
+.greetingPreferences>.row{margin:16px 0}.greetingPreferences>button,.schedulePermission>button{margin-top:12px}
+@media(max-width:680px){.brMessagePanel{padding:18px!important}.brMessagePanel .applicationForm{grid-template-columns:1fr;padding:16px}.brMessagePanel .applicationForm>*{grid-column:1}.brMessagePanel .row>label{min-width:100%}.scheduleHistory{grid-template-columns:1fr auto}.scheduleHistory>span:last-child:not(.scheduleBadge){grid-column:1/-1}.scheduleItem>strong{padding-right:0}.scheduleItem>.scheduleBadge{position:static;margin-bottom:14px}.scheduleItem .row>button{flex:1}.scheduleItem>p{max-width:100%}}
