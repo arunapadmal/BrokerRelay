@@ -1,4 +1,5 @@
 'use client'
+import { PLATFORM_OWNER_EMAIL } from '@/lib/platform-owner'
 
 import Link from 'next/link'
 import { ChangeEvent, useEffect, useMemo, useState } from 'react'
@@ -87,7 +88,7 @@ export default function AnnouncementsPage() {
     setAccountName([profile?.first_name, profile?.last_name].filter(Boolean).join(' ') || auth.user.email || 'Broker')
     setCanManageStaff(Boolean(accessData?.can_manage_staff))
     setIsHeadBroker(Boolean(accessData?.is_head_broker))
-    setIsPlatformOwner(Boolean(owner) && auth.user.email?.toLowerCase() === 'aruna@aidez.com.au')
+    setIsPlatformOwner(Boolean(owner) && auth.user.email?.toLowerCase() === PLATFORM_OWNER_EMAIL)
 
     const { data: broker, error: brokerError } = await supabase
       .from('broker_profiles').select('organisation_id')

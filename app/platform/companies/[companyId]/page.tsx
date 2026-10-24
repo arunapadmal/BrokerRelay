@@ -1,4 +1,5 @@
 'use client'
+import { PLATFORM_OWNER_EMAIL } from '@/lib/platform-owner'
 
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
@@ -37,7 +38,7 @@ export default function PlatformCompanyInformationPage() {
       const { data: auth } = await supabase.auth.getUser()
       if (!auth.user) { window.location.href = '/login'; return }
       const { data: owner } = await supabase.from('platform_admins').select('user_id').eq('user_id', auth.user.id).maybeSingle()
-      if (!owner || auth.user.email?.toLowerCase() !== 'aruna@aidez.com.au') { window.location.href = '/dashboard'; return }
+      if (!owner || auth.user.email?.toLowerCase() !== PLATFORM_OWNER_EMAIL) { window.location.href = '/dashboard'; return }
       setAuthorised(true)
       const [{ data, error }, { data: logoData, error: logoError }] = await Promise.all([
         supabase.rpc('platform_company_contact_overview_v2'),

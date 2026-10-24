@@ -1,4 +1,5 @@
 'use client'
+import { PLATFORM_OWNER_EMAIL } from '@/lib/platform-owner'
 
 import Link from 'next/link'
 import { ReactNode, useEffect, useState } from 'react'
@@ -37,7 +38,7 @@ export function ApplicationWorkspaceShell({ clientId, section, children }: Props
       setAccountName([profile?.first_name, profile?.last_name].filter(Boolean).join(' ') || auth.user.email || 'Broker')
       setCanManageStaff(Boolean(access?.can_manage_staff))
       setIsHeadBroker(Boolean(access?.is_head_broker))
-      setIsPlatformOwner(Boolean(owner) && auth.user.email?.toLowerCase() === 'aruna@aidez.com.au')
+      setIsPlatformOwner(Boolean(owner) && auth.user.email?.toLowerCase() === PLATFORM_OWNER_EMAIL)
       const organisationId = client?.organisation_id ?? access?.organisation_id
       if (organisationId) {
         const { data: organisation } = await supabase.from('organisations')

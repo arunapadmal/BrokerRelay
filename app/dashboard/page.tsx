@@ -1,4 +1,5 @@
 'use client'
+import { PLATFORM_OWNER_EMAIL } from '@/lib/platform-owner'
 
 import { ClientGreetingPreferences } from '@/components/ClientGreetingPreferences'
 import Link from 'next/link'
@@ -84,7 +85,7 @@ export default function DashboardPage() {
 
     const { data: owner } = await supabase.from('platform_admins')
       .select('user_id').eq('user_id', user.id).maybeSingle()
-    setIsPlatformOwner(Boolean(owner) && user.email?.toLowerCase() === 'aruna@aidez.com.au')
+    setIsPlatformOwner(Boolean(owner) && user.email?.toLowerCase() === PLATFORM_OWNER_EMAIL)
 
     const { data: accessData } = await supabase.rpc('get_my_portal_access')
     const access = (accessData ?? {}) as PortalAccess
