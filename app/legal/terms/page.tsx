@@ -1,0 +1,3 @@
+import Link from 'next/link'
+import { legalDocuments } from '@/lib/legal-documents'
+export default function LegalDocument(){const doc=legalDocuments[0];return <main className="page" style={{maxWidth:920,margin:'0 auto',padding:'32px 20px'}}><article className="card"><p className="eyebrow">DEVELOPMENT DRAFT</p><h1>{doc.title}</h1><p>Version {doc.version}. For sample-data testing only.</p>{doc.text.split('\n\n').slice(2).map((part,i)=>part.startsWith('## ')?<h2 key={i}>{part.slice(3)}</h2>:<p key={i} style={{whiteSpace:'pre-wrap',lineHeight:1.75}}>{part}</p>)}<Link href="/platform/company-setup">Return to company invitation</Link></article></main>}

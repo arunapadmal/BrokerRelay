@@ -1,13 +1,13 @@
 'use client'
 
 import { useEffect } from 'react'
-import { supabase } from '@/lib/supabase'
+import { workspaceDestination } from '@/lib/workspace-destination'
+import { useState } from 'react'
 
 export default function Home() {
+  const [message, setMessage] = useState('Loading BrokerRelay…')
   useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => {
-      window.location.href = data.session ? '/dashboard' : '/login'
-    })
+    void workspaceDestination().then(path => window.location.replace(path)).catch(() => setMessage('Could not open your workspace. Please refresh or open /login to sign in again.'))
   }, [])
-  return <main className="center"><div className="card">Loading BrokerRelay…</div></main>
+  return <main className="center"><div className="card">{message}</div></main>
 }

@@ -1,0 +1,3 @@
+import Link from 'next/link'
+import { partnerLegalDocuments } from '@/lib/partner-legal'
+export default function Document(){const doc=partnerLegalDocuments[0];return <main className="page" style={{maxWidth:920,margin:'0 auto',padding:'32px 20px'}}><article className="card"><p className="eyebrow">PARTNER DEVELOPMENT DRAFT</p><h1>{doc.title}</h1><p>Version {doc.version}</p>{doc.text.split('\n\n').slice(2).map((part,i)=>part.startsWith('## ')?<h2 key={i}>{part.slice(3)}</h2>:<p key={i} style={{whiteSpace:'pre-wrap',lineHeight:1.75}}>{part}</p>)}<p><Link href="/legal/privacy">Full BrokerRelay Privacy Policy</Link></p><Link href="/partner/accept">Return to partner invitation</Link></article></main>}

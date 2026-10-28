@@ -2,6 +2,7 @@
 
 import { FormEvent, useState } from 'react'
 import { supabase } from '@/lib/supabase'
+import { workspaceDestination } from '@/lib/workspace-destination'
 import { BrokerRelayBrand } from '@/components/BrokerRelayBrand'
 
 export default function LoginPage() {
@@ -24,10 +25,16 @@ export default function LoginPage() {
   async function login(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     setBusy(true); setMessage('')
-    const { error } = await supabase.auth.signInWithPassword({ email: email.trim(), password })
-    setBusy(false)
-    if (error) { setMessage(error.message); return }
-    window.location.href = '/dashboard'
+    try {
+      const { error } = await supabase.auth.signInWithPassword({ email: email.trim().toLowerCase(), password })
+      if (error) {
+        setMessage(error.code === 'invalid_credentials' ? 'We could not sign you in. Check your registered email and password, or use Forgot password to reset it.' : error.message)
+        return
+      }
+      window.location.replace(await workspaceDestination())
+    } catch (error) {
+      setMessage('Could not open your workspace. ' + (error as Error).message)
+    } finally { setBusy(false) }
   }
 
   return <main className="brokerRelayLoginPage">
@@ -40,7 +47,7 @@ export default function LoginPage() {
         <label className="brokerRelayFieldLabel" htmlFor="brokerrelay-email">Email address</label>
         <div className="brokerRelayInputWrap">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 7 8 6 8-6"/></svg>
-          <input id="brokerrelay-email" value={email} onChange={event => setEmail(event.target.value)} type="email" autoComplete="email" placeholder="Email address" required />
+          <input id="brokerrelay-email" value={email} onChange={event => setEmail(event.target.value)} type="email" autoComplete="email" placeholder="Email address" autoCapitalize="none" spellCheck={false} required />
         </div>
         <label className="brokerRelayFieldLabel" htmlFor="brokerrelay-password">Password</label>
         <div className="brokerRelayInputWrap">

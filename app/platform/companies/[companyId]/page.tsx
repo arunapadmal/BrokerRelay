@@ -1,4 +1,5 @@
 'use client'
+import { PlatformNavigation } from '@/components/PlatformNavigation'
 import { PLATFORM_OWNER_EMAIL } from '@/lib/platform-owner'
 
 import Link from 'next/link'
@@ -29,6 +30,7 @@ type Company = {
 
 export default function PlatformCompanyInformationPage() {
   const params = useParams<{ companyId: string }>()
+  const [referral, setReferral] = useState({referrer:'Direct / no referrer',manager:'Not assigned'})
   const [company, setCompany] = useState<Company | null>(null)
   const [message, setMessage] = useState('Loading company…')
   const [authorised, setAuthorised] = useState(false)
@@ -48,6 +50,11 @@ export default function PlatformCompanyInformationPage() {
       if (logoError) { setMessage(logoError.message); return }
       const found = (data as Company[] | null)?.find(row => row.id === params.companyId)
       if (!found) { setMessage('Company not found.'); return }
+      const partners = await supabase.rpc('m7_admin_partner_dashboard')
+      if (partners.error) { setMessage(partners.error.message); return }
+      const names = new Map<string,string>((partners.data?.partners??[]).map((p:{id:string;display_name:string})=>[p.id,p.display_name]))
+      const attribution = (partners.data?.referrals??[]).find((r:{organisation_id:string})=>r.organisation_id===params.companyId)
+      setReferral({referrer:attribution?.referring_partner_id?(names.get(attribution.referring_partner_id)??'Partner unavailable'):'Direct / no referrer',manager:attribution?.assigned_account_manager_id?(names.get(attribution.assigned_account_manager_id)??'Partner unavailable'):'Not assigned'})
       setCompany({ ...found, logo_url: logoData.logo_url, logo_display_width: logoData.logo_display_width, logo_display_height: logoData.logo_display_height })
       setMessage('')
     }
@@ -63,20 +70,15 @@ export default function PlatformCompanyInformationPage() {
   if (!authorised) return <main className="center"><p>Checking platform access…</p></main>
   return <main className="platformShell">
     <header className="platformHeader"><BrokerRelayBrand compact />
-      <details className="platformAccount"><summary><span className="platformAvatar" aria-hidden="true">A</span><span><strong>Aruna Weerakkody</strong><small>Platform Owner</small></span><span className="platformChevron" aria-hidden="true">⌄</span></summary><div className="platformAccountMenu"><Link href="/dashboard">Broker Desk</Link><button type="button" onClick={signOut}>Sign out</button></div></details>
+      <details className="platformAccount"><summary><span className="platformAvatar" aria-hidden="true">A</span><span><strong>Platform Owner</strong><small>Platform Owner</small></span><span className="platformChevron" aria-hidden="true">⌄</span></summary><div className="platformAccountMenu"><Link href="/platform/dashboard">Platform dashboard</Link><button type="button" onClick={signOut}>Sign out</button></div></details>
     </header>
-    <div className="platformBody"><nav className="platformSidebar" aria-label="Platform navigation">
-      <Link className="platformNavActive" href="/platform/companies"><span aria-hidden="true">▦</span> Companies</Link>
-      <Link href={`/platform/billing?company=${params.companyId}`}>▤ Billing &amp; plans</Link>
-      <Link href="/platform/companies#invitations"><span aria-hidden="true">✉</span> Invitations</Link>
-      <div className="platformSidebarBottom"><Link href="/dashboard"><span aria-hidden="true">⌂</span> Broker Desk</Link></div>
-    </nav><div className="platformMain"><div className="platformDetailsPage">
+    <div className="platformBody"><PlatformNavigation /><div className="platformMain"><div className="platformDetailsPage">
     <Link className="backLink" href="/platform/companies">← All companies</Link>
     {message && <div className="notice" role="status">{message}</div>}
     {company && <>
       <div className="platformDetailsHeading"><div><p className="eyebrow">COMPANY INFORMATION</p><h1>{company.name}</h1><span className={`platformStatus ${company.status === 'active' ? 'isActive' : ''}`}>{company.status}</span></div></div>
       <CompanyBillingPanel companyId={company.id} owner />
-      <div className="platformDetailsGrid">
+      <div className="platformDetailsGrid"><section className="card"><h2>Referral &amp; account management</h2><dl><div><dt>Original referral partner</dt><dd>{referral.referrer}</dd></div><div><dt>Current account manager</dt><dd>{referral.manager}</dd></div></dl><p className="muted">The original referrer remains recorded when account management changes. Commission follows the accepted agreement and collected eligible fees.</p><Link href="/platform/partners">Manage partners and transfer approvals →</Link></section>
         <section className="card"><h2>Company branding</h2><CompanyLogoEditor companyId={company.id} companyName={company.name} logoUrl={company.logo_url} logoWidth={company.logo_display_width} logoHeight={company.logo_display_height} onUpdated={url => setCompany(current => current ? { ...current, logo_url: url } : current)} onDimensionsUpdated={(width,height) => setCompany(current => current ? { ...current, logo_display_width: width, logo_display_height: height } : current)} /></section>
         <section className="card"><h2>Head Broker</h2><dl>
           <div><dt>Contact person</dt><dd>{company.head_broker_name ?? 'Not provided'}</dd></div>

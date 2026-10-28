@@ -194,3 +194,8 @@ button:focus-visible,.button:focus-visible,a:focus-visible,input:focus-visible,t
 
 .brokerDeskAccountMenu a { display: block; padding: 11px 17px; border-radius: 8px; color: #263858; text-decoration: none; font-size: 13px; }
 .brokerDeskAccountMenu a:hover { background: #eaf2ff; }
+
+/* Company uploads cannot increase the workspace logo frame. */
+.brokerDeskCompanyLogo { box-sizing:border-box; max-width:min(260px,100%); max-height:140px; flex-shrink:0; }
+.brokerDeskCompanyLogo img { max-width:240px; max-height:120px; object-fit:contain; }
+@media(max-width:620px) { .brokerDeskCompanyLogo img { max-width:100%; } }

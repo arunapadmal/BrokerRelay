@@ -28,3 +28,39 @@
 
 .billingForm .check { display:flex; align-items:flex-start; gap:10px; font-weight:400; }
 .billingForm .check input[type=checkbox] { width:18px; min-width:18px; height:18px; margin:3px 0 0; padding:0; }
+
+/* Shared platform billing controls match the operations workspace. */
+.platformShell .billingPanel > label,
+.platformShell .billingForm label {
+  display: grid;
+  gap: 8px;
+  font-weight: 600;
+  color: #24375b;
+}
+.platformShell .billingPanel > label { max-width: 520px; margin: 16px 0 20px; }
+.platformShell .billingPanel select,
+.platformShell .billingPanel input:not([type="checkbox"]),
+.platformShell .billingPanel textarea {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 44px;
+  padding: 11px 14px;
+  border: 1px solid #dce4f1;
+  border-radius: 10px;
+  background: #fff;
+  color: #182b4d;
+  font: inherit;
+  font-size: 14px;
+  line-height: 1.5;
+}
+.platformShell .billingPanel select:focus-visible,
+.platformShell .billingPanel input:focus-visible,
+.platformShell .billingPanel textarea:focus-visible {
+  outline: 2px solid #3169db;
+  outline-offset: 2px;
+}
+.platformShell .billingPanel .billingPanel { box-shadow: none; background: #f8faff; }
+@media (max-width: 640px) {
+  .platformShell .billingPanel > label { max-width: none; }
+  .platformShell .billingForm { padding: 14px; }
+}

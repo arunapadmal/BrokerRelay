@@ -63,13 +63,8 @@ export default function ReplacementApplicationToolsPage() {
     event.preventDefault()
     if (!source || busy) return
 
-    if (!newNumber.trim()) {
-      setError('New application number is required.')
-      return
-    }
-
     if (
-      apps.some(
+      newNumber.trim() && apps.some(
         (row) =>
           row.application_reference?.trim().toLowerCase() ===
           newNumber.trim().toLowerCase(),
@@ -83,7 +78,7 @@ export default function ReplacementApplicationToolsPage() {
 
     if (
       !window.confirm(
-        `Withdraw ${source.application_reference ?? 'the selected application'} and create replacement ${newNumber.trim()}?`,
+        `Withdraw ${source.application_reference ?? 'the selected application'} and create replacement ${newNumber.trim() || '(number to be added before submission)'}?`,
       )
     ) {
       return
@@ -96,7 +91,7 @@ export default function ReplacementApplicationToolsPage() {
       'withdraw_and_create_replacement_application',
       {
         p_application_id: source.id,
-        p_new_application_reference: newNumber.trim(),
+        p_new_application_reference: newNumber.trim() || null,
         p_new_application_description: description.trim() || null,
         p_withdrawal_note:
           note.trim() || 'Lender requested a replacement application.',
@@ -141,7 +136,7 @@ export default function ReplacementApplicationToolsPage() {
             >
               {apps.map((row) => (
                 <option value={row.id} key={row.id}>
-                  {row.application_reference ?? 'Missing application number'}
+                  {row.application_reference ?? 'Number pending'}
                   {row.application_description
                     ? ` — ${row.application_description}`
                     : ''}
@@ -151,9 +146,8 @@ export default function ReplacementApplicationToolsPage() {
           </label>
 
           <label>
-            New application number <strong>(required)</strong>
+            New lender application number (optional until submission)
             <input
-              required
               value={newNumber}
               onChange={(event: ChangeEvent<HTMLInputElement>) =>
                 setNewNumber(event.target.value)
@@ -161,8 +155,7 @@ export default function ReplacementApplicationToolsPage() {
               placeholder="e.g. AOL05"
             />
             <span className="muted smallText">
-              Enter the new CRM/lender application number. It becomes locked once
-              the replacement application is created.
+              Leave blank until issued. The number is locked once saved and must be recorded before submission.
             </span>
           </label>
 

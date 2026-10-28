@@ -34,8 +34,8 @@ export default function ResetPasswordPage() {
     setReady(false)
     const path = (() => { try { return sessionStorage.getItem('brokerrelay-invitation-return') ?? '' } catch { return '' } })()
     if (/^\/join\/[A-Za-z0-9_-]+$/.test(path)) setReturnToInvite(path)
-    setMessage('Password updated. Return to the invitation to connect your client account, or sign in to BrokerDesk if you are staff.')
+    setMessage('Password updated. Return to the invitation to connect your client account, or sign in to open your workspace.')
   }
 
-  return <main className="center"><div className="card narrow"><BrokerRelayBrand compact /><h1>Create a new password</h1><p className="muted">This page completes the password reset; it is not a magic-link login.</p>{ready && <form onSubmit={update}><label>New password</label><input type="password" value={password} onChange={e => setPassword(e.target.value)} minLength={10} required /><label>Confirm password</label><input type="password" value={confirm} onChange={e => setConfirm(e.target.value)} minLength={10} required /><button>Update password</button></form>}{message && <p role="status">{message}</p>}{updated && <p>{returnToInvite && <Link className="button" href={returnToInvite}>Return to invitation</Link>} <Link className="button secondary" href="/login">BrokerDesk sign in</Link></p>}</div></main>
+  return <main className="center"><div className="card narrow"><BrokerRelayBrand compact /><h1>Create a new password</h1><p className="muted">This page completes the password reset; it is not a magic-link login.</p>{ready && <form onSubmit={update}><label>New password</label><input type="password" value={password} onChange={e => setPassword(e.target.value)} minLength={10} required /><label>Confirm password</label><input type="password" value={confirm} onChange={e => setConfirm(e.target.value)} minLength={10} required /><button>Update password</button></form>}{message && <p role="status">{message}</p>}{updated && <p>{returnToInvite && <Link className="button" href={returnToInvite}>Return to invitation</Link>} <Link className="button secondary" href="/login">Sign in</Link></p>}</div></main>
 }

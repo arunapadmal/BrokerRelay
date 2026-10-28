@@ -237,11 +237,6 @@ export default function ClientApplicationsPage() {
     event.preventDefault()
     if (busy) return
 
-    if (!newRef.trim()) {
-      setError('Application number is required.')
-      return
-    }
-
     if (newDescription.trim().length > 160) {
       setError('Application description must be 160 characters or less.')
       return
@@ -255,7 +250,7 @@ export default function ClientApplicationsPage() {
       'create_loan_application_v2',
       {
         p_client_id: clientId,
-        p_application_reference: newRef.trim(),
+        p_application_reference: newRef.trim() || null,
         p_application_description: newDescription.trim() || null,
         p_status: 'preparing_application',
         p_settlement_date: null,
@@ -304,17 +299,18 @@ export default function ClientApplicationsPage() {
       return
     }
 
-    setNotice(
-      selected.application_reference
-        ? 'Client-friendly application description updated.'
-        : 'Application number saved and locked. Client-friendly description updated.',
-    )
+    setNotice(reference.trim() ? 'Application details saved. The recorded application number is locked.' : 'Application details saved. Add the lender number before submission.')
     await load()
   }
 
   async function updateStatus(event: FormEvent) {
     event.preventDefault()
     if (!selected || busy) return
+
+    if (['submitted','under_assessment','conditional_approval','formal_approval','loan_documents_issued','settlement_scheduled','settled'].includes(status) && !selected.application_reference) {
+      setError('Save the lender application number in Application identity before submitting or choosing a later status.')
+      return
+    }
 
     if (status === 'settled' && !date) {
       setError('Settlement date is required when status is Settled.')
@@ -498,9 +494,8 @@ export default function ClientApplicationsPage() {
             </span>
           </label>
           <label>
-            Application number <strong>(required)</strong>
+            Lender application number (optional until submission)
             <input
-              required
               value={newRef}
               onChange={(event: ChangeEvent<HTMLInputElement>) =>
                 setNewRef(event.target.value)
@@ -508,8 +503,7 @@ export default function ClientApplicationsPage() {
               placeholder="e.g. AOL05"
             />
             <span className="muted smallText">
-              Use the CRM/lender application number. It is the permanent business
-              identifier for this application and cannot be changed after creation.
+              Leave blank until the lender issues a number. Once recorded, the number is locked. Required for Submitted and later processing stages.
             </span>
           </label>
           <button disabled={busy}>
@@ -541,7 +535,7 @@ export default function ClientApplicationsPage() {
             </div>
 
             <div className="card">
-              <p className="eyebrow">APPLICATION IDENTITY</p>
+              <p className="eyebrow">APPLICATION IDENTITY</p><p className="muted smallText">BrokerRelay reference: {selected.id}</p>
               <label>
                 Client-friendly description
                 <input
@@ -558,20 +552,19 @@ export default function ClientApplicationsPage() {
                 <input
                   value={reference}
                   readOnly={Boolean(selected.application_reference)}
-                  required
                   onChange={(event: ChangeEvent<HTMLInputElement>) =>
                     setReference(event.target.value)
                   }
                   placeholder={
                     selected.application_reference
                       ? undefined
-                      : 'Application number required'
+                      : 'Add before submission'
                   }
                 />
                 <span className="muted smallText">
                   {selected.application_reference
-                    ? 'Locked after creation. This number cannot be changed.'
-                    : 'This legacy application has no number yet. Enter it once; it will then be locked.'}
+                    ? 'Locked once recorded. This number cannot be changed.'
+                    : 'Optional while preparing. Enter the lender number once before submission; it will then be locked.'}
                 </span>
               </label>
               <div style={{ marginTop: 18 }}>
@@ -630,11 +623,11 @@ export default function ClientApplicationsPage() {
               <button
                 className="secondary"
                 onClick={saveDetails}
-                disabled={busy || (!selected.application_reference && !reference.trim())}
+                disabled={busy}
               >
                 {selected.application_reference
                   ? 'Save description'
-                  : 'Set application number & save description'}
+                  : 'Save application details'}
               </button>
             </div>
           </section>

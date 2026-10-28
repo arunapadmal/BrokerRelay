@@ -1,5 +1,7 @@
 'use client'
 
+import Link from 'next/link'
+import { legalDocuments } from '@/lib/legal-documents'
 import { FormEvent, useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import { BrokerRelayBrand } from '@/components/BrokerRelayBrand'
@@ -15,6 +17,13 @@ function validAbn(value: string) {
 }
 
 export default function CompanySetupPage() {
+  const [step, setStep] = useState<'terms' | 'password' | 'company'>('terms')
+  const [terms, setTerms] = useState(false)
+  const [privacy, setPrivacy] = useState(false)
+  const [authority, setAuthority] = useState(false)
+  const [email, setEmail] = useState('')
+  const [loginPassword, setLoginPassword] = useState('')
+  const [signedIn, setSignedIn] = useState(false)
   const [invitation, setInvitation] = useState<Invitation | null>(null)
   const [password, setPassword] = useState('')
   const [confirm, setConfirm] = useState('')
@@ -22,31 +31,76 @@ export default function CompanySetupPage() {
   const [busy, setBusy] = useState(false)
   const [branding, setBranding] = useState<MobileBranding>(defaultMobileBranding)
   const [companyName, setCompanyName] = useState('')
+  const [referrer, setReferrer] = useState<string | null>(null)
 
   useEffect(() => {
     async function load() {
       // Supabase processes the email callback before this RPC gets the session.
       const { data: session } = await supabase.auth.getSession()
-      if (!session.session) { setMessage('Open the current invitation link in your email to continue.'); return }
+      if (!session.session) { setSignedIn(false); setInvitation(null); setMessage('Open your invitation email to verify your account, or sign in below to resume.'); return }
+      setSignedIn(true)
+      const owner = await supabase.from('platform_admins').select('user_id').eq('user_id',session.session.user.id).maybeSingle()
+      if (owner.data) { window.location.replace('/platform/dashboard'); return }
       const { data, error } = await supabase.rpc('my_company_setup_invitation')
       if (error || !data?.[0]) { setMessage(error?.message ?? 'No active company invitation was found for this email.'); return }
+      const attribution = await supabase.rpc('my_company_invitation_referrer')
+      if (attribution.error) { setMessage(attribution.error.message); return }
+      setReferrer(attribution.data as string | null)
       setInvitation(data[0] as Invitation); setMessage('')
     }
     void load()
-    const { data: subscription } = supabase.auth.onAuthStateChange((_event, session) => { if (session) void load() })
+    const { data: subscription } = supabase.auth.onAuthStateChange((_event, session) => { if (session) setTimeout(() => { void load() }, 0); else { setSignedIn(false); setInvitation(null) } })
     return () => subscription.subscription.unsubscribe()
   }, [])
+
+  async function acceptTerms(event: FormEvent) {
+    event.preventDefault()
+    if (!invitation || busy || !terms || !privacy || !authority) return
+    setBusy(true); setMessage('')
+    const { error } = await supabase.rpc('record_company_setup_acceptance', {
+      p_invitation_id: invitation.id, p_terms_version: legalDocuments[0].version,
+      p_privacy_version: legalDocuments[1].version, p_terms_accepted: terms,
+      p_privacy_acknowledged: privacy, p_authority_confirmed: authority,
+    })
+    setBusy(false)
+    if (error) { setMessage(error.message); return }
+    setStep('password')
+  }
+
+  async function createPassword(event: FormEvent) {
+    event.preventDefault()
+    if (busy) return
+    if (password.length < 10 || password !== confirm) { setMessage('Use at least 10 characters and enter the same password twice.'); return }
+    setBusy(true); setMessage('')
+    const { error } = await supabase.auth.updateUser({ password })
+    setBusy(false)
+    if (error) { setMessage(error.message); return }
+    setPassword(''); setConfirm(''); setStep('company')
+  }
+
+  async function signIn(event: FormEvent) {
+    event.preventDefault(); if (busy) return
+    setBusy(true); setMessage('')
+    const { error } = await supabase.auth.signInWithPassword({email: email.trim(), password: loginPassword})
+    setBusy(false); setLoginPassword('')
+    if (error) setMessage(error.message)
+  }
+
+  async function requestLink() {
+    if (!email.trim() || busy) { setMessage('Enter your invited email address first.'); return }
+    setBusy(true); setMessage('')
+    const { error } = await supabase.auth.signInWithOtp({email:email.trim(),options:{shouldCreateUser:false,emailRedirectTo:window.location.origin+'/platform/company-setup'}})
+    setBusy(false); setMessage(error ? error.message : 'If this account is eligible, a verification link will arrive. If your invitation has expired, ask the platform owner to resend it.')
+  }
 
   async function complete(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     if (!invitation || busy) return
     const form = new FormData(event.currentTarget)
-    if (password.length < 10 || password !== confirm) { setMessage('Use a password of at least 10 characters and enter it twice.'); return }
+    if (step !== 'company') return
     if (!validAbn(String(form.get('abn') ?? ''))) { setMessage('Enter an 11-digit ABN that passes the checksum.'); return }
     if (!brandingIsReadable(branding)) { setMessage('Choose readable button and notification colours.'); return }
     setBusy(true); setMessage('')
-    const { error: passwordError } = await supabase.auth.updateUser({ password })
-    if (passwordError) { setMessage(passwordError.message); setBusy(false); return }
     const { data: organisationId, error } = await supabase.rpc('accept_company_setup_with_branding', {
       p_invitation_id: invitation.id,
       p_name: String(form.get('name') ?? ''), p_legal_name: String(form.get('legal_name') ?? ''),
@@ -64,12 +118,31 @@ export default function CompanySetupPage() {
     <header className="topbar"><BrokerRelayBrand /></header>
     <section className="card"><p className="eyebrow">COMPANY SETUP</p><h1>Welcome to BrokerRelay</h1>
       {message && <div role="status" className="notice">{message}</div>}
-      {invitation && <form onSubmit={complete}>
+      <p className="notice">Development onboarding with sample data. <Link href="/legal/terms" target="_blank" rel="noopener noreferrer">Terms of Service (draft)</Link> · <Link href="/legal/privacy" target="_blank" rel="noopener noreferrer">Privacy Policy (draft)</Link>. No paid subscription is agreed by this test flow.</p>
+      {!signedIn && <form onSubmit={signIn} className="billingForm">
+        <h2>Open your company invitation</h2><p>New invitees: use the verification link sent to your email, then create your password. Existing users can sign in to resume.</p>
+        <label>Invited email<input type="email" autoComplete="email" required value={email} onChange={e=>setEmail(e.target.value)} /></label>
+        <label>Password (existing users)<input type="password" autoComplete="current-password" value={loginPassword} onChange={e=>setLoginPassword(e.target.value)} /></label>
+        <div className="row"><button disabled={busy || !loginPassword}>Sign in to continue</button><button type="button" className="secondary" disabled={busy} onClick={()=>void requestLink()}>New account / forgot password: email a link</button></div>
+      </form>}
+      {signedIn && !invitation && <button type="button" className="secondary" onClick={async()=>{await supabase.auth.signOut();window.location.reload()}}>Use a different account</button>}
+      {invitation && <p className="notice">Original referral: <strong>{referrer ?? 'Direct signup / no referrer'}</strong>. If this is incorrect, stop and contact the platform owner before completing setup.</p>}
+      {invitation && step === 'terms' && <form onSubmit={acceptTerms} className="billingForm">
+        <p>Invitation for <strong>{invitation.head_name}</strong> · {invitation.head_email}</p><h2>1. Review and agree</h2>
+        <label className="check"><input type="checkbox" required checked={terms} onChange={e=>setTerms(e.target.checked)} /><span>I agree to the <Link href="/legal/terms" target="_blank" rel="noopener noreferrer">draft Terms of Service</Link> for development testing.</span></label>
+        <label className="check"><input type="checkbox" required checked={privacy} onChange={e=>setPrivacy(e.target.checked)} /><span>I acknowledge that I have read the <Link href="/legal/privacy" target="_blank" rel="noopener noreferrer">draft Privacy Policy</Link>. This is not marketing consent.</span></label>
+        <label className="check"><input type="checkbox" required checked={authority} onChange={e=>setAuthority(e.target.checked)} /><span>I am authorised to set up this company and accept these terms on its behalf.</span></label>
+        <button disabled={busy || !terms || !privacy || !authority}>Agree and continue</button>
+      </form>}
+      {invitation && step === 'password' && <form onSubmit={createPassword} className="billingForm">
+        <h2>2. Create your password</h2><p>Your verified account: {invitation.head_email}. Choose a password to use for future sign-ins.</p>
+        <label>Create password<input type="password" autoComplete="new-password" value={password} onChange={e=>setPassword(e.target.value)} required minLength={10} /></label>
+        <label>Confirm password<input type="password" autoComplete="new-password" value={confirm} onChange={e=>setConfirm(e.target.value)} required minLength={10} /></label>
+        <button disabled={busy}>Save password and continue</button>
+      </form>}
+      {invitation && step === 'company' && <form onSubmit={complete}>
         <p className="muted">Invited Head Broker: <strong>{invitation.head_name}</strong> · {invitation.head_email} · {invitation.head_mobile}</p>
-        <h2>Your account</h2>
-        <div className="formGrid"><label>Create password<input type="password" autoComplete="new-password" value={password} onChange={event => setPassword(event.target.value)} required minLength={10} /></label>
-          <label>Confirm password<input type="password" autoComplete="new-password" value={confirm} onChange={event => setConfirm(event.target.value)} required minLength={10} /></label></div>
-        <h2>Company details</h2>
+        <h2>3. Company details</h2>
         <div className="formGrid"><label>Trading name<input name="name" maxLength={160} value={companyName} onChange={event => setCompanyName(event.target.value)} required /></label>
           <label>Legal entity name<input name="legal_name" maxLength={200} required /></label>
           <label>ABN<input name="abn" inputMode="numeric" required /></label>

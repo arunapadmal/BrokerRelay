@@ -1,6 +1,4 @@
-// Configure each deployment independently to avoid sending live users to testing.
-const portalUrl = (
-  process.env.NEXT_PUBLIC_PORTAL_URL || 'https://brokerrelay.netlify.app'
-).replace(/\/+$/, '')
-
-export const COMPANY_SETUP_URL = `${portalUrl}/platform/company-setup`
+export function companySetupUrl() {
+  if (typeof window !== 'undefined') return `${window.location.origin}/platform/company-setup`
+  return `${(process.env.NEXT_PUBLIC_PORTAL_URL || 'https://brokerrelaydev.netlify.app').replace(/\/+$/, '')}/platform/company-setup`
+}

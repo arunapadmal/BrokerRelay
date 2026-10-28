@@ -1,5 +1,7 @@
 'use client'
+import { companyLogoUrl, logoSize } from '@/lib/company-logo'
 import { PLATFORM_OWNER_EMAIL } from '@/lib/platform-owner'
+import { workspaceDestination } from '@/lib/workspace-destination'
 
 import { ClientGreetingPreferences } from '@/components/ClientGreetingPreferences'
 import Link from 'next/link'
@@ -86,6 +88,15 @@ export default function DashboardPage() {
     const { data: owner } = await supabase.from('platform_admins')
       .select('user_id').eq('user_id', user.id).maybeSingle()
     setIsPlatformOwner(Boolean(owner) && user.email?.toLowerCase() === PLATFORM_OWNER_EMAIL)
+    if (owner && user.email?.toLowerCase() === PLATFORM_OWNER_EMAIL) {
+      window.location.replace('/platform/dashboard')
+      return
+    }
+
+    try {
+      const destination = await workspaceDestination()
+      if (destination !== '/dashboard') { window.location.replace(destination); return }
+    } catch (error) { setMessage('Could not open your workspace. ' + (error as Error).message); return }
 
     const { data: accessData } = await supabase.rpc('get_my_portal_access')
     const access = (accessData ?? {}) as PortalAccess
@@ -113,9 +124,11 @@ export default function DashboardPage() {
         .eq('user_id', user.id)
         .maybeSingle()
       if (platformAdmin) {
-        window.location.href = '/platform/setup'
+        setMessage('Platform owner email does not match this deployment configuration. Check NEXT_PUBLIC_PLATFORM_OWNER_EMAIL and redeploy.')
         return
       }
+      const { data: partnerOffer } = await supabase.rpc('partner_my_current_offer')
+      if (partnerOffer) { window.location.replace(partnerOffer.accepted ? '/partner/dashboard' : '/partner/accept'); return }
       setMessage('No active broker profile found for this user.')
       return
     }
@@ -128,9 +141,9 @@ export default function DashboardPage() {
     setContext({
       organisationId: broker.organisation_id,
       organisationName: org?.name ?? 'Organisation',
-      organisationLogoUrl: org?.logo_url ?? null,
-      organisationLogoWidth: org?.logo_display_width ?? 160,
-      organisationLogoHeight: org?.logo_display_height ?? 72,
+      organisationLogoUrl: companyLogoUrl(org?.logo_url),
+      organisationLogoWidth: logoSize(org?.logo_display_width ?? 160, org?.logo_display_height ?? 72).width,
+      organisationLogoHeight: logoSize(org?.logo_display_width ?? 160, org?.logo_display_height ?? 72).height,
       brokerCode: broker.broker_code,
       brokerTitle: broker.title,
       firstName: profile?.first_name ?? '',

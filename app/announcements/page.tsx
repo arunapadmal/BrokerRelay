@@ -285,7 +285,7 @@ export default function AnnouncementsPage() {
       {notice && <div className="notice">{notice}</div>}
 
       <p className="notice">General announcements are available to clients with a recorded settled application while your company subscription is active. Select a client and application to send a loan milestone message before settlement. {baseRecipients.filter(row => !row.eligible).length} client(s) excluded from general announcements.</p>
-      <section className="card" style={{ marginBottom: 16, borderLeft: '4px solid var(--company-accent, #111878)' }}>
+      <section className="card" style={{ marginBottom: 16, borderLeft: '4px solid var(--company-accent, #2563eb)' }}>
         <div className="sectionHead">
           <div><p className="eyebrow">RECIPIENTS</p><h2>Who should receive this?</h2></div>
           <span className="pill">{loadingRecipients ? 'Checking…' : `${effectiveRecipients.length} recipient${effectiveRecipients.length === 1 ? '' : 's'}`}</span>
@@ -312,21 +312,21 @@ export default function AnnouncementsPage() {
 
           <div>
             <strong>3. Clients</strong>
-            <label style={{ display: 'block', marginTop: 9 }}>
-              <input type="radio" checked={!selectSpecific} disabled={Boolean(followUpKey)} onChange={() => { setSelectSpecific(false); setSelectedClients([]); setShowReview(false) }} />{' '}
-              All eligible clients ({baseRecipients.filter(row => row.eligible).length})
+            <label className="workspaceChoice">
+              <input type="radio" name="announcement-client-scope" checked={!selectSpecific} disabled={Boolean(followUpKey)} onChange={() => { setSelectSpecific(false); setSelectedClients([]); setShowReview(false) }} />{' '}
+              <span>All eligible clients ({baseRecipients.filter(row => row.eligible).length})</span>
             </label>
-            <label style={{ display: 'block', marginTop: 7 }}>
-              <input type="radio" checked={selectSpecific} onChange={() => { setSelectSpecific(true); setShowReview(false) }} />{' '}
-              Select specific clients
+            <label className="workspaceChoice">
+              <input type="radio" name="announcement-client-scope" checked={selectSpecific} onChange={() => { setSelectSpecific(true); setShowReview(false) }} />{' '}
+              <span>Select specific clients</span>
             </label>
 
-            {selectSpecific && <div style={{ marginTop: 12, padding: 14, border: '1px solid #e2e5ec', borderRadius: 12 }}>
+            {selectSpecific && <div style={{ marginTop: 12, padding: 14, border: '1px solid #dce4f1', borderRadius: 12 }}>
               <input value={clientSearch} onChange={(event: ChangeEvent<HTMLInputElement>) => setClientSearch(event.target.value)} placeholder="Search client name or email" />
               <div style={{ display: 'grid', gap: 8, marginTop: 10, maxHeight: 260, overflow: 'auto' }}>
-                {visibleClients.map(row => <label key={row.client_id}>
+                {visibleClients.map(row => <label className="workspaceChoice recipientChoice" key={row.client_id}>
                   <input type={followUpKey ? 'radio' : 'checkbox'} name={followUpKey ? 'follow-up-client' : undefined} checked={selectedClients.includes(row.client_id)} onChange={() => toggleClient(row.client_id)} />{' '}
-                  {row.client_name}{row.email ? ` · ${row.email}` : ''}{!row.eligible && <small className="muted"> · {row.reason} — loan milestone messages only</small>}
+                  <span>{row.client_name}{row.email ? ` · ${row.email}` : ''}{!row.eligible && <small className="muted"> · {row.reason} — loan milestone messages only</small>}</span>
                 </label>)}
               </div>
             </div>}
@@ -374,7 +374,7 @@ export default function AnnouncementsPage() {
             <button type="button" disabled={busy || effectiveRecipients.length === 0} onClick={sendAnnouncement}>{busy ? 'Sending…' : 'Send announcement'}</button>
           </div>
         </div>
-        {showReview && <div style={{ marginTop: 14, padding: 14, borderRadius: 12, background: '#f7f8fb' }}>
+        {showReview && <div style={{ marginTop: 14, padding: 14, borderRadius: 12, background: '#f8faff' }}>
           {effectiveRecipients.map(row => <div key={row.client_id} style={{ padding: '5px 0' }}><strong>{row.client_name}</strong>{row.email ? ` · ${row.email}` : ''}{!row.connected ? ' · not connected' : ''}</div>)}
         </div>}
       </section>

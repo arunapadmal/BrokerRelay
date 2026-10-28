@@ -1,4 +1,5 @@
 'use client'
+import { companyLogoUrl } from '@/lib/company-logo'
 import { PLATFORM_OWNER_EMAIL } from '@/lib/platform-owner'
 
 import Link from 'next/link'
@@ -43,7 +44,7 @@ export function ApplicationWorkspaceShell({ clientId, section, children }: Props
       if (organisationId) {
         const { data: organisation } = await supabase.from('organisations')
           .select('name,logo_url').eq('id', organisationId).maybeSingle()
-        if (active) { setCompanyName(organisation?.name ?? 'BrokerDesk'); setCompanyLogo(organisation?.logo_url ?? null) }
+        if (active) { setCompanyName(organisation?.name ?? 'BrokerDesk'); setCompanyLogo(companyLogoUrl(organisation?.logo_url)) }
       }
     }
     void loadIdentity()

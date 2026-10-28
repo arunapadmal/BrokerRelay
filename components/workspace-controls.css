@@ -1,0 +1,51 @@
+/* Shared BrokerDesk form treatment. Company mobile previews are not targeted. */
+.brokerDeskMain:is(.applicationMain,.announcementMain) select {
+  appearance:none;
+  -webkit-appearance:none;
+  box-sizing:border-box;
+  display:block;
+  width:100%;
+  max-width:100%;
+  min-height:44px;
+  padding:10px 40px 10px 14px;
+  border:1px solid var(--br-line,#dce4f1);
+  border-radius:10px;
+  background-color:#fff;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;
+  background-position:right 14px center;
+  background-size:16px;
+  color:var(--br-text,#243555);
+  font:inherit;
+  font-size:14px;
+  font-weight:400;
+  line-height:1.5;
+  cursor:pointer;
+}
+.brokerDeskMain:is(.applicationMain,.announcementMain) select:disabled{background-color:#f3f6fb;color:#64748b;cursor:not-allowed;opacity:1}
+.brokerDeskMain:is(.applicationMain,.announcementMain) select[multiple]{background-image:none;padding-right:14px;min-height:120px}
+.brokerDeskMain:is(.applicationMain,.announcementMain) :is(input,select,textarea):focus-visible{outline:3px solid #93b4fc;outline-offset:2px;border-color:#2563eb}
+.brokerDeskMain .workspaceSelection{padding:24px}
+.brokerDeskMain .workspaceClientPicker{display:grid;grid-template-columns:140px minmax(0,1fr);align-items:center;gap:10px 18px;margin:0;max-width:820px}
+.brokerDeskMain .workspaceClientPicker label{margin:0;font-size:14px;font-weight:650;color:var(--br-text,#243555)}
+.brokerDeskMain .workspaceClientPicker select{min-width:0}
+.brokerDeskMain .workspaceClientPicker p{grid-column:2;margin:4px 0 0}
+.brokerDeskMain.announcementMain .applicationHeader h1{margin:7px 0;color:var(--br-title,#12264e);font-size:29px;line-height:1.25;letter-spacing:-.025em}
+.brokerDeskMain.announcementMain .applicationHeader .muted{margin:0;line-height:1.5}
+.brokerDeskMain.announcementMain .card{border:1px solid var(--br-line,#dce4f1);border-radius:18px}
+.brokerDeskMain.announcementMain label:has(>select){display:grid;gap:7px;font-size:14px;font-weight:600}
+.brokerDeskMain.announcementMain label:has(>select) select{margin-top:0!important}
+.brokerDeskMain.announcementMain .smallText{font-size:12px;font-weight:400;line-height:1.5;color:#64748b}
+.brokerDeskMain.announcementMain .workspaceChoice{display:flex;align-items:flex-start;gap:10px;margin-top:12px;font-size:14px;font-weight:500;line-height:1.5;cursor:pointer}
+.brokerDeskMain.announcementMain .workspaceChoice input:is([type=radio],[type=checkbox]){appearance:auto;flex:0 0 18px;width:18px;height:18px;min-height:18px;margin:2px 0 0;padding:0;accent-color:#2563eb}
+.brokerDeskMain.announcementMain .recipientChoice{margin:0;padding:10px 12px;border:1px solid #e4eaf4;border-radius:10px;background:#fff;flex-wrap:nowrap}
+.brokerDeskMain.announcementMain .recipientChoice:has(input:checked){border-color:#9dbcf9;background:#f3f7ff}
+@media(max-width:620px){
+ .brokerDeskMain .workspaceSelection{padding:18px}
+ .brokerDeskMain .workspaceClientPicker{grid-template-columns:minmax(0,1fr);gap:8px}
+ .brokerDeskMain .workspaceClientPicker p{grid-column:1}
+ .brokerDeskMain.announcementMain .applicationHeader h1{font-size:24px}
+}
+@media(forced-colors:active){.brokerDeskMain:is(.applicationMain,.announcementMain) select{appearance:auto;background-image:none;padding-right:14px}}
+
+.brokerDeskMain.announcementMain .recipientChoice>span{flex:1;min-width:0;overflow-wrap:anywhere}

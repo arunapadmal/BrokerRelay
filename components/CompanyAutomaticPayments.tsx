@@ -9,6 +9,7 @@ let stripeScript: Promise<void> | null = null
 function loadStripe() { if (window.Stripe) return Promise.resolve(); if (!stripeScript) stripeScript = new Promise((resolve,reject) => { const script=document.createElement('script');script.src='https://js.stripe.com/v3/';script.onload=()=>resolve();script.onerror=()=>{stripeScript=null;reject(new Error('Could not load the secure payment form.'))};document.head.appendChild(script) });return stripeScript }
 export function CompanyAutomaticPayments({companyId,owner}:{companyId:string;owner:boolean}) {
  const [state,setState]=useState<{ready:boolean;enabled:boolean;livemode:boolean;last4?:string}|null>(null)
+ const [sandbox,setSandbox]=useState(false)
  const [error,setError]=useState(''),[notice,setNotice]=useState(''),[busy,setBusy]=useState(false),[consent,setConsent]=useState(false),[open,setOpen]=useState(false)
  const host=useRef<HTMLDivElement>(null),stripe=useRef<StripeBrowser|null>(null),elements=useRef<Elements|null>(null),payment=useRef<PaymentElement|null>(null)
  async function refresh() { const r=await supabase.rpc('billing_payment_status',{p_org:companyId});if(!r.error)setState(r.data) }
@@ -20,6 +21,7 @@ export function CompanyAutomaticPayments({companyId,owner}:{companyId:string;own
    const {data,error:failure}=await supabase.functions.invoke('billing-payment-setup',{body:{organisation_id:companyId}})
    if(failure)throw new Error('Automatic payments are not available yet. Ask the Platform Owner to check the payment gateway setup.')
    if(data.error)throw new Error(data.error)
+   setSandbox(data.livemode === false)
    await loadStripe(); stripe.current=window.Stripe!(data.publishable_key);elements.current=stripe.current.elements({clientSecret:data.client_secret,appearance:{theme:'stripe'}})
    payment.current?.destroy();payment.current=elements.current.create('payment');setOpen(true);setConsent(false)
    if(!data.livemode)setNotice('Test authorisation only. It will not enable collection of real invoices.')
@@ -40,7 +42,7 @@ export function CompanyAutomaticPayments({companyId,owner}:{companyId:string;own
  {error && <p className="notice error" role="alert">{error}</p>}{notice && <p className="notice" role="status">{notice}</p>}
  {!owner && !open && <div className="billingInvoiceList"><button type="button" disabled={busy} onClick={()=>void setup()}>{state?.ready?'Update debit authorisation':'Set up direct debit'}</button>{state?.enabled && <button type="button" className="secondary" disabled={busy} onClick={()=>void disable()}>Stop automatic payments</button>}</div>}
  <div ref={host} hidden={!open} />
- {open && <><label className="check"><input type="checkbox" checked={consent} onChange={e=>setConsent(e.target.checked)}/>I authorise monthly collection of my company invoices, including GST and applicable usage fees, after seven days’ invoice notice.</label><button type="button" disabled={busy||!consent} onClick={()=>void confirm()}>Authorise direct debit</button><p className="muted">Bank details are collected securely by Stripe. BrokerRelay stores the authorisation reference and last four digits.</p></>}
+ {open && <>{sandbox && <p className="notice">Stripe sandbox: use Stripe test bank details only. No money will be collected.</p>}<label className="check"><input type="checkbox" checked={consent} onChange={e=>setConsent(e.target.checked)}/>{sandbox ? 'I agree to create a test bank authorisation for development testing.' : 'I authorise monthly collection of my company invoices, including GST and applicable usage fees, after seven days’ invoice notice.'}</label><button type="button" disabled={busy||!consent} onClick={()=>void confirm()}>{sandbox ? 'Confirm test authorisation' : 'Authorise direct debit'}</button><p className="muted">Bank details are collected securely by Stripe. BrokerRelay stores the authorisation reference and last four digits.</p></>}
  {owner && <p className="muted">The company’s Head Broker must authorise payments from their own billing page.</p>}
  <button className="secondary" type="button" disabled={busy} onClick={()=>void refresh()}>Refresh payment status</button>
  </div>

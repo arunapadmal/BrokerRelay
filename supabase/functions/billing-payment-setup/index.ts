@@ -1,7 +1,9 @@
 import { adminClient, checked, cors, json, required, stripe } from '../_shared/billing.ts'
+import { assertSandboxEnvironment } from '../_shared/sandbox.ts'
 Deno.serve(async (req: Request) => {
  const headers = cors(req); if (req.method === 'OPTIONS') return new Response(null,{headers}); if(req.method !== 'POST') return json({error:'METHOD_NOT_ALLOWED'},405,headers)
  try {
+  assertSandboxEnvironment(name => Deno.env.get(name))
   const auth = req.headers.get('Authorization'); if (!auth?.startsWith('Bearer ')) return json({error:'UNAUTHENTICATED'},401,headers)
   const db = adminClient(); const {data:{user},error} = await db.auth.getUser(auth.slice(7)); if(error || !user) return json({error:'UNAUTHENTICATED'},401,headers)
   // @ts-ignore Deno resolves the pinned remote dependency.

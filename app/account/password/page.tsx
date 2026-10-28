@@ -15,7 +15,7 @@ export default function ChangePasswordPage() {
   useEffect(() => {
     void supabase.auth.getUser().then(({ data }) => {
       setReady(Boolean(data.user))
-      setMessage(data.user ? '' : 'Sign in through your invitation or BrokerDesk account before changing your password.')
+      setMessage(data.user ? '' : 'Sign in to your account before changing your password.')
     })
   }, [])
   async function update(event: FormEvent) {
@@ -41,5 +41,5 @@ export default function ChangePasswordPage() {
     </form>}
     {message && <p className="notice" role="status">{message}</p>}
     <p className="muted">Forgot your current password? Use <Link href="/login">Forgot password on the sign-in page</Link> or the reset link on your client invitation.</p>
-  </section></main>
+  <p><Link href="/">← Return to my workspace</Link></p></section></main>
 }

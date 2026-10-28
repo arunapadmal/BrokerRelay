@@ -1,0 +1,25 @@
+.partnerDashboard .partnerNav{display:flex;flex-direction:column;gap:8px;flex:0 0 230px;padding:20px 16px;border-right:1px solid #dce4f1;background:#f8faff}
+.partnerNav a{padding:12px 14px;border-radius:10px;text-decoration:none;font-weight:600;color:#24375b}
+.partnerNav a:hover,.partnerNav a[aria-current=page]{background:#e8efff;color:#245ad5}
+.partnerNav button{margin-top:auto}
+.partnerDashboard .billingStats{margin-top:20px}
+.partnerDashboard fieldset{border:0;display:grid;gap:16px;padding:0;min-width:0}
+.partnerDashboard fieldset legend{font-size:15px;font-weight:600;margin-bottom:14px}
+.partnerDashboard .tableWrap{max-width:100%;overflow-x:auto}
+.partnerDashboard table{width:100%;border-collapse:collapse;text-align:left}
+.partnerDashboard th,.partnerDashboard td{padding:14px 12px;border-bottom:1px solid #e3e9f3;vertical-align:top}
+.partnerDashboard th{color:#53617b;font-size:12px;text-transform:uppercase;letter-spacing:.05em}
+.partnerDashboard td{overflow-wrap:anywhere}
+.partnerStatus{display:inline-block;padding:4px 10px;border-radius:30px;background:#eef2fa;color:#53617b;text-transform:capitalize;font-size:12px;font-weight:600}
+.partnerStatus.accepted{background:#e3f6ed;color:#176342}.partnerStatus.pending{background:#fff3d9;color:#825c13}
+.partnerDashboard section[id]{scroll-margin-top:20px}
+@media(max-width:800px){.partnerDashboard .platformBody{display:block}.partnerDashboard .partnerNav{flex-direction:row;flex-wrap:wrap;border-right:0;border-bottom:1px solid #dce4f1;padding:12px}.partnerNav a{padding:8px}.partnerNav button{margin-top:0}.partnerDashboard .platformMain{padding:18px}.partnerDashboard .billingStats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:420px){.partnerDashboard .billingStats{grid-template-columns:1fr}}
+
+/* Match the owner account identity and dropdown treatment. */
+.partnerDashboard .partnerAccountIdentity{min-width:0;max-width:220px}
+.partnerDashboard .partnerAccountIdentity strong{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.partnerDashboard .platformAccountMenu{min-width:230px}
+.partnerDashboard .platformAccountMenu a,.partnerDashboard .platformAccountMenu button{box-sizing:border-box}
+.partnerDashboard .platformAccountMenu button{border-top:1px solid #e8edf6;margin-top:4px;border-radius:0 0 7px 7px}
+@media(max-width:800px){.partnerDashboard .partnerAccountIdentity{display:none}.partnerDashboard .platformAccountMenu{min-width:210px;max-width:calc(100vw - 32px)}}
