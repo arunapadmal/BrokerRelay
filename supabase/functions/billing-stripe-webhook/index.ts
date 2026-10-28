@@ -16,8 +16,14 @@ Deno.serve(async (req: Request) => {
     await checked(db.from('billing_payment_accounts').update({stripe_payment_method_id:pm.id,stripe_mandate_id:si.mandate,last4:pm.au_becs_debit?.last4,ready:true,enabled:true,updated_at:new Date().toISOString()}).eq('organisation_id',account.organisation_id).eq('setup_intent_id',si.id))
    }
   } else if(event.type.startsWith('payment_intent.')) {
-   // Authorisation-only rollout. No invoice or commission changes from test payments.
-   return json({received:true,ignored:'PAYMENT_COLLECTION_NOT_ENABLED'})
+   const pi=await stripe(`payment_intents/${encodeURIComponent(obj.id)}`)
+   const id=pi.metadata?.brokerrelay_sandbox_run
+   if(!id)return json({received:true,ignored:'NOT_A_SANDBOX_INVOICE_TEST'})
+   const run=await checked(db.from('billing_sandbox_runs').select('*').eq('id',id).maybeSingle())
+   if(!run || pi.livemode!==false || pi.currency!==run.currency || pi.amount!==run.amount_cents || pi.customer!==run.customer_id || (run.intent_id && run.intent_id!==pi.id))throw new Error('SANDBOX_PAYMENT_MISMATCH')
+   const status=pi.status==='succeeded'?'paid':pi.status==='processing'?'processing':['requires_payment_method','canceled'].includes(pi.status)?'failed':'requires_action'
+   // Terminal states cannot regress; duplicate deliveries cannot create another payment.
+   await checked(db.from('billing_sandbox_runs').update({intent_id:pi.id,status,last_event_id:event.id,webhook_received_at:new Date().toISOString()}).eq('id',id).not('status','in','(paid,failed)'))
   } else if(event.type==='mandate.updated' && obj.status==='inactive') {
    await checked(db.from('billing_payment_accounts').update({ready:false,enabled:false}).eq('stripe_mandate_id',obj.id))
   } else if(event.type==='payment_method.detached') {
