@@ -17,6 +17,10 @@ Deno.serve(async (req: Request) => {
    }
   } else if(event.type.startsWith('payment_intent.')) {
    const pi=await stripe(`payment_intents/${encodeURIComponent(obj.id)}`)
+   if(pi.metadata?.brokerrelay_invoice_test==='true') {
+    await checked(db.rpc('billing_reconcile_sandbox_invoice',{p_event:event.id,p_invoice:pi.metadata.brokerrelay_invoice_id,p_intent:pi.id,p_customer:pi.customer,p_amount:pi.amount,p_currency:pi.currency,p_status:pi.status,p_live:pi.livemode}))
+    return json({received:true})
+   }
    const id=pi.metadata?.brokerrelay_sandbox_run
    if(!id)return json({received:true,ignored:'NOT_A_SANDBOX_INVOICE_TEST'})
    const run=await checked(db.from('billing_sandbox_runs').select('*').eq('id',id).maybeSingle())

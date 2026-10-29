@@ -5,6 +5,7 @@ import { BillingPlan, BillingSummary, BillingInvoice, monthStart, monthLabel, mo
 import { BillingInvoiceView } from '@/components/BillingInvoiceView'
 import './billing.css'
 import { CompanyAutomaticPayments } from '@/components/CompanyAutomaticPayments'
+import { InvoiceFinancialResults } from '@/components/InvoiceFinancialResults'
 export function CompanyBillingPanel({ companyId, owner = false }: { companyId: string; owner?: boolean }) {
  const [summary, setSummary] = useState<BillingSummary | null>(null)
  const [plans, setPlans] = useState<BillingPlan[]>([])
@@ -62,6 +63,7 @@ export function CompanyBillingPanel({ companyId, owner = false }: { companyId: s
   {owner && summary?.subscription && (completedMonths.length ? <form className="billingForm billingNoPrint" onSubmit={e => { e.preventDefault(); setPreview(null); void action(() => supabase.rpc('billing_generate_invoice', { p_org: companyId, p_month: billingMonth }), 'Invoice issued. Select it below to print or save as PDF.') }}><label>Completed billing month<select value={billingMonth} onChange={e => setMonth(e.target.value)}>{completedMonths.map(m => <option value={m} key={m}>{monthLabel(m)}</option>)}</select></label><button disabled={busy}>Generate invoice</button></form> : <p className="notice">Your first billing month is still in progress. A final invoice will be available after {monthLabel(summary.subscription.start_month)} ends. You can preview it now.</p>)}
   {preview && <BillingInvoiceView invoice={preview} preview />}
   {summary?.subscription && <CompanyAutomaticPayments companyId={companyId} owner={owner} />}
+  <InvoiceFinancialResults companyId={companyId} owner={owner}/>
   <p className="muted">Invoices for the previous calendar month are generated on the 1st in Melbourne time. When automation is enabled, invoices go to your company billing email. Authorised direct debit is scheduled seven days after notice; receipts follow confirmed payment.</p>
   <div className="billingInvoiceList billingNoPrint"><h3>Invoices</h3><button type="button" className="secondary" disabled={busy} onClick={()=>void load()}>Refresh invoices</button></div>{!invoices.length && <p className="muted">Invoices appear after a completed month has been billed.</p>}
   <div className="billingInvoiceList billingNoPrint">{invoices.map(i => <button type="button" className="secondary" key={i.id} onClick={() => { setPreview(null); setSelectedInvoice(i.id) }}>BR-{String(i.invoice_number).padStart(6, '0')} · {monthLabel(i.month)} · {money(i.total_cents)} · {i.status}</button>)}</div>
