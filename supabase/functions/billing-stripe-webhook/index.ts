@@ -1,5 +1,6 @@
 import { adminClient, checked, json, required, stripe, verifyStripeSignature } from '../_shared/billing.ts'
 import { assertSandboxEnvironment } from '../_shared/sandbox.ts'
+import { reconcileRefund } from '../_shared/refunds.ts'
 Deno.serve(async (req: Request) => {
  if(req.method!=='POST') return json({error:'METHOD_NOT_ALLOWED'},405)
  try {
@@ -28,6 +29,11 @@ Deno.serve(async (req: Request) => {
    const status=pi.status==='succeeded'?'paid':pi.status==='processing'?'processing':['requires_payment_method','canceled'].includes(pi.status)?'failed':'requires_action'
    // Terminal states cannot regress; duplicate deliveries cannot create another payment.
    await checked(db.from('billing_sandbox_runs').update({intent_id:pi.id,status,last_event_id:event.id,webhook_received_at:new Date().toISOString()}).eq('id',id).not('status','in','(paid,failed)'))
+  } else if(event.type==='charge.refunded') {
+   await reconcileRefund(db,obj.id,event.id)
+  } else if(['refund.created','refund.updated','refund.failed'].includes(event.type)) {
+   const refund=await stripe(`refunds/${encodeURIComponent(obj.id)}`)
+   if(refund.charge)await reconcileRefund(db,typeof refund.charge==='string'?refund.charge:refund.charge.id,event.id)
   } else if(event.type==='mandate.updated' && obj.status==='inactive') {
    await checked(db.from('billing_payment_accounts').update({ready:false,enabled:false}).eq('stripe_mandate_id',obj.id))
   } else if(event.type==='payment_method.detached') {
