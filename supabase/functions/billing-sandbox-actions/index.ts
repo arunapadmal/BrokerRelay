@@ -25,6 +25,27 @@ Deno.serve(async(req:Request)=>{
   const ctx=await checked(db.from('billing_invoice_payment_context').select('*').eq('invoice_id',i.id).single());if(ctx.mode!=='sandbox'||(!ctx.intent_id&&!(body.action==='email'&&body.kind==='invoice_email')))throw new Error('SUBMITTED_SANDBOX_INVOICE_REQUIRED')
   const pi=ctx.intent_id?await stripe(`payment_intents/${encodeURIComponent(ctx.intent_id)}`):null
   if(pi&&(pi.livemode!==false||pi.customer!==ctx.customer_id||pi.amount!==i.total_cents||pi.currency!=='aud'))throw new Error('PAYMENT_MISMATCH')
+  if(body.action==='resend_receipt'){
+   required('RESEND_API_KEY');required('BILLING_EMAIL_FROM')
+   if(!user.email||!user.email_confirmed_at)throw new Error('VERIFIED_OWNER_EMAIL_REQUIRED')
+   if(body.sandbox_ack!==true||!/^[0-9a-f-]{36}$/i.test(body.request_id??''))throw new Error('RESEND_CONFIRMATION_REQUIRED')
+   const receipt=await checked(db.from('billing_invoice_receipts').select('snapshot').eq('invoice_id',i.id).single())
+   const preview=invoiceEmail({...i,...receipt.snapshot},'receipt_email','https://brokerrelaydev.netlify.app')
+   const payload={from:required('BILLING_EMAIL_FROM'),to:[user.email],subject:'[SANDBOX RECEIPT COPY — NO MONEY COLLECTED] '+preview.subject,text:'Requested copy of the original sandbox receipt. No new payment.\n\n'+preview.text,html:'<p><strong>Requested copy of the original sandbox receipt. No new payment.</strong></p>'+preview.html}
+   const r=await checked(db.rpc('billing_claim_receipt_resend',{p_invoice:i.id,p_owner:user.id,p_request:body.request_id,p_recipient:user.email,p_payload:payload}))
+   if(r.state==='accepted')return json({message:'This resend request was already accepted. No duplicate email sent.'},200,headers)
+   if(r.state==='rejected')throw new Error('PREVIOUS_RESEND_REJECTED_START_NEW_REQUEST')
+   if(Date.now()-new Date(r.created_at).getTime()>20*3600000)throw new Error('RESEND_REVIEW_REQUIRED')
+   const response=await fetch('https://api.resend.com/emails',{method:'POST',headers:{Authorization:`Bearer ${required('RESEND_API_KEY')}`,'Content-Type':'application/json','Idempotency-Key':`br-receipt-copy-${r.id}`},body:JSON.stringify(r.payload),signal:AbortSignal.timeout(20000)})
+   if(!response.ok){
+    // Only explicit validation/auth rejections are safe to mark as unsent.
+    if([400,401,403,422].includes(response.status))await checked(db.from('billing_sandbox_receipt_resends').update({state:'rejected',error_code:`EMAIL_PROVIDER_${response.status}`}).eq('id',r.id).eq('state','pending'))
+    throw new Error(`EMAIL_PROVIDER_${response.status}`)
+   }
+   const sent=await response.json();if(!sent.id)throw new Error('RESEND_REVIEW_REQUIRED')
+   await checked(db.from('billing_sandbox_receipt_resends').update({state:'accepted',provider_id:sent.id,accepted_at:new Date().toISOString(),error_code:null}).eq('id',r.id))
+   return json({message:'Provider accepted the receipt copy. Check your inbox.'},200,headers)
+  }
   if(body.action==='email'){
    required('RESEND_API_KEY');required('BILLING_EMAIL_FROM');if(!user.email||!user.email_confirmed_at)throw new Error('VERIFIED_OWNER_EMAIL_REQUIRED')
    const kind=body.kind;if(!['invoice_email','receipt_email','failure_email'].includes(kind))throw new Error('EMAIL_KIND_REQUIRED')
