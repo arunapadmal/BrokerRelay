@@ -23,3 +23,21 @@
 .partnerDashboard .platformAccountMenu a,.partnerDashboard .platformAccountMenu button{box-sizing:border-box}
 .partnerDashboard .platformAccountMenu button{border-top:1px solid #e8edf6;margin-top:4px;border-radius:0 0 7px 7px}
 @media(max-width:800px){.partnerDashboard .partnerAccountIdentity{display:none}.partnerDashboard .platformAccountMenu{min-width:210px;max-width:calc(100vw - 32px)}}
+
+/* Compact partner workspace: lists grow through pagination, not page length. */
+.partnerDashboard .partnerNav button{margin:0;padding:12px 14px;border:0;border-radius:10px;background:transparent;text-align:left;font:inherit;font-weight:600;color:#24375b;cursor:pointer}
+.partnerDashboard .partnerNav button:hover,.partnerDashboard .partnerNav button[aria-current=page]{background:#e8efff;color:#245ad5}
+.partnerDashboard .partnerSummary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin:18px 0}
+.partnerOverviewGrid{display:grid;grid-template-columns:minmax(280px,.8fr) minmax(0,1.7fr);gap:20px;align-items:start}
+.partnerOverviewGrid>.billingPanel{margin-top:0;min-width:0;padding:20px}
+.partnerDashboard .partnerOverviewGrid fieldset{gap:12px}
+.partnerDashboard .partnerOverviewGrid fieldset legend{margin-bottom:8px}
+.partnerDashboard .partnerOverviewGrid th,.partnerDashboard .partnerOverviewGrid td{padding:10px 8px}
+.partnerListTabs,.partnerFilters,.partnerPager{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.partnerListTabs{margin:12px 0}.partnerListTabs [aria-pressed=true]{background:#e8efff;color:#245ad5;border-color:#245ad5}
+.partnerFilters{align-items:end;margin-bottom:12px}.partnerFilters label{flex:1;min-width:150px;display:grid;gap:6px}
+.partnerPager{justify-content:flex-end;margin-top:14px;font-size:13px}.partnerPager>span:first-child{margin-right:auto}
+.partnerDashboard details>summary{cursor:pointer;font-weight:600}
+@media(max-width:1100px){.partnerOverviewGrid{grid-template-columns:1fr}.partnerDashboard .partnerSummary{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:800px){.partnerDashboard .partnerNav button{padding:8px 12px}.partnerOverviewGrid{gap:16px}}
+@media(max-width:420px){.partnerDashboard .partnerSummary{grid-template-columns:1fr}.partnerPager{justify-content:flex-start}}
