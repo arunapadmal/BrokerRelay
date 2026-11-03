@@ -1,4 +1,5 @@
 'use client'
+import { BrokerNavigation } from '@/components/BrokerNavigation'
 import { PLATFORM_OWNER_EMAIL } from '@/lib/platform-owner'
 
 import Link from 'next/link'
@@ -256,22 +257,7 @@ export default function AnnouncementsPage() {
         <BrokerRelayBrand compact />
         <div className="brokerDeskAccount"><span className="announcementCompanyIdentity">{companyLogoUrl && <img src={companyLogoUrl} alt="" aria-hidden="true" />}{companyName}</span><details><summary><span className="brokerDeskAvatar">{accountName.charAt(0).toUpperCase()}</span><span>{accountName}</span>⌄</summary><div className="brokerDeskAccountMenu"><Link href="/account/password">Change password</Link><button type="button" onClick={signOut}>Sign out</button></div></details></div>
       </header>
-      <div className="brokerDeskLayout"><nav className="brokerDeskNav" aria-label="Broker Desk navigation">
-        <Link href="/dashboard">⌂ &nbsp; Home</Link>
-        <Link href="/dashboard#clients">♙ &nbsp; Clients</Link>
-        <Link href="/messages">✉ &nbsp; Messages</Link>
-        <Link href="/applications">▤ &nbsp; Applications</Link>
-        <Link href="/documents">▣ &nbsp; Document requests</Link>
-        <Link href="/clients/team">♙ &nbsp; Manage team</Link>
-        <Link href="/announcements" className="brokerDeskNavActive" aria-current="page">◈ &nbsp; Announcements</Link>
-        <Link href="/settings/follow-up-templates">⚙ &nbsp; Follow-up settings</Link>
-        {canManageStaff && <Link href="/admin">⚙ &nbsp; Company &amp; staff</Link>}
-        {isHeadBroker && <Link href="/admin/document-delivery">▣ &nbsp; Delivery settings</Link>}
-        {isHeadBroker && <Link href="/settings/mobile-appearance">◈ &nbsp; Mobile appearance</Link>}
-        {isPlatformOwner && <Link href="/platform/companies">▦ &nbsp; Platform companies</Link>}
-        <Link className="brokerDeskHelpLink" href="/help">ⓘ &nbsp; Help &amp; Support</Link>
-      {isHeadBroker && <Link href="/billing">▤ &nbsp; Billing &amp; invoices</Link>}
-    </nav><div className="brokerDeskMain announcementMain">
+      <div className="brokerDeskLayout"><BrokerNavigation canManageStaff={canManageStaff} isHeadBroker={isHeadBroker} isPlatformOwner={isPlatformOwner}/><div className="brokerDeskMain announcementMain">
       <header className="applicationHeader announcementHeader">
         <div>
           <p className="eyebrow">CLIENT COMMUNICATION</p>

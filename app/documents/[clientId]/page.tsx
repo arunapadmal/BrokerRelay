@@ -320,7 +320,7 @@ export default function ClientDocumentRequestsPage() {
         ) : (
           <div className="statusHistory">
             {requests.map((request) => (
-              <div className="historyItem" key={request.document_request_id}>
+              <div className="historyItem" id={`request-${request.document_request_id}`} key={request.document_request_id}>
                 <div className="historyDot" />
                 <div style={{ width: '100%' }}>
                   <div className="sectionHead">

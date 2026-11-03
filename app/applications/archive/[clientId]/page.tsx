@@ -190,7 +190,7 @@ export default function ApplicationArchivePage() {
             const items = historyByApplication[application.id] ?? []
 
             return (
-              <section className="card" key={application.id}>
+              <section className="card" id={`application-${application.id}`} key={application.id}>
                 <div className="sectionHead">
                   <div>
                     <p className="eyebrow">

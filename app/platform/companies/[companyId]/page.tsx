@@ -77,7 +77,7 @@ export default function PlatformCompanyInformationPage() {
     {message && <div className="notice" role="status">{message}</div>}
     {company && <>
       <div className="platformDetailsHeading"><div><p className="eyebrow">COMPANY INFORMATION</p><h1>{company.name}</h1><span className={`platformStatus ${company.status === 'active' ? 'isActive' : ''}`}>{company.status}</span></div></div>
-      <CompanyBillingPanel companyId={company.id} owner />
+      <p><Link className="button secondary" href={`/platform/billing?company=${company.id}`}>Open company invoices & payments →</Link></p>
       <div className="platformDetailsGrid"><section className="card"><h2>Referral &amp; account management</h2><dl><div><dt>Original referral partner</dt><dd>{referral.referrer}</dd></div><div><dt>Current account manager</dt><dd>{referral.manager}</dd></div></dl><p className="muted">The original referrer remains recorded when account management changes. Commission follows the accepted agreement and collected eligible fees.</p><Link href="/platform/partners">Manage partners and transfer approvals →</Link></section>
         <section className="card"><h2>Company branding</h2><CompanyLogoEditor companyId={company.id} companyName={company.name} logoUrl={company.logo_url} logoWidth={company.logo_display_width} logoHeight={company.logo_display_height} onUpdated={url => setCompany(current => current ? { ...current, logo_url: url } : current)} onDimensionsUpdated={(width,height) => setCompany(current => current ? { ...current, logo_display_width: width, logo_display_height: height } : current)} /></section>
         <section className="card"><h2>Head Broker</h2><dl>

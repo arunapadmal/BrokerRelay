@@ -1,4 +1,5 @@
 'use client'
+import { usePathname } from 'next/navigation'
 import { InvitationHistory } from '@/components/InvitationHistory'
 import { PlatformNavigation } from '@/components/PlatformNavigation'
 import { PLATFORM_OWNER_EMAIL } from '@/lib/platform-owner'
@@ -17,6 +18,8 @@ type ReferralNames = { referrer: string; manager: string }
 type Invitation = { id: string; head_name: string; head_email: string; head_mobile: string; status: string; created_at: string; expires_at: string }
 
 export default function PlatformCompaniesPage() {
+ const view=usePathname().split('/')[3]||'list'
+ const [page,setPage]=useState(1),[invitationPage,setInvitationPage]=useState(1)
   const [referrers,setReferrers]=useState<{id:string;display_name:string}[]>([])
   const [referralNames,setReferralNames]=useState<Record<string,ReferralNames>>({})
   const [period,setPeriod]=useState('all')
@@ -131,19 +134,19 @@ export default function PlatformCompaniesPage() {
     </header>
     <div className="platformBody">
       <PlatformNavigation />
-      <div className="platformMain">
-        <section id="companies" className="platformCompanies">
+      <div className="platformMain">{error&&<p className="notice error" role="alert">{error}</p>}
+        {view==='list'&&<section id="companies" className="platformCompanies">
           <div className="platformHeading"><div><h1>Companies</h1><p>Independent companies using BrokerRelay. Each company manages its own staff, clients and data.</p></div></div>
           <div className="row" role="group" aria-label="Company reporting period"><button type="button" className={period==='all'?'':'secondary'} aria-pressed={period==='all'} onClick={()=>setPeriod('all')}>All time</button><button type="button" className={period==='month'?'':'secondary'} aria-pressed={period==='month'} onClick={()=>setPeriod('month')}>This month</button></div><p className="muted">{period==='month'?'New clients and applications created this month; settlements use the actual settlement date in Melbourne time. Missing counts require the monthly performance SQL update.':'All-time records by current status.'}</p>
           <label className="platformSearchLabel" htmlFor="company-search">Search companies</label>
-          <input id="company-search" className="platformSearch" type="search" value={companySearch} onChange={event => setCompanySearch(event.target.value)} placeholder="Company, Head Broker, or email" />
+          <input id="company-search" className="platformSearch" type="search" value={companySearch} onChange={event => {setCompanySearch(event.target.value);setPage(1)}} placeholder="Company, Head Broker, or email" />
           <div className="tableWrap"><table><thead><tr><th>Company</th><th>Referral partner</th><th>Head Broker</th><th>Contact number</th><th>Status</th><th>{period==='month'?'New clients':'Clients'}</th><th>{period==='month'?'New applications':'Applications'}</th></tr></thead>
-            <tbody>{visibleCompanies.map(company => <Fragment key={company.id}><tr><td><button className="platformCompanyToggle" type="button" aria-expanded={expandedCompanyId === company.id} aria-controls={`company-details-${company.id}`} onClick={() => setExpandedCompanyId(current => current === company.id ? null : company.id)}>{company.name} <span aria-hidden="true">{expandedCompanyId === company.id ? '⌃' : '⌄'}</span></button></td><td>{referralNames[company.id]?.referrer??'Direct / no referrer'}<small style={{display:'block'}}>Account manager: {referralNames[company.id]?.manager??'Not assigned'}</small></td><td>{company.head_broker_name ?? '—'}</td><td>{company.head_broker_mobile ? <a href={`tel:${company.head_broker_mobile.replace(/[^+\d]/g, '')}`}>{company.head_broker_mobile}</a> : '—'}</td><td><span className={`platformStatus ${company.status === 'active' ? 'isActive' : ''}`}>{company.status}</span></td><td>{shownPerformance[company.id]?.clients ?? '—'}</td><td>{shownPerformance[company.id]?.applications ?? '—'}{shownPerformance[company.id] && <small style={{display:'block'}}>{period==='month'?`Settlements this month: ${shownPerformance[company.id].settled_month??0}`:`Settled: ${shownPerformance[company.id].application_statuses.settled??0} · Withdrawn: ${shownPerformance[company.id].application_statuses.withdrawn??0}`}</small>}</td></tr>
-              {expandedCompanyId === company.id && <tr className="platformCompanyProfileRow" id={`company-details-${company.id}`}><td colSpan={7}><div className="platformCompanyProfilePanel"><div><p className="eyebrow">COMPANY PROFILE</p><h3>{company.name}</h3><dl><div><dt>Original referral partner</dt><dd>{referralNames[company.id]?.referrer??'Direct / no referrer'}</dd></div><div><dt>Account manager</dt><dd>{referralNames[company.id]?.manager??'Not assigned'}</dd></div><div><dt>Head Broker</dt><dd>{company.head_broker_name ?? 'Not provided'}</dd></div><div><dt>Email</dt><dd>{company.head_broker_email ?? 'Not provided'}</dd></div><div><dt>Mobile</dt><dd>{company.head_broker_mobile ?? 'Not provided'}</dd></div><div><dt>ABN</dt><dd>{company.abn ?? 'Not provided'}</dd></div><div><dt>Added</dt><dd>{new Date(company.created_at).toLocaleDateString('en-AU')}</dd></div></dl></div><div className="platformCompanyProfileActions"><CompanyLogoEditor companyId={company.id} companyName={company.name} logoUrl={company.logo_url} logoWidth={company.logo_display_width} logoHeight={company.logo_display_height} onUpdated={url => setCompanies(current => current.map(row => row.id === company.id ? { ...row, logo_url: url } : row))} onDimensionsUpdated={(width,height) => setCompanies(current => current.map(row => row.id === company.id ? { ...row, logo_display_width: width, logo_display_height: height } : row))} /><Link className="button secondary" href={`/platform/companies/${company.id}`}>Full company information</Link></div></div>{period==='all' && shownPerformance[company.id] && <details><summary>Client and application status breakdown</summary><p>Clients: {Object.entries(shownPerformance[company.id].client_statuses).map(([k,v])=>`${k}: ${v}`).join(' · ') || 'None'}</p><p>Applications: {Object.entries(shownPerformance[company.id].application_statuses).map(([k,v])=>`${k.replaceAll('_',' ')}: ${v}`).join(' · ') || 'None'}</p></details>}<CompanyBillingPanel companyId={company.id} owner /></td></tr>}
+            <tbody>{visibleCompanies.slice((Math.min(page,Math.max(1,Math.ceil(visibleCompanies.length/10)))-1)*10,Math.min(page,Math.max(1,Math.ceil(visibleCompanies.length/10)))*10).map(company => <Fragment key={company.id}><tr><td><Link className="platformCompanyToggle" href={`/platform/companies/${company.id}`}>{company.name} →</Link></td><td>{referralNames[company.id]?.referrer??'Direct / no referrer'}<small style={{display:'block'}}>Account manager: {referralNames[company.id]?.manager??'Not assigned'}</small></td><td>{company.head_broker_name ?? '—'}</td><td>{company.head_broker_mobile ? <a href={`tel:${company.head_broker_mobile.replace(/[^+\d]/g, '')}`}>{company.head_broker_mobile}</a> : '—'}</td><td><span className={`platformStatus ${company.status === 'active' ? 'isActive' : ''}`}>{company.status}</span></td><td>{shownPerformance[company.id]?.clients ?? '—'}</td><td>{shownPerformance[company.id]?.applications ?? '—'}{shownPerformance[company.id] && <small style={{display:'block'}}>{period==='month'?`Settlements this month: ${shownPerformance[company.id].settled_month??0}`:`Settled: ${shownPerformance[company.id].application_statuses.settled??0} · Withdrawn: ${shownPerformance[company.id].application_statuses.withdrawn??0}`}</small>}</td></tr>
+
             </Fragment>)}</tbody></table></div>
           {!companies.length ? <p className="platformEmpty">No companies yet. Send a setup invitation to add the first company.</p> : visibleCompanies.length === 0 && <p className="platformEmpty">No companies match your search.</p>}
-        </section>
-        <section id="invitations" className="platformInvitationCard">
+        <div className="workspacePager"><span>{visibleCompanies.length} companies · Page {Math.min(page,Math.max(1,Math.ceil(visibleCompanies.length/10)))} of {Math.max(1,Math.ceil(visibleCompanies.length/10))}</span><button className="secondary" disabled={page<=1} onClick={()=>setPage(page-1)}>Previous</button><button className="secondary" disabled={page>=Math.ceil(visibleCompanies.length/10)} onClick={()=>setPage(page+1)}>Next</button></div></section>}
+        {view==='invitations'&&<><section id="invitations" className="platformInvitationCard">
           <div className="platformInvitationIntro"><span className="platformInvitationIcon" aria-hidden="true">➤</span><div><h2>Send company setup invitation</h2><p>Invite a Head Broker to register a new company on BrokerRelay. The Head Broker will create their account and complete the company setup.</p><p className="platformExpiry">Invitations expire after seven days.</p></div></div>
           <div className="platformInvitationForm">
             {error && <div className="notice error" role="alert">{error}</div>}
@@ -157,9 +160,9 @@ export default function PlatformCompaniesPage() {
             </form>
           </div>
         </section>
-        <details className="platformHistory"><summary>Manage actual invitations · resend or cancel</summary><h2>Actual invitation history</h2>
+        <details open className="platformHistory"><summary>Manage actual invitations · resend or cancel</summary><h2>Actual invitation history</h2>
           <div className="tableWrap"><table><thead><tr><th>Head Broker</th><th>Email</th><th>Mobile</th><th>Status</th><th>Sent</th><th>Action</th></tr></thead>
-            <tbody>{invitations.map(invitation => <tr key={invitation.id}>
+            <tbody>{invitations.slice((invitationPage-1)*10,invitationPage*10).map(invitation => <tr key={invitation.id}>
               <td>{invitation.head_name}</td><td>{invitation.head_email}</td><td>{invitation.head_mobile}</td>
               <td>{invitation.status === 'pending' && new Date(invitation.expires_at) <= new Date() ? 'Expired' : invitation.status}</td>
               <td>{new Date(invitation.created_at).toLocaleDateString('en-AU')}</td>
@@ -169,8 +172,8 @@ export default function PlatformCompaniesPage() {
               </div>}</td>
             </tr>)}</tbody></table></div>
           {!invitations.length && <p className="platformEmpty">No invitations yet.</p>}
-        </details>
-        <InvitationHistory/>
+        <div className="workspacePager"><span>{invitations.length} invitations · Page {invitationPage}</span><button className="secondary" disabled={invitationPage<=1} onClick={()=>setInvitationPage(invitationPage-1)}>Previous</button><button className="secondary" disabled={invitationPage*10>=invitations.length} onClick={()=>setInvitationPage(invitationPage+1)}>Next</button></div></details>
+        </>}{view==='onboarding'&&<InvitationHistory/>}
       </div>
     </div>
   </main>

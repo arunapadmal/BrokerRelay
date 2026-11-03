@@ -162,7 +162,9 @@ export default function ClientApplicationsPage() {
     if (!archiveError) {
       setArchiveCount(pastCount ?? 0)
     }
+    const requested=new URLSearchParams(window.location.search).get('application')
     setSelectedId((previous) =>
+      requested&&rows.some(row=>row.id===requested)?requested:
       previous && rows.some((row) => row.id === previous)
         ? previous
         : (rows.at(-1)?.id ?? null),

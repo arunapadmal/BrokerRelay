@@ -1,4 +1,6 @@
 'use client'
+import {usePathname} from 'next/navigation'
+import { BrokerNavigation } from '@/components/BrokerNavigation'
 
 import Link from 'next/link'
 import { FormEvent, useEffect, useMemo, useRef, useState } from 'react'
@@ -64,6 +66,8 @@ function validWebsite(value: string) {
 }
 
 export default function AdministrationPage() {
+ const view=usePathname().split('/')[2]||'company'
+ const [staffSearch,setStaffSearch]=useState(''),[staffPage,setStaffPage]=useState(1)
   const [snapshot, setSnapshot] = useState<Snapshot | null>(null)
   const [selected, setSelected] = useState<Member | null>(null)
   const [roles, setRoles] = useState<string[]>([])
@@ -71,7 +75,8 @@ export default function AdministrationPage() {
   const [message, setMessage] = useState('')
   const [error, setError] = useState('')
   const [busy, setBusy] = useState(false)
-  const [inviteOpen, setInviteOpen] = useState(false)
+  const [inviteOpen, setInviteOpen] = useState(view==='invitations')
+ useEffect(()=>{if(view==='invitations')setInviteOpen(true)},[view])
   const [transferTo, setTransferTo] = useState('')
   const [pending, setPending] = useState<PendingInvitation[]>([])
   const [currentUserId, setCurrentUserId] = useState('')
@@ -311,43 +316,26 @@ export default function AdministrationPage() {
   return (
     <main className="adminShell">
       <header className="adminShellHeader"><BrokerRelayBrand compact /><div className="adminShellAccount"><span>{company.name} · Company administration</span><details><summary><span className="adminShellAvatar" aria-hidden="true">{viewerName.charAt(0).toUpperCase()}</span><span className="adminShellAccountName">{viewerName}</span><span aria-hidden="true">⌄</span></summary><div className="adminShellAccountMenu"><span className="adminShellAccountEmail">{currentUserEmail}</span><Link href="/account/password">Change password</Link><button type="button" onClick={signOut}>Sign out</button></div></details></div></header>
-      <div className="adminShellLayout"><nav className="adminShellNav" aria-label="Company administration navigation">
-        <Link href="/dashboard">⌂ &nbsp; Broker Desk</Link>
-        <Link href="/admin" className="adminNavActive" aria-current="page">♙ &nbsp; Company &amp; staff</Link>
-        <a href="#company-profile">▦ &nbsp; Company profile</a>
-        {viewerIsHeadBroker && <Link href="/billing">▤ &nbsp; Company billing &amp; invoices</Link>}
-        <a href="#staff-directory">♙ &nbsp; Staff directory</a>
-        {pending.length > 0 || inviteOpen ? <a href="#staff-invitations">✉ &nbsp; Invitations {pending.length > 0 && <span className="pill">{pending.length}</span>}</a> : <button type="button" onClick={() => setInviteOpen(true)}>✉ &nbsp; Invitations</button>}
-        {viewerIsHeadBroker && <a href="#head-broker-handover">⇄ &nbsp; Head Broker handover</a>}
-        {viewerIsHeadBroker && <Link href="/admin/document-delivery">▣ &nbsp; Delivery settings</Link>}
-        {viewerIsHeadBroker && <Link href="/settings/mobile-appearance">◈ &nbsp; Mobile appearance</Link>}
-        <Link className="adminHelpLink" href="/help">ⓘ &nbsp; Help &amp; Support</Link>
-      </nav><div className="adminShellMain">
+      <div className="adminShellLayout"><BrokerNavigation canManageStaff isHeadBroker={viewerIsHeadBroker} className="adminShellNav"/><div className="adminShellMain">
       <header className="adminHeader">
-        <div className="adminCompanyHeading">{company.logo_url && <span className="adminCompanyLogo" style={{ width: `${(company.logo_display_width ?? 160) + 20}px`, height: `${(company.logo_display_height ?? 72) + 20}px` }}><img src={company.logo_url} alt={`${company.name} logo`} style={{ width: `${company.logo_display_width ?? 160}px`, height: `${company.logo_display_height ?? 72}px` }} /></span>}<div><p className="eyebrow">COMPANY ADMINISTRATION</p><h1>Company &amp; staff</h1><p className="muted">{company.name} · {company.status}</p></div></div>
-        <button onClick={() => setInviteOpen(!inviteOpen)}>{inviteOpen ? 'Close invitation' : '+ Invite staff'}</button>
+        <div className="adminCompanyHeading">{company.logo_url && <span className="adminCompanyLogo" style={{ width: `${(company.logo_display_width ?? 160) + 20}px`, height: `${(company.logo_display_height ?? 72) + 20}px` }}><img src={company.logo_url} alt={`${company.name} logo`} style={{ width: `${company.logo_display_width ?? 160}px`, height: `${company.logo_display_height ?? 72}px` }} /></span>}<div><p className="eyebrow">COMPANY ADMINISTRATION</p><h1>{({company:'Company details',staff:'Staff & roles',invitations:'Staff invitations',handover:'Head Broker handover'} as Record<string,string>)[view]||'Company & staff'}</h1><p className="muted">{company.name} · {company.status}</p></div></div>
+        <Link className="button" href="/admin/invitations">Invite staff</Link>
       </header>
       {error && <div className="notice error">{error}</div>}
       {message && <div className="notice success">{message}</div>}
 
-      {viewerIsHeadBroker && <section className="card adminMobileAppearance" id="mobile-appearance">
-        <p className="eyebrow">CLIENT MOBILE APP</p>
-        <h2>Mobile app appearance</h2>
-        <p className="muted">Choose your company logo and colours, then preview the client home screen before publishing.</p>
-        <Link className="button secondary" href="/settings/mobile-appearance">Edit mobile app appearance →</Link>
-      </section>}
 
-      {inviteOpen && <form className="card adminForm" id="staff-invitations" onSubmit={invite}>
+      {view==='invitations'&&inviteOpen && <form className="card adminForm" id="staff-invitations" onSubmit={invite}>
         <div className="sectionHead"><div><p className="eyebrow">NEW STAFF MEMBER</p><h2>Send invitation</h2></div></div>
         <div className="formGrid"><label>First name<input name="first_name" maxLength={80} required /></label><label>Last name<input name="last_name" maxLength={80} required /></label><label>Email<input name="email" type="email" required /></label><label>Broker code (broker roles only)<input name="broker_code" maxLength={80} /></label><label>Position title<input name="title" maxLength={120} /></label></div>
         <fieldset><legend>Roles</legend><p className="muted smallText">Select only the roles this person should receive. No role is selected automatically.</p><div className="checkGrid">{roleOptions.map(([key, label]) => <label className="check" key={key}><input type="checkbox" name={`role-${key}`} /> {label}</label>)}</div></fieldset>
         <button disabled={busy}>{busy ? 'Inviting…' : 'Send staff invitation'}</button>
       </form>}
 
-      {pending.length > 0 && <section className="card" id={inviteOpen ? undefined : 'staff-invitations'}><div className="sectionHead"><div><p className="eyebrow">PENDING INVITATIONS</p><h2>{pending.length} awaiting acceptance</h2></div></div><div className="staffList">{pending.map(invitation => <div className="staffRow" key={invitation.id}><span><strong>{invitation.first_name} {invitation.last_name}</strong><small>{invitation.email}</small></span><span><small>{invitation.roles.map(role => role.replaceAll('_', ' ')).join(' · ')}</small><div className="row"><button type="button" disabled={busy} onClick={() => resendInvitation(invitation.id)}>Resend</button><button type="button" className="danger" disabled={busy} onClick={() => cancelInvitation(invitation.id)}>Cancel</button></div></span></div>)}</div></section>}
+      {view==='invitations'&&pending.length > 0 && <section className="card" id={inviteOpen ? undefined : 'staff-invitations'}><div className="sectionHead"><div><p className="eyebrow">PENDING INVITATIONS</p><h2>{pending.length} awaiting acceptance</h2></div></div><div className="staffList">{pending.map(invitation => <div className="staffRow" key={invitation.id}><span><strong>{invitation.first_name} {invitation.last_name}</strong><small>{invitation.email}</small></span><span><small>{invitation.roles.map(role => role.replaceAll('_', ' ')).join(' · ')}</small><div className="row"><button type="button" disabled={busy} onClick={() => resendInvitation(invitation.id)}>Resend</button><button type="button" className="danger" disabled={busy} onClick={() => cancelInvitation(invitation.id)}>Cancel</button></div></span></div>)}</div></section>}
 
       <section className="adminGrid">
-        <form className="card adminForm" id="company-profile" onSubmit={saveCompany}>
+        {view==='company'&&<form className="card adminForm" id="company-profile" onSubmit={saveCompany}>
           <p className="eyebrow">COMPANY MANAGEMENT</p><h2>Company profile</h2>
           {viewerIsHeadBroker && <p><Link href="/admin/document-delivery">Manage verified document delivery email →</Link></p>}
           <div className="notice">Trading name, legal name and ABN are protected legal identity. A change requires a new company, except for a one-time controlled correction by a platform administrator.</div>
@@ -357,15 +345,15 @@ export default function AdministrationPage() {
             <div className="formGrid"><label>ABN<input value={company.abn ?? ''} readOnly /></label><label>Billing email<input name="billing_email" type="email" defaultValue={company.billing_email ?? ''} /></label><label>Phone<input name="contact_phone" type="tel" defaultValue={company.contact_phone ?? ''} /></label><label>Website<input name="website" type="url" placeholder="https://example.com.au" defaultValue={company.website ?? ''} /></label></div>
             <button disabled={busy}>Save contact details</button>
           </fieldset>
-        </form>
+        </form>}
 
-        <section className="card" id="staff-directory">
+        {view==='staff'&&<section className="card" id="staff-directory">
           <div className="sectionHead"><div><p className="eyebrow">STAFF DIRECTORY</p><h2>{snapshot.members.length} people</h2></div></div>
-          <div className="staffList">{snapshot.members.map((member) => <button type="button" className={`staffRow ${selected?.user_id === member.user_id ? 'selected' : ''}`} key={member.user_id} onClick={() => choose(member)}><span><strong>{member.first_name} {member.last_name}</strong><small>{member.email}</small></span><span><small>{member.roles.map((role) => role.replaceAll('_', ' ')).join(' · ')}</small><span className={`status ${member.status}`}>{member.status}</span></span></button>)}</div>
-        </section>
+          <label>Search staff<input type="search" value={staffSearch} onChange={e=>{setStaffSearch(e.target.value);setStaffPage(1)}} placeholder="Name, email or role"/></label><div className="staffList">{snapshot.members.filter(m=>`${m.first_name} ${m.last_name} ${m.email} ${m.roles.join(' ')}`.toLowerCase().includes(staffSearch.toLowerCase())).slice((staffPage-1)*10,staffPage*10).map((member) => <button type="button" className={`staffRow ${selected?.user_id === member.user_id ? 'selected' : ''}`} key={member.user_id} onClick={() => choose(member)}><span><strong>{member.first_name} {member.last_name}</strong><small>{member.email}</small></span><span><small>{member.roles.map((role) => role.replaceAll('_', ' ')).join(' · ')}</small><span className={`status ${member.status}`}>{member.status}</span></span></button>)}</div>
+        <div className="workspacePager"><span>Page {staffPage}</span><button className="secondary" disabled={staffPage<=1} onClick={()=>setStaffPage(staffPage-1)}>Previous</button><button className="secondary" disabled={staffPage*10>=snapshot.members.filter(m=>`${m.first_name} ${m.last_name} ${m.email} ${m.roles.join(' ')}`.toLowerCase().includes(staffSearch.toLowerCase())).length} onClick={()=>setStaffPage(staffPage+1)}>Next</button></div></section>}
       </section>
 
-      {viewerIsHeadBroker && <section className="card staffEditor" id="head-broker-handover">
+      {view==='handover'&&viewerIsHeadBroker && <section className="card staffEditor" id="head-broker-handover">
         <div className="sectionHead"><div><p className="eyebrow">PROTECTED OWNERSHIP</p><h2>Start Head Broker handover</h2><p className="muted">No authority changes now. Both people must authenticate and confirm from their dashboards within 48 hours.</p></div></div>
         <div className="notice">The successor must be active staff in this company. You confirm first; the successor can then accept or decline. The final switch is atomic and permanently audited.</div>
         <label>New Head Broker<select value={ownershipTarget} onChange={(event) => setOwnershipTarget(event.target.value)}><option value="">Select active staff member…</option>{ownershipTargets.map((member) => <option key={member.user_id} value={member.user_id}>{member.first_name} {member.last_name} · {member.email}</option>)}</select></label>
@@ -373,7 +361,7 @@ export default function AdministrationPage() {
         <button className="danger" onClick={transferOwnership} disabled={busy || !ownershipTarget || formerHeadRoles.length === 0}>{busy ? 'Starting…' : 'Start ownership handover'}</button>
       </section>}
 
-      {selected && <section className="card staffEditor">
+      {view==='staff'&&selected && <section className="card staffEditor workspaceDrawer">
         <div className="sectionHead"><div><p className="eyebrow">STAFF MANAGEMENT</p><h2>{selected.first_name} {selected.last_name}</h2><p className="muted">{selected.email} · {selected.assigned_clients} assigned client(s)</p></div><button className="secondary" onClick={() => setSelected(null)}>Close</button></div>
         {selected.roles.includes('head_broker') && <div className="notice">This is the protected Head Broker account. Its ownership, roles, permissions and status cannot be changed here. Use the ownership-transfer section first.</div>}
         {selected.status !== 'active' && <div className="notice">This staff record is {selected.status}. Roles and permissions are read-only until the invitation is accepted or the staff member is reactivated.</div>}

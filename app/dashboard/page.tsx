@@ -1,4 +1,5 @@
 'use client'
+import { BrokerNavigation } from '@/components/BrokerNavigation'
 import { companyLogoUrl, logoSize } from '@/lib/company-logo'
 import { PLATFORM_OWNER_EMAIL } from '@/lib/platform-owner'
 import { workspaceDestination } from '@/lib/workspace-destination'
@@ -227,22 +228,7 @@ export default function DashboardPage() {
           </details>
         </div>
       </header>
-      <div className="brokerDeskLayout"><nav className="brokerDeskNav" aria-label="Broker Desk navigation">
-        <a className="brokerDeskNavActive" href="#home">⌂ &nbsp; Home</a>
-        <a href="#clients">♙ &nbsp; Clients</a>
-        <Link href="/messages">✉ &nbsp; Messages {unreadTotal > 0 && <span className="unreadBadge">{unreadTotal}</span>}</Link>
-        <Link href="/applications">▤ &nbsp; Applications</Link>
-        <Link href="/documents">▣ &nbsp; Document requests</Link>
-        <Link href="/clients/team">♙ &nbsp; Manage team</Link>
-        <Link href="/announcements">◈ &nbsp; Announcements</Link>
-        <Link href="/settings/follow-up-templates">⚙ &nbsp; Follow-up settings</Link>
-        {portalAccess.can_manage_staff && <Link href="/admin">⚙ &nbsp; Company &amp; staff</Link>}
-        {portalAccess.is_head_broker && <Link href="/admin/document-delivery">▣ &nbsp; Delivery settings</Link>}
-        {portalAccess.is_head_broker && <Link href="/settings/mobile-appearance">◈ &nbsp; Mobile appearance</Link>}
-        {isPlatformOwner && <Link href="/platform/companies">▦ &nbsp; Platform companies</Link>}
-        <Link className="brokerDeskHelpLink" href="/help">ⓘ &nbsp; Help &amp; Support</Link>
-      {portalAccess.is_head_broker && <Link href="/billing">▤ &nbsp; Billing &amp; invoices</Link>}
-    </nav><div className="brokerDeskMain">
+      <div className="brokerDeskLayout"><BrokerNavigation canManageStaff={portalAccess.can_manage_staff} isHeadBroker={portalAccess.is_head_broker} isPlatformOwner={isPlatformOwner}/><div className="brokerDeskMain">
 
       <section className="hero">
         <div className="brokerDeskHeroIdentity">
@@ -284,7 +270,7 @@ export default function DashboardPage() {
       )}
 
       {mobileInviteLink && (
-        <section className="card invite">
+        <section className="card invite" id="invite">
           <div>
             <p className="eyebrow">MOBILE CLIENT INVITATION</p>
             <h2>Invitation ready</h2>
@@ -301,8 +287,8 @@ export default function DashboardPage() {
       )}
 
       <div className="brokerDeskOverview" aria-label="Workspace overview">
-        <a href="#clients" className="brokerDeskMetric"><span>♙</span><strong>{clients.length}</strong><small>Connected clients</small></a>
-        <a href="#clients" className="brokerDeskMetric"><span>✉</span><strong>{unreadTotal}</strong><small>Unread messages</small></a>
+        <a href="/clients" className="brokerDeskMetric"><span>♙</span><strong>{clients.length}</strong><small>Connected clients</small></a>
+        <a href="/messages" className="brokerDeskMetric"><span>✉</span><strong>{unreadTotal}</strong><small>Unread messages</small></a>
         <Link href="/announcements" className="brokerDeskMetric"><span>◈</span><strong>Announcements</strong><small>Send a client update →</small></Link>
       </div>
 
@@ -313,7 +299,7 @@ export default function DashboardPage() {
         <div className="sectionHead">
           <div>
             <p className="eyebrow">CLIENTS</p>
-            <h2>Connected clients</h2>
+            <h2>Recent connected clients</h2><Link href="/clients">View all clients →</Link>
           </div>
           <span className="pill">{clients.length}</span>
         </div>
@@ -327,7 +313,7 @@ export default function DashboardPage() {
             <table>
               <thead><tr><th>Client</th><th>Contact</th><th>Status</th><th>Messages</th><th>Application</th><th>Team</th></tr></thead>
               <tbody>
-                {visibleClients.map(c => (
+                {visibleClients.slice(0,5).map(c => (
                   <Fragment key={c.id}>
                   <tr>
                     <td><button className="brokerDeskClientToggle" type="button" aria-expanded={expandedClientId === c.id} onClick={() => setExpandedClientId(current => current === c.id ? null : c.id)}>{c.first_name} {c.last_name} <span aria-hidden="true">{expandedClientId === c.id ? '⌃' : '⌄'}</span></button><small>Connected {c.connected_at ? new Date(c.connected_at).toLocaleDateString('en-AU') : '—'}</small></td>

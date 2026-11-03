@@ -1,4 +1,5 @@
 'use client'
+import { BrokerNavigation } from '@/components/BrokerNavigation'
 import { companyLogoUrl } from '@/lib/company-logo'
 import { PLATFORM_OWNER_EMAIL } from '@/lib/platform-owner'
 
@@ -62,24 +63,7 @@ export function ApplicationWorkspaceShell({ clientId, section, children }: Props
       <BrokerRelayBrand compact />
       <div className="brokerDeskAccount"><span className="announcementCompanyIdentity">{companyLogo && <img src={companyLogo} alt="" aria-hidden="true" />}{companyName}</span><details><summary><span className="brokerDeskAvatar">{accountName.charAt(0).toUpperCase()}</span><span>{accountName}</span>⌄</summary><div className="brokerDeskAccountMenu"><Link href="/account/password">Change password</Link><button type="button" onClick={signOut}>Sign out</button></div></details></div>
     </header>
-    <div className="brokerDeskLayout"><nav className="brokerDeskNav applicationNav" aria-label="Broker Desk navigation">
-      <Link href="/dashboard">⌂ &nbsp; Home</Link>
-      <Link href="/dashboard#clients">♙ &nbsp; Clients</Link>
-      <Link href="/messages" className={section === 'messages' ? 'brokerDeskNavActive' : undefined} aria-current={section === 'messages' ? 'page' : undefined}>✉ &nbsp; Messages</Link>
-      <Link href="/applications" className={section === 'active' ? 'brokerDeskNavActive' : undefined} aria-current={section === 'active' ? 'page' : undefined}>▤ &nbsp; Applications</Link>
-      {clientId && <Link href={`/applications/archive/${clientId}`} className={section === 'archive' ? 'brokerDeskNavActive' : undefined} aria-current={section === 'archive' ? 'page' : undefined}>▦ &nbsp; Archive / Past</Link>}
-      {clientId && <Link href={`/applications/replacement/${clientId}`} className={section === 'replacement' ? 'brokerDeskNavActive' : undefined} aria-current={section === 'replacement' ? 'page' : undefined}>⇄ &nbsp; Replacement</Link>}
-      <Link href="/documents" className={section === 'documents' ? 'brokerDeskNavActive' : undefined} aria-current={section === 'documents' ? 'page' : undefined}>▣ &nbsp; Document requests</Link>
-      <Link href="/clients/team" className={section === 'team' ? 'brokerDeskNavActive' : undefined} aria-current={section === 'team' ? 'page' : undefined}>♙ &nbsp; Manage team</Link>
-      <Link href="/announcements">◈ &nbsp; Announcements</Link>
-      <Link href={clientId ? `/settings/follow-up-templates?clientId=${encodeURIComponent(clientId)}` : '/settings/follow-up-templates'} className={section === 'settings' ? 'brokerDeskNavActive' : undefined} aria-current={section === 'settings' ? 'page' : undefined}>⚙ &nbsp; Follow-up settings</Link>
-      {canManageStaff && <Link href="/admin">♙ &nbsp; Company &amp; staff</Link>}
-      {isHeadBroker && <Link href="/admin/document-delivery" className={section === 'delivery' ? 'brokerDeskNavActive' : undefined} aria-current={section === 'delivery' ? 'page' : undefined}>▣ &nbsp; Delivery settings</Link>}
-      {isHeadBroker && <Link href="/settings/mobile-appearance" className={section === 'mobile' ? 'brokerDeskNavActive' : undefined} aria-current={section === 'mobile' ? 'page' : undefined}>◈ &nbsp; Mobile appearance</Link>}
-      {isHeadBroker && <Link href="/billing" className={section === 'billing' ? 'brokerDeskNavActive' : undefined} aria-current={section === 'billing' ? 'page' : undefined}>▤ &nbsp; Billing &amp; invoices</Link>}
-      {isPlatformOwner && <Link href="/platform/companies">▦ &nbsp; Platform companies</Link>}
-      <Link href="/help" className={`brokerDeskHelpLink${section === 'help' ? ' brokerDeskNavActive' : ''}`} aria-current={section === 'help' ? 'page' : undefined}>ⓘ &nbsp; Help &amp; Support</Link>
-    </nav><div className="brokerDeskMain applicationMain">
+    <div className="brokerDeskLayout"><BrokerNavigation canManageStaff={canManageStaff} isHeadBroker={isHeadBroker} isPlatformOwner={isPlatformOwner} clientId={clientId}/><div className="brokerDeskMain applicationMain">
       {error && <div className="notice error" role="alert">{error}</div>}
       {children}
     </div></div>

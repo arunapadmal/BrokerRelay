@@ -26,7 +26,7 @@ export default function HelpPage() {
       <section className="card" id="start"><p className="eyebrow">01 · WORKSPACE</p><h2>Getting started</h2>
         <ol><li>Sign in with the account invited by your company. If you received a staff invitation, accept it before opening the Broker Desk.</li>
           <li>Use <Link href="/dashboard">Home</Link> to see your connected clients, invitation tools and account menu. Use your account menu to sign out.</li>
-          <li>Select Messages, Applications, Document requests or Manage team from the left menu. Choose a client inside that workspace. Access depends on your company role and client assignment.</li></ol>
+          <li>Expand BrokerDesk in the left menu. Messages, Applications and Document requests open searchable, paginated workspaces; open a record directly. Use New conversation, New application or New request to search for a client. Company details, Staff & roles, Mobile appearance, Delivery settings and Billing & invoices are grouped under Company & staff. Access depends on your company role and client assignment.</li></ol>
         <p>Home now includes <strong>Your next actions</strong>: unread conversations, open document requests and applications in progress. Head Brokers can expand the company setup checklist. These counts cover records you are permitted to access.</p>
         <p className="muted">A client joins through a mobile invitation or the browser invitation test page. They may need to accept and connect before you can work on their loan.</p>
       </section>
