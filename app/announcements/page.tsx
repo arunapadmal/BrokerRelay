@@ -271,7 +271,7 @@ export default function AnnouncementsPage() {
       {notice && <div className="notice">{notice}</div>}
 
       <p className="notice">General announcements are available to clients with a recorded settled application while your company subscription is active. Select a client and application to send a loan milestone message before settlement. {baseRecipients.filter(row => !row.eligible).length} client(s) excluded from general announcements.</p>
-      <section className="card" style={{ marginBottom: 16, borderLeft: '4px solid var(--company-accent, #2563eb)' }}>
+      <section className="card" style={{ marginBottom: 16 }}>
         <div className="sectionHead">
           <div><p className="eyebrow">RECIPIENTS</p><h2>Who should receive this?</h2></div>
           <span className="pill">{loadingRecipients ? 'Checking…' : `${effectiveRecipients.length} recipient${effectiveRecipients.length === 1 ? '' : 's'}`}</span>

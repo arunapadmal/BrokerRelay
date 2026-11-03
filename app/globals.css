@@ -215,3 +215,24 @@ button:focus-visible,.button:focus-visible,a:focus-visible,input:focus-visible,t
 .inboxWorkspace{display:grid;grid-template-columns:minmax(240px,.8fr) minmax(0,1.8fr);gap:18px;align-items:start}.conversationDirectory{display:flex;flex-direction:column;gap:4px;max-height:55vh;overflow:auto}.conversationDirectory a{padding:14px 10px;color:#243555;text-decoration:none;border-bottom:1px solid #e8edf6;border-radius:8px}.conversationDirectory a:hover,.conversationDirectory .conversationSelected{background:#eaf2ff}.conversationDirectory small{display:block;margin-top:5px;color:#61718d}.inboxWorkspace .messagePage{min-width:0}.inboxWorkspace .messageHeader h1{font-size:24px}.inboxWorkspace .chatMessages{max-height:48vh;overflow:auto}.inboxEmpty{padding:28px}.workspaceDrawer{position:fixed;z-index:80;right:20px;top:94px;bottom:20px;width:min(650px,calc(100vw - 40px));overflow:auto;box-shadow:0 12px 60px #13294b33;border:1px solid #dce4f1;background:#fff;box-sizing:border-box;padding:24px;border-radius:16px}
 .adminShell .adminGrid{grid-template-columns:1fr}.adminShell .groupedNavigation{background:#fff}.platformSidebar.groupedNavigation{position:sticky;top:0;max-height:100vh;overflow:auto;align-self:start}
 @media(max-width:900px){.groupedNavigation.brokerDeskNav,.groupedNavigation.adminShellNav,.platformSidebar.groupedNavigation{display:block;white-space:normal;position:static;max-height:none;overflow:visible}.groupedNavigation .navigationGroup>summary{padding:10px 14px}.inboxWorkspace{grid-template-columns:1fr}.conversationDirectory{max-height:260px}.inboxWorkspace .chatMessages{max-height:48vh}.workspaceDrawer{top:20px}}
+
+/* Compact BrokerDesk actions, shared with the company workspace theme. */
+.workspaceResults table{font-size:14px;color:#263858}
+.workspaceResults th{font-size:11px;letter-spacing:.06em;text-transform:uppercase}
+.workspaceResults td{vertical-align:top;overflow-wrap:anywhere}
+.workspaceRowActions,.workspaceRelatedActions{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.workspaceRowActions .button{font-size:12px;line-height:1.3;white-space:nowrap;padding:8px 11px}
+.workspacePager{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;border-top:1px solid var(--br-line);padding-top:14px}
+.workspacePageButtons{display:flex;gap:8px;flex-wrap:nowrap}
+.workspacePageButtons button{font-size:12px;line-height:1.3;padding:8px 11px;min-width:0}
+.inboxWorkspace .workspacePager{grid-template-columns:1fr}
+.inboxWorkspace .workspacePageButtons{justify-content:flex-end}
+.applicationProgressActions{display:grid!important;grid-template-columns:1fr;justify-items:end;gap:12px;margin-top:14px}
+.applicationProgressActions>span{justify-self:start;font-size:12px;color:#65758f}
+.applicationProgressActions>button{font-size:14px;white-space:normal}
+.followupTemplate{padding:0!important;overflow:hidden}
+.followupTemplate>summary{display:flex;justify-content:space-between;gap:12px;padding:18px 22px;cursor:pointer;color:#12264e;font-size:14px;list-style:revert}
+.followupTemplate>summary span{font-size:12px;color:#65758f}
+.followupTemplate>.sectionHead,.followupTemplate>.applicationForm{margin:18px 22px}
+.messageSettingsTabs{margin-top:18px}.messageSettingsTabs button{font-size:14px}
+@media(max-width:600px){.workspacePager{grid-template-columns:1fr}.workspacePageButtons{justify-content:flex-end}.followupTemplate>summary{flex-direction:column}.applicationProgressActions>button{width:100%}}

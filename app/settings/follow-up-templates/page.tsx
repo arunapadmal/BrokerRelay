@@ -30,6 +30,7 @@ const names: Record<string, string> = {
 }
 
 export default function FollowUpTemplateSettingsPage() {
+  const [loading,setLoading] = useState(true)
   const [tab,setTab]=useState<'loan'|'company'>('loan')
   const [organisationId, setOrganisationId] = useState<string | null>(null)
   const [templates, setTemplates] = useState<TemplateRow[]>([])
@@ -78,13 +79,14 @@ export default function FollowUpTemplateSettingsPage() {
       return
     }
     setTemplates((data ?? []) as TemplateRow[])
+    if (!data?.length) setError('Loan follow-up templates are unavailable. Ask the Platform Owner to restore the default templates, then retry.')
     if (companyError) setError(companyError.message)
     else setCompanyMessages((companyRows ?? []) as CompanyMessage[])
     setCanManageCompany(Boolean(access?.can_manage_company))
   }
 
   useEffect(() => {
-    void load()
+    void load().catch(() => setError('Could not load message settings. Please retry.')).finally(() => setLoading(false))
     const requestedClientId = new URLSearchParams(window.location.search).get('clientId')
     if (requestedClientId && /^[0-9a-f-]{36}$/i.test(requestedClientId)) setClientId(requestedClientId)
   }, [])
@@ -201,7 +203,7 @@ export default function FollowUpTemplateSettingsPage() {
         </p>
       </section>
 
-      <div className="row" role="group" aria-label="Message settings" style={{marginBottom:16}}><button type="button" className={tab==='loan'?'':'secondary'} aria-pressed={tab==='loan'} onClick={()=>setTab('loan')}>Loan follow-ups</button><button type="button" className={tab==='company'?'':'secondary'} aria-pressed={tab==='company'} onClick={()=>setTab('company')}>Company messages</button></div>
+      <div className="row messageSettingsTabs" role="group" aria-label="Message settings" style={{marginBottom:16}}><button type="button" className={tab==='loan'?'':'secondary'} aria-pressed={tab==='loan'} onClick={()=>setTab('loan')}>Loan follow-ups</button><button type="button" className={tab==='company'?'':'secondary'} aria-pressed={tab==='company'} onClick={()=>setTab('company')}>Company messages</button></div>
       {tab==='company' && <>
       <section className="card" style={{ marginBottom: 16 }}>
         <p className="eyebrow">COMPANY MESSAGE LIBRARY</p>
@@ -229,10 +231,12 @@ export default function FollowUpTemplateSettingsPage() {
       {organisationId && <CompanyMessageSchedules organisationId={organisationId} templates={companyMessages} />}
       </>}
       {tab==='loan' && <>
+      {loading && <p role="status">Loading loan follow-ups…</p>}
+      {!loading && !templates.length && <section className="card"><h2>No loan templates available</h2><p>The default message templates need to be restored before you can edit your wording.</p><button type="button" className="secondary" onClick={() => { setLoading(true); void load().catch(() => setError('Could not load message settings. Please retry.')).finally(() => setLoading(false)) }}>Retry loading templates</button></section>}
       <p className="muted">Approval and settlement updates are sent when an application moves to that stage. Later check-ins are scheduled from its settlement date.</p>
       <div style={{ display: 'grid', gap: 16 }}>
         {templates.map((row) => (
-          <section className="card" key={row.template_key}>
+          <details className="card followupTemplate" key={row.template_key}><summary><strong>{names[row.template_key]}</strong><span>{row.template_source === 'broker' ? 'Your wording' : row.template_source === 'company' ? 'Company wording' : 'BrokerRelay default'}</span></summary>
             <div className="sectionHead">
               <div>
                 <p className="eyebrow">{names[row.template_key]}</p>
@@ -298,7 +302,7 @@ export default function FollowUpTemplateSettingsPage() {
                 </button>
               </div>
             </div>
-          </section>
+          </details>
         ))}
       </div>
       </>}

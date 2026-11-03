@@ -690,7 +690,7 @@ export default function ClientApplicationsPage() {
                 />
               </label>
 
-              <div className="formFoot">
+              <div className="formFoot applicationProgressActions">
                 <span>
                   {note.length}/1000 · visible only in this application&apos;s
                   thread
