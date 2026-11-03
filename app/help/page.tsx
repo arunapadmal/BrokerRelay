@@ -26,31 +26,31 @@ export default function HelpPage() {
       <section className="card" id="start"><p className="eyebrow">01 · WORKSPACE</p><h2>Getting started</h2>
         <ol><li>Sign in with the account invited by your company. If you received a staff invitation, accept it before opening the Broker Desk.</li>
           <li>Use <Link href="/dashboard">Home</Link> to see your connected clients, invitation tools and account menu. Use your account menu to sign out.</li>
-          <li>Select Messages, Applications, Document requests or Manage team from the left menu. Choose a client inside that workspace. Access depends on your company role and client assignment.</li></ol>
+          <li>Expand BrokerDesk in the left menu. Messages, Applications and Document requests open searchable, paginated workspaces; open a record directly. Use New conversation, New application or New request to search for a client. Company details, Staff & roles, Mobile appearance, Delivery settings and Billing & invoices are grouped under Company & staff. Access depends on your company role and client assignment.</li></ol>
         <p>Home now includes <strong>Your next actions</strong>: unread conversations, open document requests and applications in progress. Head Brokers can expand the company setup checklist. These counts cover records you are permitted to access.</p>
         <p className="muted">A client joins through a mobile invitation or the browser invitation test page. They may need to accept and connect before you can work on their loan.</p>
       </section>
       <section className="card" id="clients"><p className="eyebrow">02 · CLIENTS</p><h2>Clients &amp; service team</h2>
-        <ol><li>On <Link href="/dashboard#clients">Home → Connected clients</Link>, search for a client and select their name to expand the profile in place.</li>
+        <ol><li>Open <Link href="/clients">BrokerDesk → Clients</Link>, search by name, email or mobile, and choose Open to view the client profile. The dashboard shows a short recent-client preview.</li>
           <li>Use the profile actions to open messages, applications, document requests or the service team.</li>
           <li>In <Link href="/clients/team">Manage team</Link>, choose a client. The Head Broker can change the primary broker; authorised staff can assign or remove broker assistants.</li></ol>
         <p className="muted">Only staff assigned to a client should be able to view that client’s applications, messages and documents. Ask your Head Broker to check assignments if a client is missing.</p>
       </section>
       <section className="card" id="messages"><p className="eyebrow">03 · COMMUNICATION</p><h2>Secure messages</h2>
-        <ol><li>Open <Link href="/messages">Messages</Link> and select the client. You can change clients with the selector at the top of the conversation.</li>
+        <ol><li>Open <Link href="/messages">Messages</Link> and search the conversation list. Use the unread filter to prioritise replies. Select a conversation to open it alongside the list, or use New conversation to find a client.</li>
           <li>Write your message and choose <strong>Send secure message</strong>. New replies appear in the conversation; opening it marks messages as read.</li></ol>
         <p>Use secure messages for a conversation, application updates for loan progress, and announcements for eligible client updates. Notifications alert clients to new activity; they are not a separate conversation.</p>
         <p className="muted">Messages support text. Use Document requests when you need a file; avoid asking clients to attach sensitive documents in a message.</p>
       </section>
       <section className="card" id="applications"><p className="eyebrow">04 · LOAN PROGRESS</p><h2>Applications</h2>
-        <ol><li>Open <Link href="/applications">Applications</Link>, choose a client, and select the active application. Its details and progress controls appear below.</li>
+        <ol><li>Open <Link href="/applications">Applications</Link>, search by client, application number, description or lender, and filter by status. Choose Open on the application you need. Use New application to find a client when creating another loan.</li>
           <li>Create a separate application when the client has another loan. Enter the application number used by your CRM or lender and a clear client-friendly description. Keep the number accurate; the description can be updated later.</li>
-          <li>Use <strong>Publish status</strong> to update progress. Add a client-facing note when helpful. Conditional approval, full approval and settlement changes can create client notifications.</li>
+          <li>Use <strong>Publish progress update</strong> to update progress. Add a client-facing note when helpful. Conditional approval, full approval and settlement changes can create client notifications.</li>
           <li>For a lender-requested replacement, use <strong>Replacement</strong>. This withdraws the old application and creates a new one with its own number. Use <strong>Archive / Past</strong> to review withdrawn or older settled applications.</li></ol>
         <p className="muted">For a settled loan, enter the settlement date. BrokerRelay schedules its follow-ups from that date and moves the application to Past after 90 days. Check the application status before sending a manual loan follow-up.</p>
       </section>
       <section className="card" id="documents"><p className="eyebrow">05 · DOCUMENT RELAY</p><h2>Document requests</h2>
-        <ol><li>Open <Link href="/documents">Document requests</Link> and choose the client.</li>
+        <ol><li>Open <Link href="/documents">Document requests</Link> and search by client or request title. Choose Open to review a request, or New request to find a client.</li>
           <li>Select the related loan application, document type, request title, optional instructions and the maximum number of files.</li>
           <li>Choose <strong>Send document request</strong>. Review its status in Request history; a pending or failed request can be cancelled.</li></ol>
         <p className="muted">Before the first request, the Head Broker opens <Link href="/admin/document-delivery">Delivery settings</Link> from the left menu, enters the company’s single receiving mailbox and verifies it with the email code. To change a saved address, choose Edit email, enter a different address and verify it. Saving the same address again is prevented; existing requests retain their original destination. Uploaded files are relayed to that verified mailbox and removed from temporary storage according to the relay workflow. The requesting broker also receives a private copy at their confirmed sign-in email while their broker and company memberships remain active. To copy other people or another mailbox, set up forwarding with your email provider. Confirm delivery before relying on a file.</p>
@@ -64,11 +64,11 @@ export default function HelpPage() {
       </section>
       <section className="card" id="follow-ups"><p className="eyebrow">07 · MESSAGE SETTINGS</p><h2>Follow-up messages and company schedules</h2>
         <h3>Loan follow-ups</h3>
-        <p>Open <Link href="/settings/follow-up-templates">Follow-up Message Settings</Link> and select <strong>Loan follow-ups</strong>. Review the approval, settlement and review messages. Save your broker wording or restore company/platform wording. Loan milestones follow the application status; later reviews follow its settlement date.</p>
+        <p>Open <Link href="/settings/follow-up-templates">Follow-up Message Settings</Link> and select <strong>Loan follow-ups</strong>. Expand a message row to review the approval, settlement or review wording. Save your broker wording or restore company/platform wording. Loan milestones follow the application status; later reviews follow its settlement date.</p>
         <p>Use <code>{'{{client_first_name}}'}</code> and <code>{'{{broker_first_name}}'}</code> to personalise greetings. Loan messages can also use <code>{'{{application_description}}'}</code>.</p>
         <h3>Set up company-message scheduling</h3>
         <ol>
-          <li>The Head Broker opens <Link href="/admin">Company &amp; Staff</Link>, selects an active broker, enables <strong>Can schedule company messages</strong> and saves. Company-wide sending requires its separate announcement permission.</li>
+          <li>The Head Broker opens <Link href="/admin/staff">Company &amp; staff → Staff &amp; roles</Link>, selects an active broker, enables <strong>Can schedule company messages</strong> and saves. Company-wide sending requires its separate announcement permission.</li>
           <li>Open <Link href="/settings/follow-up-templates">Follow-up Message Settings</Link> → <strong>Company messages</strong>. The Head Broker can create shared templates, such as New Year greetings or birthday wishes. Saving a template alone does not schedule a send.</li>
           <li>Select a saved message and choose <strong>Send once</strong>, <strong>Every year</strong> or <strong>Every client birthday</strong>. Choose the send time and timezone. One-off and annual messages also need a date.</li>
           <li>Choose <strong>My assigned clients</strong>, specific clients, or <strong>All company clients</strong> if authorised. Each broker manages their own client schedules; the Head Broker can oversee all company schedules.</li>
@@ -76,7 +76,7 @@ export default function HelpPage() {
           <li>Choose <strong>Activate</strong> and confirm the saved schedule shows <strong>Active</strong>. Saving and activating are separate steps. Pause a schedule before editing if you want to review it again before sending.</li>
         </ol>
         <h3>Optional birthdays and greeting preferences</h3>
-        <p>Expand a client’s profile on the <Link href="/dashboard">Dashboard</Link> and open <strong>Optional birthday and greetings</strong>. Enter only day and month; a birth year is not required. Birthday information is optional and never blocks registration or a loan application.</p>
+        <p>Open the client profile from <Link href="/clients">Clients</Link> and open <strong>Optional birthday and greetings</strong>. Enter only day and month; a birth year is not required. Birthday information is optional and never blocks registration or a loan application.</p>
         <p>With the client’s agreement, select <strong>Client agrees to birthday greetings</strong> and/or <strong>Client agrees to general company greetings</strong>, then choose <strong>Save preferences</strong>. Recording a birthday alone does not enable greetings. New Year greetings require the general company-greetings preference.</p>
         <p>Once the birthday schedule is active, newly recorded birthdays are included automatically when eligible. Clients without a birthday are omitted. February 29 birthdays use February 28 in non-leap years. In the updated client app, clients can manage these choices under <strong>Settings and more → Birthday and greetings</strong>.</p>
         <h3>When and where messages arrive</h3>
@@ -151,6 +151,8 @@ export default function HelpPage() {
         <h3>Dashboard action counts</h3><p>Unread conversations count clients with unread replies. Open document requests include requests awaiting upload and failed delivery. Applications in progress are a worklist, not an overdue warning. Refresh Home after completing work. Head Brokers can expand the company setup checklist for links to company details, delivery, appearance, templates and billing.</p>
         <h3>Client or application missing</h3><p>Check that you selected the correct client and that your Head Broker assigned you to their service team. For a withdrawn or older settled loan, check Archive / Past.</p>
         <h3>Document request cannot be completed</h3><p>Ask the Head Broker to open Delivery settings in the left menu and verify the company’s document delivery email. Check the request status before asking the client to upload again.</p>
+        <h3>Loan follow-ups tab is empty</h3><p>Loan follow-ups is selected when message settings opens. Expand a message row to edit it; Save my wording keeps your broker override. Use company/default wording is available only after you have saved an override. If no messages appear, use Retry loading templates and report the displayed error to the Platform Owner.</p>
+        <h3>Finding records and using pages</h3><p>Clients, applications, document requests and conversations show up to 20 records per page. Search or change the status filter to narrow results. Previous and Next appear when there is more than one page. Search only returns records your account can access.</p>
         <h3>Follow-up option missing</h3><p>Ask the Head Broker to check the company subscription if a billing restriction appears. Choose one client and application first. Only messages allowed for that loan status are offered. Approval and settlement defaults also require the follow-up database update.</p>
         <h3>Mobile appearance cannot be published</h3><p>Only the Head Broker can edit it. Choose a valid background text colour with enough contrast against the background; the page shows an alert if the combination is difficult to read. If the Background text option is missing or saving fails, ask your administrator to check that the latest web update and mobile appearance database update have been installed.</p>
         <h3>Sign-in or access problem</h3><p>Check that you are using the invited email address. Existing clients can reset their password from the invitation page; signed-in users can <Link href="/account/password">change their password</Link>. If access is still missing, contact your company’s Head Broker or administrator with the page name and error message. Do not send passwords or client documents in a support request.</p>

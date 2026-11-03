@@ -1,4 +1,5 @@
 'use client'
+import { BrokerNavigation } from '@/components/BrokerNavigation'
 import { PLATFORM_OWNER_EMAIL } from '@/lib/platform-owner'
 
 import Link from 'next/link'
@@ -256,22 +257,7 @@ export default function AnnouncementsPage() {
         <BrokerRelayBrand compact />
         <div className="brokerDeskAccount"><span className="announcementCompanyIdentity">{companyLogoUrl && <img src={companyLogoUrl} alt="" aria-hidden="true" />}{companyName}</span><details><summary><span className="brokerDeskAvatar">{accountName.charAt(0).toUpperCase()}</span><span>{accountName}</span>⌄</summary><div className="brokerDeskAccountMenu"><Link href="/account/password">Change password</Link><button type="button" onClick={signOut}>Sign out</button></div></details></div>
       </header>
-      <div className="brokerDeskLayout"><nav className="brokerDeskNav" aria-label="Broker Desk navigation">
-        <Link href="/dashboard">⌂ &nbsp; Home</Link>
-        <Link href="/dashboard#clients">♙ &nbsp; Clients</Link>
-        <Link href="/messages">✉ &nbsp; Messages</Link>
-        <Link href="/applications">▤ &nbsp; Applications</Link>
-        <Link href="/documents">▣ &nbsp; Document requests</Link>
-        <Link href="/clients/team">♙ &nbsp; Manage team</Link>
-        <Link href="/announcements" className="brokerDeskNavActive" aria-current="page">◈ &nbsp; Announcements</Link>
-        <Link href="/settings/follow-up-templates">⚙ &nbsp; Follow-up settings</Link>
-        {canManageStaff && <Link href="/admin">⚙ &nbsp; Company &amp; staff</Link>}
-        {isHeadBroker && <Link href="/admin/document-delivery">▣ &nbsp; Delivery settings</Link>}
-        {isHeadBroker && <Link href="/settings/mobile-appearance">◈ &nbsp; Mobile appearance</Link>}
-        {isPlatformOwner && <Link href="/platform/companies">▦ &nbsp; Platform companies</Link>}
-        <Link className="brokerDeskHelpLink" href="/help">ⓘ &nbsp; Help &amp; Support</Link>
-      {isHeadBroker && <Link href="/billing">▤ &nbsp; Billing &amp; invoices</Link>}
-    </nav><div className="brokerDeskMain announcementMain">
+      <div className="brokerDeskLayout"><BrokerNavigation canManageStaff={canManageStaff} isHeadBroker={isHeadBroker} isPlatformOwner={isPlatformOwner}/><div className="brokerDeskMain announcementMain">
       <header className="applicationHeader announcementHeader">
         <div>
           <p className="eyebrow">CLIENT COMMUNICATION</p>
@@ -285,7 +271,7 @@ export default function AnnouncementsPage() {
       {notice && <div className="notice">{notice}</div>}
 
       <p className="notice">General announcements are available to clients with a recorded settled application while your company subscription is active. Select a client and application to send a loan milestone message before settlement. {baseRecipients.filter(row => !row.eligible).length} client(s) excluded from general announcements.</p>
-      <section className="card" style={{ marginBottom: 16, borderLeft: '4px solid var(--company-accent, #111878)' }}>
+      <section className="card" style={{ marginBottom: 16 }}>
         <div className="sectionHead">
           <div><p className="eyebrow">RECIPIENTS</p><h2>Who should receive this?</h2></div>
           <span className="pill">{loadingRecipients ? 'Checking…' : `${effectiveRecipients.length} recipient${effectiveRecipients.length === 1 ? '' : 's'}`}</span>
@@ -312,21 +298,21 @@ export default function AnnouncementsPage() {
 
           <div>
             <strong>3. Clients</strong>
-            <label style={{ display: 'block', marginTop: 9 }}>
-              <input type="radio" checked={!selectSpecific} disabled={Boolean(followUpKey)} onChange={() => { setSelectSpecific(false); setSelectedClients([]); setShowReview(false) }} />{' '}
-              All eligible clients ({baseRecipients.filter(row => row.eligible).length})
+            <label className="workspaceChoice">
+              <input type="radio" name="announcement-client-scope" checked={!selectSpecific} disabled={Boolean(followUpKey)} onChange={() => { setSelectSpecific(false); setSelectedClients([]); setShowReview(false) }} />{' '}
+              <span>All eligible clients ({baseRecipients.filter(row => row.eligible).length})</span>
             </label>
-            <label style={{ display: 'block', marginTop: 7 }}>
-              <input type="radio" checked={selectSpecific} onChange={() => { setSelectSpecific(true); setShowReview(false) }} />{' '}
-              Select specific clients
+            <label className="workspaceChoice">
+              <input type="radio" name="announcement-client-scope" checked={selectSpecific} onChange={() => { setSelectSpecific(true); setShowReview(false) }} />{' '}
+              <span>Select specific clients</span>
             </label>
 
-            {selectSpecific && <div style={{ marginTop: 12, padding: 14, border: '1px solid #e2e5ec', borderRadius: 12 }}>
+            {selectSpecific && <div style={{ marginTop: 12, padding: 14, border: '1px solid #dce4f1', borderRadius: 12 }}>
               <input value={clientSearch} onChange={(event: ChangeEvent<HTMLInputElement>) => setClientSearch(event.target.value)} placeholder="Search client name or email" />
               <div style={{ display: 'grid', gap: 8, marginTop: 10, maxHeight: 260, overflow: 'auto' }}>
-                {visibleClients.map(row => <label key={row.client_id}>
+                {visibleClients.map(row => <label className="workspaceChoice recipientChoice" key={row.client_id}>
                   <input type={followUpKey ? 'radio' : 'checkbox'} name={followUpKey ? 'follow-up-client' : undefined} checked={selectedClients.includes(row.client_id)} onChange={() => toggleClient(row.client_id)} />{' '}
-                  {row.client_name}{row.email ? ` · ${row.email}` : ''}{!row.eligible && <small className="muted"> · {row.reason} — loan milestone messages only</small>}
+                  <span>{row.client_name}{row.email ? ` · ${row.email}` : ''}{!row.eligible && <small className="muted"> · {row.reason} — loan milestone messages only</small>}</span>
                 </label>)}
               </div>
             </div>}
@@ -374,7 +360,7 @@ export default function AnnouncementsPage() {
             <button type="button" disabled={busy || effectiveRecipients.length === 0} onClick={sendAnnouncement}>{busy ? 'Sending…' : 'Send announcement'}</button>
           </div>
         </div>
-        {showReview && <div style={{ marginTop: 14, padding: 14, borderRadius: 12, background: '#f7f8fb' }}>
+        {showReview && <div style={{ marginTop: 14, padding: 14, borderRadius: 12, background: '#f8faff' }}>
           {effectiveRecipients.map(row => <div key={row.client_id} style={{ padding: '5px 0' }}><strong>{row.client_name}</strong>{row.email ? ` · ${row.email}` : ''}{!row.connected ? ' · not connected' : ''}</div>)}
         </div>}
       </section>

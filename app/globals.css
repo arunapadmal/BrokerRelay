@@ -194,3 +194,45 @@ button:focus-visible,.button:focus-visible,a:focus-visible,input:focus-visible,t
 
 .brokerDeskAccountMenu a { display: block; padding: 11px 17px; border-radius: 8px; color: #263858; text-decoration: none; font-size: 13px; }
 .brokerDeskAccountMenu a:hover { background: #eaf2ff; }
+
+/* Company uploads cannot increase the workspace logo frame. */
+.brokerDeskCompanyLogo { box-sizing:border-box; max-width:min(260px,100%); max-height:140px; flex-shrink:0; }
+.brokerDeskCompanyLogo img { max-width:240px; max-height:120px; object-fit:contain; }
+@media(max-width:620px) { .brokerDeskCompanyLogo img { max-width:100%; } }
+
+/* Shared grouped navigation uses the existing BrokerRelay palette and type. */
+.groupedNavigation .navigationGroup{border:0;margin:0;min-width:0}
+.groupedNavigation .navigationGroup>summary{padding:12px 14px;border-radius:10px;color:#243555;font-size:14px;font-weight:700;cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center}
+.groupedNavigation .navigationGroup>summary::after{content:'⌄';font-size:16px}.groupedNavigation .navigationGroup[open]>summary::after{transform:rotate(180deg)}
+.groupedNavigation .navigationGroup>summary::-webkit-details-marker{display:none}
+.groupedNavigation .navigationGroup>summary:hover{background:#f4f8ff}
+.groupedNavigation .navigationGroup>div{padding:2px 0 8px 12px;border-left:2px solid #e8edf6;margin-left:14px}
+.groupedNavigation .navigationGroup a{padding:9px 12px;font-weight:550;font-size:13px}
+.groupedNavigation .navigationGroup a.navigationCurrent{background:#eaf2ff;color:#2563eb;font-weight:700}
+.groupedNavigation :focus-visible{outline:2px solid #2563eb;outline-offset:2px}
+.workspaceResults{padding:18px;min-width:0}.workspaceResults table{width:100%;border-collapse:collapse;text-align:left}.workspaceResults th,.workspaceResults td{padding:12px 10px;border-bottom:1px solid #e4eaf4;vertical-align:top}.workspaceResults th{color:#53617b;font-size:12px;text-transform:uppercase;letter-spacing:.04em}.workspaceToolbar{display:flex;gap:14px;flex-wrap:wrap;align-items:end;margin:18px 0}.workspaceToolbar label{display:grid;gap:6px;flex:1;min-width:160px}.workspacePager{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:16px}.workspacePager>span{margin-right:auto;font-size:13px;color:#61718d}
+.workspaceClientSearch{width:100%;max-width:760px}.workspaceClientSearch>summary{cursor:pointer;font-weight:650;margin-bottom:12px}.workspaceClientSearch input{width:100%;box-sizing:border-box}.clientSearchResults{display:grid;max-height:260px;overflow:auto;gap:6px;margin-top:10px}.clientSearchResults button{text-align:left;display:grid;gap:4px}.clientSearchResults small{font-weight:400}
+.inboxWorkspace{display:grid;grid-template-columns:minmax(240px,.8fr) minmax(0,1.8fr);gap:18px;align-items:start}.conversationDirectory{display:flex;flex-direction:column;gap:4px;max-height:55vh;overflow:auto}.conversationDirectory a{padding:14px 10px;color:#243555;text-decoration:none;border-bottom:1px solid #e8edf6;border-radius:8px}.conversationDirectory a:hover,.conversationDirectory .conversationSelected{background:#eaf2ff}.conversationDirectory small{display:block;margin-top:5px;color:#61718d}.inboxWorkspace .messagePage{min-width:0}.inboxWorkspace .messageHeader h1{font-size:24px}.inboxWorkspace .chatMessages{max-height:48vh;overflow:auto}.inboxEmpty{padding:28px}.workspaceDrawer{position:fixed;z-index:80;right:20px;top:94px;bottom:20px;width:min(650px,calc(100vw - 40px));overflow:auto;box-shadow:0 12px 60px #13294b33;border:1px solid #dce4f1;background:#fff;box-sizing:border-box;padding:24px;border-radius:16px}
+.adminShell .adminGrid{grid-template-columns:1fr}.adminShell .groupedNavigation{background:#fff}.platformSidebar.groupedNavigation{position:sticky;top:0;max-height:100vh;overflow:auto;align-self:start}
+@media(max-width:900px){.groupedNavigation.brokerDeskNav,.groupedNavigation.adminShellNav,.platformSidebar.groupedNavigation{display:block;white-space:normal;position:static;max-height:none;overflow:visible}.groupedNavigation .navigationGroup>summary{padding:10px 14px}.inboxWorkspace{grid-template-columns:1fr}.conversationDirectory{max-height:260px}.inboxWorkspace .chatMessages{max-height:48vh}.workspaceDrawer{top:20px}}
+
+/* Compact BrokerDesk actions, shared with the company workspace theme. */
+.workspaceResults table{font-size:14px;color:#263858}
+.workspaceResults th{font-size:11px;letter-spacing:.06em;text-transform:uppercase}
+.workspaceResults td{vertical-align:top;overflow-wrap:anywhere}
+.workspaceRowActions,.workspaceRelatedActions{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.workspaceRowActions .button{font-size:12px;line-height:1.3;white-space:nowrap;padding:8px 11px}
+.workspacePager{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;border-top:1px solid var(--br-line);padding-top:14px}
+.workspacePageButtons{display:flex;gap:8px;flex-wrap:nowrap}
+.workspacePageButtons button{font-size:12px;line-height:1.3;padding:8px 11px;min-width:0}
+.inboxWorkspace .workspacePager{grid-template-columns:1fr}
+.inboxWorkspace .workspacePageButtons{justify-content:flex-end}
+.applicationProgressActions{display:grid!important;grid-template-columns:1fr;justify-items:end;gap:12px;margin-top:14px}
+.applicationProgressActions>span{justify-self:start;font-size:12px;color:#65758f}
+.applicationProgressActions>button{font-size:14px;white-space:normal}
+.followupTemplate{padding:0!important;overflow:hidden}
+.followupTemplate>summary{display:flex;justify-content:space-between;gap:12px;padding:18px 22px;cursor:pointer;color:#12264e;font-size:14px;list-style:revert}
+.followupTemplate>summary span{font-size:12px;color:#65758f}
+.followupTemplate>.sectionHead,.followupTemplate>.applicationForm{margin:18px 22px}
+.messageSettingsTabs{margin-top:18px}.messageSettingsTabs button{font-size:14px}
+@media(max-width:600px){.workspacePager{grid-template-columns:1fr}.workspacePageButtons{justify-content:flex-end}.followupTemplate>summary{flex-direction:column}.applicationProgressActions>button{width:100%}}
