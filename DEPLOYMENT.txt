@@ -1,0 +1,11 @@
+BrokerRelay — BrokerDesk theme and follow-up fixes
+
+Upload the included app/ and components/ files to the development branch, replacing files at the same paths, then deploy Netlify.
+
+The missing follow-up defaults have already been restored in the development Supabase project. supabase/restore-followup-defaults.sql is included as an idempotent reference for other environments; it preserves existing templates. No need to run it again in development.
+
+Changes: compact company-style actions on Clients/Applications/Document requests; pagination controls kept together and omitted for single-page lists; application progress action below the note; standard announcement card; collapsible loan template editors with loading, empty-state explanation and retry; Help & Support updated for searchable workspaces and current navigation.
+
+Verification: Next.js production build and TypeScript passed; navigation role/destination checks passed; all 9 default templates returned; save/reset checked in a rolled-back transaction. No test messages sent. Signed-in visual confirmation remains after deployment.
+
+Post-deploy: hard refresh; check Clients actions, Messages with an empty list and multiple pages, application note footer, Announcements, and Follow-up settings. Expand a loan template to edit it. Default reset is enabled only for a saved broker override.
