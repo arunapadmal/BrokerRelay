@@ -1,0 +1,31 @@
+
+name: Prepare BrokerRelay CSV Dashboard Fix
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  prepare-fix:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout development
+        uses: actions/checkout@v4
+        with:
+          ref: development
+
+      - name: Apply dashboard correction
+        run: |
+          python3 scripts/apply_csv_dashboard_fix.py
+          git diff --check
+
+      - name: Create pull request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          branch: feature/csv-dashboard-visibility-v2
+          base: development
+          title: Fix CSV dashboard visibility and company styling
+          body: Adds CSV import navigation and company-themed client links.
