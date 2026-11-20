@@ -5,6 +5,7 @@ import { ApplicationWorkspaceShell } from '@/components/ApplicationWorkspaceShel
 
 const sections = [
   ['start', 'Getting started'], ['clients', 'Clients & service team'],
+  ['client-import', 'Import clients from CRM'],
   ['messages', 'Messages'], ['applications', 'Applications'],
   ['documents', 'Document requests'], ['announcements', 'Announcements'],
   ['follow-ups', 'Follow-up messages'], ['company', 'Company & staff'],
@@ -36,33 +37,57 @@ export default function HelpPage() {
           <li>In <Link href="/clients/team">Manage team</Link>, choose a client. The Head Broker can change the primary broker; authorised staff can assign or remove broker assistants.</li></ol>
         <p className="muted">Only staff assigned to a client should be able to view that client’s applications, messages and documents. Ask your Head Broker to check assignments if a client is missing.</p>
       </section>
-      <section className="card" id="messages"><p className="eyebrow">03 · COMMUNICATION</p><h2>Secure messages</h2>
+      <section className="card" id="client-import">
+        <p className="eyebrow">03 · CLIENT DATA MANAGEMENT</p>
+        <h2>Import clients &amp; existing loans from your CRM</h2>
+        <p>Use <Link href="/clients/import">Import clients &amp; existing loans (CSV)</Link> to bring existing customer records into BrokerRelay. A CRM export can contain several rows for the same client because they have multiple loan references or lenders.</p>
+        <h3>Prepare your CSV file</h3>
+        <p><strong>Required columns:</strong> <code>first_name</code>, <code>last_name</code>, <code>email</code> and <code>mobile</code>.</p>
+        <p><strong>Optional columns:</strong> <code>birthday</code> (DD/MM/YYYY), <code>application_number</code> and <code>lender</code>. These optional fields may be left blank, including for clients with no known loan information. An application description is not required.</p>
+        <div className="row">
+          <a className="button secondary" href="/examples/crm_clients_import_v5.csv" download="BrokerRelay_CRM_Import_Example.csv">Download example CSV</a>
+          <Link className="button" href="/clients/import">Open CSV importer</Link>
+        </div>
+        <p className="muted">The example file contains fictional clients. Open it in your spreadsheet program to see the supported column headings, then export your own file as CSV.</p>
+        <h3>Check duplicates before importing</h3>
+        <ol>
+          <li>Select the correct broker company and upload the CSV file (maximum 500 records per import).</li>
+          <li>Choose <strong>Check duplicates &amp; preview</strong>. Review new clients, matched clients, repeated rows, application references, lender relationships and any records needing attention.</li>
+          <li>BrokerRelay matches clients within the company and avoids creating repeated historical application references. One client can have multiple distinct application numbers and lenders.</li>
+          <li>Resolve any identity conflicts or invalid rows before choosing <strong>Confirm import</strong>. Review the completion summary and any rows that were skipped.</li>
+        </ol>
+        <h3>Historical loans, birthdays and privacy</h3>
+        <p>Historical references are stored separately from active loan applications. Importing them does not create settlement billing events or automatically start loan follow-ups.</p>
+        <p>When a birthday is supplied, BrokerRelay retains the day and month only. Birthday greetings are not enabled merely because a date was imported; obtain and record the client’s agreement first.</p>
+        <p className="muted">Before exporting client data from another CRM, confirm your company is authorised to transfer it. Do not include bank account details, passwords, identification documents or other unnecessary sensitive information. Keep the exported CSV securely and delete local copies according to your company’s information-handling policy.</p>
+      </section>
+      <section className="card" id="messages"><p className="eyebrow">04 · COMMUNICATION</p><h2>Secure messages</h2>
         <ol><li>Open <Link href="/messages">Messages</Link> and search the conversation list. Use the unread filter to prioritise replies. Select a conversation to open it alongside the list, or use New conversation to find a client.</li>
           <li>Write your message and choose <strong>Send secure message</strong>. New replies appear in the conversation; opening it marks messages as read.</li></ol>
         <p>Use secure messages for a conversation, application updates for loan progress, and announcements for eligible client updates. Notifications alert clients to new activity; they are not a separate conversation.</p>
         <p className="muted">Messages support text. Use Document requests when you need a file; avoid asking clients to attach sensitive documents in a message.</p>
       </section>
-      <section className="card" id="applications"><p className="eyebrow">04 · LOAN PROGRESS</p><h2>Applications</h2>
+      <section className="card" id="applications"><p className="eyebrow">05 · LOAN PROGRESS</p><h2>Applications</h2>
         <ol><li>Open <Link href="/applications">Applications</Link>, search by client, application number, description or lender, and filter by status. Choose Open on the application you need. Use New application to find a client when creating another loan.</li>
           <li>Create a separate application when the client has another loan. Enter the application number used by your CRM or lender and a clear client-friendly description. Keep the number accurate; the description can be updated later.</li>
           <li>Use <strong>Publish progress update</strong> to update progress. Add a client-facing note when helpful. Conditional approval, full approval and settlement changes can create client notifications.</li>
           <li>For a lender-requested replacement, use <strong>Replacement</strong>. This withdraws the old application and creates a new one with its own number. Use <strong>Archive / Past</strong> to review withdrawn or older settled applications.</li></ol>
         <p className="muted">For a settled loan, enter the settlement date. BrokerRelay schedules its follow-ups from that date and moves the application to Past after 90 days. Check the application status before sending a manual loan follow-up.</p>
       </section>
-      <section className="card" id="documents"><p className="eyebrow">05 · DOCUMENT RELAY</p><h2>Document requests</h2>
+      <section className="card" id="documents"><p className="eyebrow">06 · DOCUMENT RELAY</p><h2>Document requests</h2>
         <ol><li>Open <Link href="/documents">Document requests</Link> and search by client or request title. Choose Open to review a request, or New request to find a client.</li>
           <li>Select the related loan application, document type, request title, optional instructions and the maximum number of files.</li>
           <li>Choose <strong>Send document request</strong>. Review its status in Request history; a pending or failed request can be cancelled.</li></ol>
         <p className="muted">Before the first request, the Head Broker opens <Link href="/admin/document-delivery">Delivery settings</Link> from the left menu, enters the company’s single receiving mailbox and verifies it with the email code. To change a saved address, choose Edit email, enter a different address and verify it. Saving the same address again is prevented; existing requests retain their original destination. Uploaded files are relayed to that verified mailbox and removed from temporary storage according to the relay workflow. The requesting broker also receives a private copy at their confirmed sign-in email while their broker and company memberships remain active. To copy other people or another mailbox, set up forwarding with your email provider. Confirm delivery before relying on a file.</p>
       </section>
-      <section className="card" id="announcements"><p className="eyebrow">06 · CLIENT UPDATES</p><h2>Announcements</h2>
+      <section className="card" id="announcements"><p className="eyebrow">07 · CLIENT UPDATES</p><h2>Announcements</h2>
         <ol><li>Open <Link href="/announcements">Announcements</Link>. Choose My clients or, if authorised, Company clients. You may narrow recipients by lender or select particular clients.</li>
           <li>General announcements require an active company subscription and a recorded settled application for each recipient. Clients without a settled application can receive loan milestone announcements for their application status. Write a title and message, or load a saved company message. Birthday and New Year messages can be sent manually or scheduled in Follow-up Message Settings.</li>
           <li>For a loan follow-up, choose one client and their application. Only messages matching that application’s current status appear. Review the message and recipients before sending.</li>
           <li>Use <strong>Recent announcements</strong> to review sends and read counts. The recipient audience is checked again when sending.</li></ol>
         <p className="muted">A manually sent loan follow-up is linked to its application. Sending it does not change the application status or replace scheduled notifications.</p>
       </section>
-      <section className="card" id="follow-ups"><p className="eyebrow">07 · MESSAGE SETTINGS</p><h2>Follow-up messages and company schedules</h2>
+      <section className="card" id="follow-ups"><p className="eyebrow">08 · MESSAGE SETTINGS</p><h2>Follow-up messages and company schedules</h2>
         <h3>Loan follow-ups</h3>
         <p>Open <Link href="/settings/follow-up-templates">Follow-up Message Settings</Link> and select <strong>Loan follow-ups</strong>. Expand a message row to review the approval, settlement or review wording. Save your broker wording or restore company/platform wording. Loan milestones follow the application status; later reviews follow its settlement date.</p>
         <p>Use <code>{'{{client_first_name}}'}</code> and <code>{'{{broker_first_name}}'}</code> to personalise greetings. Loan messages can also use <code>{'{{application_description}}'}</code>.</p>
@@ -95,20 +120,20 @@ export default function HelpPage() {
         <h3>BrokerRelay Pro daily tasks</h3>
         <p>In the updated BrokerRelay Pro app, <strong>My Day</strong> shows today’s scheduled greetings, client, sending broker and delivery status. Pull down to refresh. Open a card to review the message or manage its schedule in BrokerDesk. Opening a task does not resend it. Pro displays the tasks; the server performs the automatic sending.</p>
       </section>
-      <section className="card" id="company"><p className="eyebrow">08 · COMPANY ADMINISTRATION</p><h2>Company &amp; staff</h2>
+      <section className="card" id="company"><p className="eyebrow">09 · COMPANY ADMINISTRATION</p><h2>Company &amp; staff</h2>
         <ol><li>Authorised company staff can open <Link href="/admin">Company &amp; staff</Link> to update the company profile and logo, invite staff, and review pending invitations.</li>
           <li>Assign roles and permissions deliberately. Review client assignments when changing a broker’s responsibilities.</li>
           <li>Transfer a departing broker’s clients before deactivating their access. A Head Broker can start a protected handover that requires confirmation by both people.</li></ol>
         <p className="muted">Some controls appear only for the Head Broker or staff with the relevant permission.</p>
       </section>
-      <section className="card" id="mobile-appearance"><p className="eyebrow">09 · COMPANY BRANDING</p><h2>Mobile app appearance</h2>
+      <section className="card" id="mobile-appearance"><p className="eyebrow">10 · COMPANY BRANDING</p><h2>Mobile app appearance</h2>
         <ol><li>The Head Broker opens <Link href="/settings/mobile-appearance">Mobile appearance</Link> from the left menu or Company &amp; staff. This setting controls how the company appears inside the client app.</li>
           <li>Upload an optional company logo (PNG, JPEG or WebP, up to 2 MB), or use the standard business icon. The phone preview shows the selected logo.</li>
           <li>Choose the BrokerRelay defaults or customise <strong>Background</strong>, <strong>Background text</strong>, <strong>Buttons</strong> and <strong>Notifications</strong>. For a dark background, select a light background text colour. Check the phone preview as you make changes.</li>
           <li>Choose <strong>Publish changes</strong> when the colours are readable. Clients see the published appearance after their app refreshes.</li></ol>
         <p className="muted">The installed app icon remains BrokerRelay. Button and notification label colours adjust automatically; the background text colour controls headings and labels over the page background.</p>
       </section>
-      <section className="card" id="billing"><p className="eyebrow">10 · COMPANY SUBSCRIPTION</p><h2>Billing &amp; invoices</h2>
+      <section className="card" id="billing"><p className="eyebrow">11 · COMPANY SUBSCRIPTION</p><h2>Billing &amp; invoices</h2>
         <p>The Head Broker opens <Link href="/billing">Billing &amp; invoices</Link> from the left menu or Company &amp; staff. Other brokers should contact their Head Broker about company billing.</p>
         <h3>Check your package and usage</h3>
         <ol><li>Review your current package, monthly price, included settlements and extra settlement rate. Use the amounts displayed for your company; package prices and allowances can change for future months.</li>
@@ -130,7 +155,7 @@ export default function HelpPage() {
         <h3>Subscription status and communication</h3>
         <p>General announcements and post-settlement relationship follow-ups require an active subscription, including any approved overdue grace period. General announcements also require a recorded settled application for each recipient. Before settlement, use loan-processing communications and status-eligible milestone announcements. If relationship communications are paused, ask your Head Broker to review billing with the Platform Owner.</p>
       </section>
-      <section className="card" id="payments"><p className="eyebrow">11 · PAYMENTS</p><h2>Direct debit &amp; receipts</h2>
+      <section className="card" id="payments"><p className="eyebrow">12 · PAYMENTS</p><h2>Direct debit &amp; receipts</h2>
         <p>Automatic payments are available only after the Platform Owner configures the payment gateway and billing delivery. A company’s Head Broker must authorise collection from their own billing page.</p>
         <ol><li>Open <Link href="/billing">Billing &amp; invoices</Link> and find <strong>Automatic direct debit</strong>.</li>
           <li>Select <strong>Set up direct debit</strong>, or <strong>Update debit authorisation</strong> for an existing authorisation. Enter the required details in the secure Stripe form.</li>
@@ -142,7 +167,7 @@ export default function HelpPage() {
         <p>Select <strong>Stop automatic payments</strong> and confirm. A payment already submitted may still complete. Stopping collection does not cancel your subscription or remove amounts owed; arrange an alternative payment method with the Platform Owner.</p>
         <p className="muted">Stripe collects bank details securely. BrokerRelay stores the authorisation reference and last four digits. Never send full bank details or passwords in a support message.</p>
       </section>
-      <section className="card" id="support"><p className="eyebrow">12 · TROUBLESHOOTING</p><h2>Help with a problem</h2>
+      <section className="card" id="support"><p className="eyebrow">13 · TROUBLESHOOTING</p><h2>Help with a problem</h2>
         <h3>No invoice or billing access</h3><p>Billing is available to the Head Broker. Check that a subscription has been assigned and that the first billing month has ended, then choose Refresh invoices. If a completed month is missing, ask the Platform Owner to check the billing run.</p>
         <h3>Invoice or receipt email missing</h3><p>Ask the Head Broker to check the company billing email in Company &amp; staff and review the spam folder. The invoice may still be available on the billing page. Give the Platform Owner the invoice number so they can check delivery. A receipt is not due while payment is still processing.</p>
         <h3>Direct debit unavailable or payment failed</h3><p>If setup is unavailable, ask the Platform Owner to check gateway configuration. A test authorisation cannot collect real invoices. For a failed payment, review the notice, refresh payment status and contact the Platform Owner about updating the authorisation or paying manually. Do not repeatedly submit payment while its status is uncertain.</p>
