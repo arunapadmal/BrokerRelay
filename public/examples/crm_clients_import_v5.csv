@@ -1,0 +1,5 @@
+first_name,last_name,email,mobile,birthday,application_number,lender
+John,Smith,john.smith@example.com,0412345678,15/06/1985,HL001,CBA
+John,Smith,john.smith@example.com,0412345678,15/06/1985,HL002,ANZ
+Mary,Brown,mary.brown@example.com,0498765432,,,
+Alex,Green,alex.green@example.com,0400123456,,,Westpac
