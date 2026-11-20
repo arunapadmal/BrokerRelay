@@ -1,1 +1,47 @@
+/* Table headings are controls, not primary action buttons. Override the more
+   specific .applicationMain .card button:not(.secondary) theme rule. */
+.brokerDeskMain.applicationMain .workspaceResults th button.workspaceSortHeader,
+.brokerDeskMain.applicationMain .workspaceResults th button.workspaceSortHeader:not(.secondary){
+  appearance:none;
+  display:inline-flex;
+  align-items:center;
+  justify-content:flex-start;
+  gap:.4rem;
+  width:auto;
+  min-width:0;
+  max-width:100%;
+  margin:0;
+  padding:0;
+  border:0;
+  border-radius:0;
+  box-shadow:none;
+  background:transparent;
+  color:inherit;
+  font:inherit;
+  font-size:inherit;
+  font-weight:inherit;
+  line-height:inherit;
+  letter-spacing:inherit;
+  text-align:left;
+  text-decoration:none;
+  white-space:normal;
+  cursor:pointer;
+  filter:none;
+}
+.brokerDeskMain.applicationMain .workspaceResults th button.workspaceSortHeader:hover,
+.brokerDeskMain.applicationMain .workspaceResults th button.workspaceSortHeader:focus-visible {
+  background:transparent;
+  color:inherit;
+  filter:none;
+}
+.brokerDeskMain.applicationMain .workspaceResults th button.workspaceSortHeader:hover{text-decoration:underline}
+.brokerDeskMain.applicationMain .workspaceResults th button.workspaceSortHeader:focus-visible{outline:2px solid #2563eb;outline-offset:3px}
+.brokerDeskMain.applicationMain .workspaceResults th button.workspaceSortHeader span{
+  display:inline-block;
+  flex:none;
+  color:#526889;
+  font-size:11px;
+  line-height:1;
+}
+
 .workspaceSortHeader{appearance:none;border:0;background:transparent;color:inherit;font:inherit;font-weight:inherit;padding:0;display:inline-flex;gap:.4rem;align-items:center;cursor:pointer;text-align:left}.workspaceSortHeader:hover{text-decoration:underline}.workspaceSortHeader:focus-visible{outline:2px solid currentColor;outline-offset:3px}.workspaceMobileSort{display:none!important}@media(max-width:700px){.workspaceMobileSort{display:flex!important;flex-direction:column;gap:.25rem}.workspaceToolbar{flex-wrap:wrap}.workspaceToolbar>label{min-width:0;flex:1 1 140px}}
