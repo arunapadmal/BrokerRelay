@@ -1,3 +1,4 @@
+import '@/components/table-sorting.css'
 import './globals.css'
 import './theme-consistency.css'
 import '@/components/billing.css'
