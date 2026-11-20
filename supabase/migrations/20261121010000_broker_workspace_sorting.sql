@@ -6,7 +6,7 @@ create or replace function public.broker_workspace_sorted(
 ) returns jsonb language plpgsql stable security invoker set search_path = '' as $$
 declare
  v_total bigint; v_items jsonb; v_offset integer := (greatest(1,least(coalesce(p_page,1),100000))-1)*20;
- v_query text := '%' || replace(replace(replace(left(btrim(coalesce(p_query,'')),100),'\\','\\\\'),'%','\\%'),'_','\\_') || '%';
+ v_query text := '%' || left(btrim(coalesce(p_query,'')),100) || '%';
  v_dir text := case when lower(p_direction)='desc' then 'desc' else 'asc' end;
  v_sort text;
  v_order text;
@@ -19,7 +19,7 @@ begin
                  else 'client' end;
  if p_kind='clients' then
    select count(*) into v_total from public.clients c
-   where concat_ws(' ',c.first_name,c.last_name,c.email,c.mobile) ilike v_query escape '\'
+   where concat_ws(' ',c.first_name,c.last_name,c.email,c.mobile) ilike v_query
      and (p_status='all' or c.status::text=p_status);
    v_order := case v_sort
      when 'client' then 'lower(c.first_name),lower(c.last_name)'
@@ -37,14 +37,14 @@ begin
       from public.clients c
       left join lateral (select count(*)::integer as loan_count,max(a.settlement_date) as latest_settlement
         from public.loan_applications a where a.client_id=c.id and a.organisation_id=c.organisation_id) loan on true
-      where concat_ws('' '',c.first_name,c.last_name,c.email,c.mobile) ilike $1 escape ''\''
+      where concat_ws('' '',c.first_name,c.last_name,c.email,c.mobile) ilike $1
         and ($2=''all'' or c.status::text=$2)
       order by ' || v_order || ' ' || v_dir || ' nulls last,c.id asc limit 20 offset $3) t';
  else
    select count(*) into v_total from public.loan_applications a
     join public.clients c on c.id=a.client_id
     left join public.lenders l on l.id=a.lender_id
-    where concat_ws(' ',c.first_name,c.last_name,a.application_reference,a.application_description,l.name) ilike v_query escape '\'
+    where concat_ws(' ',c.first_name,c.last_name,a.application_reference,a.application_description,l.name) ilike v_query
       and (p_status='all' or a.status::text=p_status);
    v_order := case v_sort
      when 'client' then 'lower(c.first_name),lower(c.last_name)'
@@ -60,7 +60,7 @@ begin
        a.status::text as status,l.name as lender,a.created_at as at_time,a.settlement_date
       from public.loan_applications a join public.clients c on c.id=a.client_id
       left join public.lenders l on l.id=a.lender_id
-      where concat_ws('' '',c.first_name,c.last_name,a.application_reference,a.application_description,l.name) ilike $1 escape ''\''
+      where concat_ws('' '',c.first_name,c.last_name,a.application_reference,a.application_description,l.name) ilike $1
        and ($2=''all'' or a.status::text=$2)
       order by ' || v_order || ' ' || v_dir || ' nulls last,a.id asc limit 20 offset $3) t';
  end if;
