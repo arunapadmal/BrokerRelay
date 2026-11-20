@@ -10,7 +10,7 @@ export function BrokerWorkspace({kind,clientId}:{kind:'applications'|'documents'
  const [items,setItems]=useState<Row[]>([]),[query,setQuery]=useState(''),[status,setStatus]=useState('all'),[page,setPage]=useState(1),[total,setTotal]=useState(0),[busy,setBusy]=useState(false),[error,setError]=useState(''),[creating,setCreating]=useState(false),[refresh,setRefresh]=useState(0)
  const [sort,setSort]=useState('client'),[direction,setDirection]=useState<'asc'|'desc'>('asc')
  const sortable=kind==='clients'||kind==='applications'
- const sortOptions=kind==='clients'?[['client','Client'],['email','Email'],['mobile','Mobile'],['status','Status'],['loan_count','Loan count'],['settlement_date','Latest settlement'],['created','Added']]:[['client','Client'],['reference','Application number'],['lender','Lender'],['status','Status'],['settlement_date','Settlement date'],['created','Created']]
+ const sortOptions=kind==='clients'?[['client','Client'],['email','Email'],['mobile','Mobile'],['status','Status'],['loan_count','Loan count'],['settlement_date','Latest settlement'],['created_at','Added']]:[['client','Client'],['reference','Application number'],['lender','Lender'],['status','Status'],['settlement_date','Settlement date'],['created_at','Created']]
  function changeSort(key:string){setDirection(current=>sort===key?(current==='asc'?'desc':'asc'):'asc');setSort(key);setPage(1)}
  const sortHeader=(key:string,label:string)=><button type="button" className="workspaceSortHeader" onClick={()=>changeSort(key)}>{label} <span aria-hidden="true">{sort===key?(direction==='asc'?'▲':'▼'):'↕'}</span></button>
  const title={applications:'Applications',documents:'Document requests',messages:'Messages',clients:'Clients'}[kind]
