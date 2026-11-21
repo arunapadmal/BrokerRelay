@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.95.0",
-    "next": "latest",
+    "next": "16.4.6",
     "qrcode.react": "^4.2.0",
     "react": "latest",
     "react-dom": "latest"
@@ -19,5 +19,9 @@
     "@types/react": "latest",
     "@types/react-dom": "latest",
     "typescript": "latest"
+  },
+  "overrides": {
+    "sharp": "^0.35.5",
+    "source-map-js": "^1.2.2"
   }
 }
