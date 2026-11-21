@@ -32,6 +32,10 @@ export default function PlatformCompaniesPage() {
   const changeSort=(key:string)=>{setSortDirection(v=>sortKey===key?(v==='asc'?'desc':'asc'):'asc');setSortKey(key);setPage(1)}
   const sortButton=(key:string,label:string)=><button type="button" className="workspaceSortHeader" onClick={()=>changeSort(key)}>{label} <span aria-hidden="true">{sortKey===key?(sortDirection==='asc'?'▲':'▼'):'↕'}</span></button>
   const [companies, setCompanies] = useState<Company[]>([])
+  const [sortedCompanyIds,setSortedCompanyIds]=useState<string[]>([])
+  const [sortedCompanyTotal,setSortedCompanyTotal]=useState(0)
+  const [listRevision,setListRevision]=useState(0)
+  const [sortingBusy,setSortingBusy]=useState(false)
   const [expandedCompanyId, setExpandedCompanyId] = useState<string | null>(null)
   const [invitations, setInvitations] = useState<Invitation[]>([])
   const [error, setError] = useState('')
@@ -60,6 +64,7 @@ export default function PlatformCompaniesPage() {
       setCompanies(((companyResult.data ?? []) as Company[]).map(row => ({ ...row, logo_url: logos.get(row.id)?.logo_url ?? null, logo_display_width: logos.get(row.id)?.logo_display_width ?? 160, logo_display_height: logos.get(row.id)?.logo_display_height ?? 72 })))
     }
     if (logoResult.error) setError(`Could not load company logos: ${logoResult.error.message}`)
+    setListRevision(n=>n+1)
     if (invitationResult.error) {
       const missingMigration = invitationResult.error.code === 'PGRST202'
       setError(missingMigration
@@ -79,6 +84,23 @@ export default function PlatformCompaniesPage() {
       await load(); setReady(true)
     })()
   }, [])
+
+  useEffect(() => {
+    if (!ready || view!=='list') return
+    let active=true
+    setSortingBusy(true)
+    const timer=window.setTimeout(()=>{void(async()=>{
+      const result=await supabase.rpc('platform_sorted_companies',{
+        p_search:companySearch,p_period:period,p_page:page,p_sort:sortKey,p_direction:sortDirection
+      })
+      if (!active) return
+      setSortingBusy(false)
+      if(result.error){setError('Company sorting unavailable: '+result.error.message);return}
+      setSortedCompanyIds((result.data?.ids??[]) as string[])
+      setSortedCompanyTotal(Number(result.data?.total??0))
+    })()},200)
+    return ()=>{active=false;window.clearTimeout(timer)}
+  },[ready,view,companySearch,period,page,sortKey,sortDirection,listRevision])
 
   async function sendInvitation(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -123,11 +145,8 @@ export default function PlatformCompaniesPage() {
     window.location.href = '/login'
   }
 
-  const searchText = companySearch.trim().toLocaleLowerCase()
-  const visibleCompanies = companies.filter(company =>
-    !searchText || [company.name, company.head_broker_name, company.head_broker_email, referralNames[company.id]?.referrer, referralNames[company.id]?.manager]
-      .some(value => value?.toLocaleLowerCase().includes(searchText))
-  ).sort((a,b)=>{const get=(c:Company):string|number=>{const p=shownPerformance[c.id];switch(sortKey){case 'clients':return p?.clients??-1;case 'applications':return p?.applications??-1;case 'settlements':return period==='month'?(p?.settled_month??-1):(p?.application_statuses?.settled??-1);case 'status':return c.status;case 'head':return c.head_broker_name??'';case 'phone':return c.head_broker_mobile??'';default:return c.name}};const x=get(a),y=get(b);const cmp=typeof x==='number'&&typeof y==='number'?x-y:String(x).localeCompare(String(y),undefined,{numeric:true,sensitivity:'base'});return (sortDirection==='asc'?cmp:-cmp)||a.id.localeCompare(b.id)})
+  const visibleCompanies=sortedCompanyIds.map(id=>companies.find(c=>c.id===id)).filter((c):c is Company=>Boolean(c))
+  const companyPages=Math.max(1,Math.ceil(sortedCompanyTotal/10))
 
   if (!ready) return <main className="page"><p>Checking platform access…</p></main>
   return <main className="platformShell">
@@ -145,11 +164,11 @@ export default function PlatformCompaniesPage() {
           <input id="company-search" className="platformSearch" type="search" value={companySearch} onChange={event => {setCompanySearch(event.target.value);setPage(1)}} placeholder="Company, Head Broker, or email" />
           <div className="workspaceMobileSort">Sort by <select aria-label="Sort companies by" value={sortKey} onChange={e=>changeSort(e.target.value)}>{[['name','Company'],['head','Head Broker'],['phone','Contact'],['status','Status'],['clients','Clients'],['applications','Applications'],['settlements','Settlements']].map(([k,v])=><option key={k} value={k}>{v}</option>)}</select><select aria-label="Sort direction" value={sortDirection} onChange={e=>{setSortDirection(e.target.value as 'asc'|'desc');setPage(1)}}><option value="asc">Ascending</option><option value="desc">Descending</option></select></div>
           <div className="tableWrap"><table><thead><tr><th>{sortButton('name','Company')}</th><th>Referral partner</th><th>{sortButton('head','Head Broker')}</th><th>{sortButton('phone','Contact number')}</th><th>{sortButton('status','Status')}</th><th>{sortButton('clients',period==='month'?'New clients':'Clients')}</th><th>{sortButton('applications',period==='month'?'New applications':'Applications')}</th><th>{sortButton('settlements','Settlements')}</th></tr></thead>
-            <tbody>{visibleCompanies.slice((Math.min(page,Math.max(1,Math.ceil(visibleCompanies.length/10)))-1)*10,Math.min(page,Math.max(1,Math.ceil(visibleCompanies.length/10)))*10).map(company => <Fragment key={company.id}><tr><td><Link className="platformCompanyToggle" href={`/platform/companies/${company.id}`}>{company.name} →</Link></td><td>{referralNames[company.id]?.referrer??'Direct / no referrer'}<small style={{display:'block'}}>Account manager: {referralNames[company.id]?.manager??'Not assigned'}</small></td><td>{company.head_broker_name ?? '—'}</td><td>{company.head_broker_mobile ? <a href={`tel:${company.head_broker_mobile.replace(/[^+\d]/g, '')}`}>{company.head_broker_mobile}</a> : '—'}</td><td><span className={`platformStatus ${company.status === 'active' ? 'isActive' : ''}`}>{company.status}</span></td><td>{shownPerformance[company.id]?.clients ?? '—'}</td><td>{shownPerformance[company.id]?.applications ?? '—'}{shownPerformance[company.id] && <small style={{display:'block'}}>{period==='month'?`Settlements this month: ${shownPerformance[company.id].settled_month??0}`:`Settled: ${shownPerformance[company.id].application_statuses.settled??0} · Withdrawn: ${shownPerformance[company.id].application_statuses.withdrawn??0}`}</small>}</td><td>{period==='month'?(shownPerformance[company.id]?.settled_month??'—'):(shownPerformance[company.id]?.application_statuses?.settled??'—')}</td></tr>
+            <tbody>{visibleCompanies.map(company => <Fragment key={company.id}><tr><td><Link className="platformCompanyToggle" href={`/platform/companies/${company.id}`}>{company.name} →</Link></td><td>{referralNames[company.id]?.referrer??'Direct / no referrer'}<small style={{display:'block'}}>Account manager: {referralNames[company.id]?.manager??'Not assigned'}</small></td><td>{company.head_broker_name ?? '—'}</td><td>{company.head_broker_mobile ? <a href={`tel:${company.head_broker_mobile.replace(/[^+\d]/g, '')}`}>{company.head_broker_mobile}</a> : '—'}</td><td><span className={`platformStatus ${company.status === 'active' ? 'isActive' : ''}`}>{company.status}</span></td><td>{shownPerformance[company.id]?.clients ?? '—'}</td><td>{shownPerformance[company.id]?.applications ?? '—'}{shownPerformance[company.id] && <small style={{display:'block'}}>{period==='month'?`Settlements this month: ${shownPerformance[company.id].settled_month??0}`:`Settled: ${shownPerformance[company.id].application_statuses.settled??0} · Withdrawn: ${shownPerformance[company.id].application_statuses.withdrawn??0}`}</small>}</td><td>{period==='month'?(shownPerformance[company.id]?.settled_month??'—'):(shownPerformance[company.id]?.application_statuses?.settled??'—')}</td></tr>
 
             </Fragment>)}</tbody></table></div>
-          {!companies.length ? <p className="platformEmpty">No companies yet. Send a setup invitation to add the first company.</p> : visibleCompanies.length === 0 && <p className="platformEmpty">No companies match your search.</p>}
-        <div className="workspacePager"><span>{visibleCompanies.length} companies · Page {Math.min(page,Math.max(1,Math.ceil(visibleCompanies.length/10)))} of {Math.max(1,Math.ceil(visibleCompanies.length/10))}</span><button className="secondary" disabled={page<=1} onClick={()=>setPage(page-1)}>Previous</button><button className="secondary" disabled={page>=Math.ceil(visibleCompanies.length/10)} onClick={()=>setPage(page+1)}>Next</button></div></section>}
+          {!companies.length ? <p className="platformEmpty">No companies yet. Send a setup invitation to add the first company.</p> : !sortingBusy && sortedCompanyTotal===0 && <p className="platformEmpty">No companies match your search.</p>}
+        <div className="workspacePager"><span>{sortedCompanyTotal} companies · Page {page} of {companyPages}{sortingBusy?' · Sorting…':''}</span><button className="secondary" disabled={sortingBusy||page<=1} onClick={()=>setPage(page-1)}>Previous</button><button className="secondary" disabled={sortingBusy||page>=companyPages} onClick={()=>setPage(page+1)}>Next</button></div></section>}
         {view==='invitations'&&<><section id="invitations" className="platformInvitationCard">
           <div className="platformInvitationIntro"><span className="platformInvitationIcon" aria-hidden="true">➤</span><div><h2>Send company setup invitation</h2><p>Invite a Head Broker to register a new company on BrokerRelay. The Head Broker will create their account and complete the company setup.</p><p className="platformExpiry">Invitations expire after seven days.</p></div></div>
           <div className="platformInvitationForm">
