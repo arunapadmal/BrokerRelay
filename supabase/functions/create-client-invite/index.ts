@@ -117,7 +117,7 @@ Deno.serve(async (req: Request) => {
       invitation_id: invitation.id,
       token: rawInviteToken,
       expires_at: invitation.expires_at,
-      deep_link: `aidezconnect://join?token=${encodeURIComponent(rawInviteToken)}`,
+      deep_link: `brokerrelay://join?token=${encodeURIComponent(rawInviteToken)}`,
       web_path: `/join/${encodeURIComponent(rawInviteToken)}`,
       broker_code: broker.broker_code,
     }, 201)
