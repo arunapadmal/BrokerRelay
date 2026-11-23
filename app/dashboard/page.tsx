@@ -208,14 +208,22 @@ export default function DashboardPage() {
       return
     }
 
-    setMobileInviteLink(data.deep_link)
-    setBrowserInviteLink(`${window.location.origin}/join/${data.token}`)
+    // Use the current environment's HTTPS origin so development, testing,
+    // demo and production invitations never point to another environment.
+    // The existing /join/[token] page handles browser-based onboarding.
+    if (typeof data?.token !== 'string' || !data.token) {
+      setMessage('Invitation was created, but its link could not be generated. Please contact support.')
+      return
+    }
+    const inviteUrl = new URL(`/join/${encodeURIComponent(data.token)}`, window.location.origin).toString()
+    setMobileInviteLink(inviteUrl)
+    setBrowserInviteLink(inviteUrl)
     setExpiresAt(data.expires_at)
   }
 
   async function copyMobileInvite() {
     await navigator.clipboard.writeText(mobileInviteLink)
-    setMessage('Mobile invitation link copied.')
+    setMessage('HTTPS invitation link copied.')
   }
 
   async function signOut() {
@@ -289,10 +297,10 @@ export default function DashboardPage() {
             <p className="muted">Valid until {new Date(expiresAt).toLocaleString()}</p>
             <input readOnly value={mobileInviteLink} />
             <div className="row">
-              <button onClick={copyMobileInvite}>Copy mobile link</button>
+              <button onClick={copyMobileInvite}>Copy invitation link</button>
               <a className="button secondary" href={browserInviteLink} target="_blank">Open browser test page</a>
             </div>
-            <p className="muted">The QR opens the client invitation in the mobile app.</p>
+            <p className="muted">Scan the QR code to open this secure invitation in your browser. The mobile app can handle HTTPS links once App Links are configured.</p>
           </div>
           <div className="qr"><QRCodeSVG value={mobileInviteLink} size={180} /></div>
         </section>
